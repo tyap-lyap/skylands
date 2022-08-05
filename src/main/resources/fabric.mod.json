@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "skylands",
+  "version": "${version}",
+  "name": "Skylands",
+  "description": "Simple skyblock islands generator and manager.",
+  "authors": [
+    "PinkGoosik"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/skylands",
+    "sources": "https://github.com/tyap-lyap/skylands",
+    "issues": "https://github.com/tyap-lyap/skylands/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/skylands/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "skylands.Mod"
+    ],
+    "cardinal-components": [
+      "skylands.data.Components"
+    ]
+  },
+  "mixins": [
+    "skylands.mixins.json"
+  ],
+  "custom": {
+    "cardinal-components": [
+      "skylands:world_data"
+    ]
+  },
+  "depends": {
+    "fabricloader": "*",
+    "fabric": "*",
+    "minecraft": ">=1.19",
+    "java": ">=17"
+  }
+}

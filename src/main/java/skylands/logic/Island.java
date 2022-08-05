@@ -10,7 +10,6 @@ import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.gen.chunk.FlatChunkGenerator;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
-import org.apache.commons.lang3.RandomStringUtils;
 import skylands.Mod;
 import xyz.nucleoid.fantasy.RuntimeWorldConfig;
 import xyz.nucleoid.fantasy.RuntimeWorldHandle;
@@ -22,7 +21,6 @@ import java.util.UUID;
 public class Island {
 	public UUID ownerUUID;
 	public ArrayList<UUID> members = new ArrayList<>();
-	private RuntimeWorldHandle handler = null;
 
 	public Vec3d spawnPos = new Vec3d(0.5D, 75D, 0.5D);
 
@@ -30,32 +28,36 @@ public class Island {
 		this.ownerUUID = uuid;
 	}
 
-	private RuntimeWorldHandle createWorld() {
+	public boolean isMember(PlayerEntity player) {
+		if(ownerUUID.equals(player.getUuid())) return true;
+		for(var uuid : members) {
+			if(uuid.equals(player.getUuid())) return true;
+		}
+		return false;
+	}
+
+	private RuntimeWorldHandle getHandler() {
 		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), BuiltinRegistries.BIOME);
 		var generator = new FlatChunkGenerator(BuiltinRegistries.STRUCTURE_SET, flat);
+//		long seed = Long.parseLong(RandomStringUtils.randomNumeric(9));
 
 		RuntimeWorldConfig config = new RuntimeWorldConfig()
 				.setDimensionType(DimensionTypes.OVERWORLD)
 				.setGenerator(generator)
 				.setDifficulty(Difficulty.HARD)
-				.setSeed(Long.parseLong(RandomStringUtils.randomNumeric(9)));
+				.setSeed(123L);
 
 		return Skylands.instance.fantasy.getOrOpenPersistentWorld(Mod.id(this.ownerUUID.toString()), config);
 	}
 
 	public ServerWorld getWorld() {
-		if(this.handler == null) {
-			RuntimeWorldHandle handler = this.createWorld();
-			this.handler = handler;
-			return handler.asWorld();
-		}
-		return this.handler.asWorld();
+		RuntimeWorldHandle handler = this.getHandler();
+		return handler.asWorld();
 	}
 
 	public void deleteWorld() {
-		if(this.handler != null) {
-			this.handler.delete();
-		}
+		RuntimeWorldHandle handler = this.getHandler();
+		handler.delete();
 	}
 
 	public void visit(PlayerEntity player) {

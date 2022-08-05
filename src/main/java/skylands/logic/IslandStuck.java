@@ -25,6 +25,13 @@ public class IslandStuck {
 		return Optional.empty();
 	}
 
+	public Optional<Island> get(UUID uuid) {
+		for(var island : this.islands) {
+			if(island.ownerUUID.equals(uuid)) return Optional.of(island);
+		}
+		return Optional.empty();
+	}
+
 	public boolean hasIsland(UUID uuid) {
 		for(var island : this.islands) {
 			if(island.ownerUUID.equals(uuid)) return true;

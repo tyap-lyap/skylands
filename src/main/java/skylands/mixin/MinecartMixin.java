@@ -29,7 +29,7 @@ public abstract class MinecartMixin extends Entity {
 			if(island.isPresent()) {
 				if(source.getAttacker() instanceof PlayerEntity attacker) {
 					if(!island.get().isMember(attacker)) {
-						attacker.sendMessage(Text.of("Skylands > You can't damage entities at someone's island!"), true);
+						attacker.sendMessage(Text.of("Skylands > You can't damage entities on someone's island!"), true);
 						cir.setReturnValue(false);
 					}
 				}

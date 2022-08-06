@@ -31,13 +31,17 @@ public abstract class LivingEntityMixin extends Entity {
 			if(island.isPresent()) {
 				if(self instanceof PlayerEntity player) {
 					if(!island.get().isMember(player)) {
-						player.sendMessage(Text.of("Skylands > You can't take damage at someone's island"), true);
+						player.sendMessage(Text.of("Skylands > You can't take damage on someone's island"), true);
+						if(source.equals(DamageSource.OUT_OF_WORLD)) {
+							var pos = island.get().spawnPos;
+							player.teleport(pos.getX(), pos.getY(), pos.getZ());
+						}
 						cir.setReturnValue(false);
 					}
 				}
 				if(source.getAttacker() instanceof PlayerEntity attacker) {
 					if(!island.get().isMember(attacker)) {
-						attacker.sendMessage(Text.of("Skylands > You can't damage entities at someone's island!"), true);
+						attacker.sendMessage(Text.of("Skylands > You can't damage entities on someone's island!"), true);
 						cir.setReturnValue(false);
 					}
 				}

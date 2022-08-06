@@ -1,7 +1,7 @@
 package skylands.mixin;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
+import net.minecraft.item.DecorationItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.text.Text;
@@ -16,10 +16,10 @@ import skylands.logic.Skylands;
 
 import java.util.UUID;
 
-@Mixin(BlockItem.class)
-public abstract class BlockItemMixin extends Item {
+@Mixin(DecorationItem.class)
+public abstract class DecorationItemMixin extends Item {
 
-	public BlockItemMixin(Settings settings) {
+	public DecorationItemMixin(Settings settings) {
 		super(settings);
 	}
 
@@ -31,7 +31,7 @@ public abstract class BlockItemMixin extends Item {
 			if(world.getRegistryKey().getValue().getNamespace().equals(Mod.MOD_ID)) {
 				var island = Skylands.instance.islandStuck.get(UUID.fromString(world.getRegistryKey().getValue().getPath()));
 				if(island.isPresent() && !island.get().isMember(player)) {
-					player.sendMessage(Text.of("Skylands > You can't place blocks out here!"), true);
+					player.sendMessage(Text.of("Skylands > You can't place items out here!"), true);
 					cir.setReturnValue(ActionResult.FAIL);
 				}
 			}

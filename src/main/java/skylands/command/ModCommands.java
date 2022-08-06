@@ -19,7 +19,7 @@ import net.minecraft.world.TeleportTarget;
 import skylands.Mod;
 import skylands.logic.Skylands;
 
-public class Commands {
+public class ModCommands {
 
 	public static void init() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {

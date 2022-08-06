@@ -3,11 +3,13 @@ package skylands.event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.TypedActionResult;
 
-public class Events {
+public class ModEvents {
 
 	public static void init() {
 		ServerLifecycleEvents.SERVER_STARTING.register(ServerStartEvent::onStart);
@@ -25,6 +27,12 @@ public class Events {
 				return UseItemEvent.onUse(player, world, hand);
 			}
 			return TypedActionResult.pass(player.getStackInHand(hand));
+		});
+		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+			if(!world.isClient) {
+				return UseEntityEvent.onUse(player, world, hand, entity);
+			}
+			return ActionResult.PASS;
 		});
 	}
 }

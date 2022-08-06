@@ -6,8 +6,8 @@ import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skylands.command.Commands;
-import skylands.event.Events;
+import skylands.command.ModCommands;
+import skylands.event.ModEvents;
 
 public class Mod implements ModInitializer {
 	public static final String MOD_ID = "skylands";
@@ -15,8 +15,8 @@ public class Mod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		Events.init();
-		Commands.init();
+		ModEvents.init();
+		ModCommands.init();
 		//Example code, you can remove it
 		FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(mod -> {
 			ModMetadata meta = mod.getMetadata();

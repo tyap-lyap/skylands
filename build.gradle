@@ -67,6 +67,7 @@ jar {
 import buildscript.ParseGitHubActionChangelog
 
 modrinth {
+	token = System.getenv("MODRINTH_TOKEN")
 	projectId = "skylands"
 	versionNumber = version
 	versionName = "[1.19] Skylands " + version

@@ -2,10 +2,11 @@ plugins {
 	id "fabric-loom" version "0.12-SNAPSHOT"
 	id "io.github.juuxel.loom-quiltflower" version "1.7.3"
 	id "io.github.p03w.machete" version "1.1.2"
+	id "com.modrinth.minotaur" version "2.+"
 }
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version
+version = System.getenv("GITHUB_RUN_NUMBER")
 group = project.maven_group
 
 repositories {
@@ -28,10 +29,10 @@ dependencies {
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.1"
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.0.1"
 
-	modImplementation include("eu.pb4:sgui:1.1.3+1.19.1")
+//	modImplementation include("eu.pb4:sgui:1.1.3+1.19.1")
 	modImplementation include("xyz.nucleoid:fantasy:0.4.5+1.19")
-	modImplementation include("fr.catcore:server-translations-api:1.4.16+1.19")
-	modImplementation include("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
+//	modImplementation include("fr.catcore:server-translations-api:1.4.16+1.19")
+//	modImplementation include("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
 
 	modLocalRuntime "maven.modrinth:ferrite-core:5.0.0-fabric"
 	modLocalRuntime "maven.modrinth:lazydfu:0.1.3"
@@ -60,5 +61,22 @@ java {
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}" }
+	}
+}
+
+import buildscript.ParseGitHubActionChangelog
+
+modrinth {
+	projectId = "skylands"
+	versionNumber = version
+	versionName = "[1.19] Skylands " + version
+	versionType = "alpha"
+	uploadFile = remapJar
+	additionalFiles = [remapSourcesJar]
+	gameVersions = ["1.19", "1.19.1", "1.19.2"]
+	loaders = ["fabric", "quilt"]
+	changelog = ParseGitHubActionChangelog.getChangelog()
+	dependencies {
+		required.project "fabric-api"
 	}
 }

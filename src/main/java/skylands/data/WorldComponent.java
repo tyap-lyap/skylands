@@ -2,6 +2,7 @@ package skylands.data;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import skylands.logic.Skylands;
 
 public class WorldComponent implements AbstractWorldData {
@@ -12,14 +13,14 @@ public class WorldComponent implements AbstractWorldData {
 	}
 
 	@Override
-	public void readFromNbt(NbtCompound nbt) {
+	public void readFromNbt(@NotNull NbtCompound nbt) {
 		if(world.getRegistryKey().equals(World.OVERWORLD)) {
 			Skylands.instance.readFromNbt(nbt);
 		}
 	}
 
 	@Override
-	public void writeToNbt(NbtCompound nbt) {
+	public void writeToNbt(@NotNull NbtCompound nbt) {
 		if(world.getRegistryKey().equals(World.OVERWORLD)) {
 			Skylands.instance.writeToNbt(nbt);
 		}

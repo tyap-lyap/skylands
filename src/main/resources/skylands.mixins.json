@@ -13,6 +13,7 @@
     "DecorationItemMixin",
     "DoorBlockMixin",
     "FarmlandBlockMixin",
+    "FenceGateBlockMixin",
     "FlowerPotBlockMixin",
     "FurnaceBlockMixin",
     "HoeItemMixin",

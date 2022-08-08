@@ -86,7 +86,18 @@ public class ModCommands {
 			}))).then(CommandManager.literal("delete-island").then(CommandManager.argument("player", StringArgumentType.word()).executes(context -> {
 				var player = StringArgumentType.getString(context, "player");
 				return 1;
-			}))));
+			}))).then(CommandManager.literal("toggle-hub-protection").executes(context -> {
+				var hub = Skylands.instance.hub;
+				if(hub.hasProtection) {
+					hub.hasProtection = false;
+					context.getSource().sendFeedback(Text.of("Skylands > Hub protection is now disabled!"), true);
+				}
+				else {
+					hub.hasProtection = true;
+					context.getSource().sendFeedback(Text.of("Skylands > Hub protection is now enabled!"), true);
+				}
+				return 1;
+			})));
 		});
 	}
 }

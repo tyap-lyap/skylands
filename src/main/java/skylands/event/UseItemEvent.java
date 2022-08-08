@@ -6,6 +6,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
+@SuppressWarnings("unused")
 public class UseItemEvent {
 
 	public static TypedActionResult<ItemStack> onUse(PlayerEntity player, World world, Hand hand) {

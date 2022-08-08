@@ -13,10 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import skylands.Mod;
-import skylands.logic.Skylands;
-
-import java.util.UUID;
+import skylands.util.WorldProtection;
 
 @Mixin(FlowerPotBlock.class)
 public abstract class FlowerPotBlockMixin {
@@ -24,12 +21,9 @@ public abstract class FlowerPotBlockMixin {
 	@Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
 	void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
 		if(!world.isClient) {
-			if(world.getRegistryKey().getValue().getNamespace().equals(Mod.MOD_ID)) {
-				var island = Skylands.instance.islandStuck.get(UUID.fromString(world.getRegistryKey().getValue().getPath()));
-				if(island.isPresent() && !island.get().isMember(player)) {
-					player.sendMessage(Text.of("Skylands > You can't interact with flower pots out here!"), true);
-					cir.setReturnValue(ActionResult.FAIL);
-				}
+			if(!WorldProtection.canModify(world, player)) {
+				player.sendMessage(Text.of("Skylands > You can't interact with flower pots out here!"), true);
+				cir.setReturnValue(ActionResult.FAIL);
 			}
 		}
 	}

@@ -65,6 +65,7 @@ jar {
 }
 
 import buildscript.ParseGitHubActionChangelog
+tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 
 modrinth {
 	token = System.getenv("MODRINTH_TOKEN")

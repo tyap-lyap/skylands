@@ -11,9 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import skylands.logic.Skylands;
-
-import java.util.UUID;
+import skylands.util.WorldProtection;
 
 @Mixin(AbstractMinecartEntity.class)
 public abstract class MinecartMixin extends Entity {
@@ -24,15 +22,10 @@ public abstract class MinecartMixin extends Entity {
 
 	@Inject(method = "damage", at = @At("HEAD"), cancellable = true)
 	void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-		if(!world.isClient && world.getRegistryKey().getValue().getNamespace().equals("skylands")) {
-			var island = Skylands.instance.islandStuck.get(UUID.fromString(world.getRegistryKey().getValue().getPath()));
-			if(island.isPresent()) {
-				if(source.getAttacker() instanceof PlayerEntity attacker) {
-					if(!island.get().isMember(attacker)) {
-						attacker.sendMessage(Text.of("Skylands > You can't damage entities on someone's island!"), true);
-						cir.setReturnValue(false);
-					}
-				}
+		if(!world.isClient && source.getAttacker() instanceof PlayerEntity attacker) {
+			if(!WorldProtection.canModify(world, attacker)) {
+				attacker.sendMessage(Text.of("Skylands > You can't damage entities on someone's island!"), true);
+				cir.setReturnValue(false);
 			}
 		}
 	}

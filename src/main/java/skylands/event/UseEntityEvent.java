@@ -2,15 +2,11 @@ package skylands.event;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import skylands.Mod;
-import skylands.logic.Skylands;
 
-import java.util.UUID;
-
+@SuppressWarnings("unused")
 public class UseEntityEvent {
 
 	public static ActionResult onUse(PlayerEntity player, World world, Hand hand, Entity entity) {

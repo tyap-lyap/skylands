@@ -69,6 +69,7 @@ tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 
 modrinth {
 	token = System.getenv("MODRINTH_TOKEN")
+	syncBodyFrom = rootProject.file("README.md").text
 	projectId = "skylands"
 	versionNumber = version
 	versionName = "build." + version

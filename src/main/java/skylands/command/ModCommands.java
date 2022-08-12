@@ -11,6 +11,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplate;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.math.BlockPos;
@@ -18,6 +20,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import skylands.Mod;
 import skylands.logic.Skylands;
+import skylands.util.Players;
 
 public class ModCommands {
 
@@ -65,7 +68,29 @@ public class ModCommands {
 					});
 				}
 				return 1;
-			})).then(CommandManager.literal("visit").then(CommandManager.argument("player", EntityArgumentType.player()).executes(context -> {
+			}).then(CommandManager.argument("player", StringArgumentType.word()).executes(context -> {
+				var playerName = StringArgumentType.getString(context, "player");
+				var visitor = context.getSource().getPlayer();
+				if(visitor != null) {
+					Skylands.instance.islandStuck.get(playerName).ifPresentOrElse(island -> {
+						if(visitor.getWorld().getRegistryKey().getValue().equals(Mod.id(island.owner.uuid.toString()))) {
+							visitor.sendMessage(Text.of("Skylands > You are already on the " + playerName + "'s Island!"));
+						}
+						else {
+							if(island.isMember(visitor)) {
+								visitor.sendMessage(Text.of("Skylands > Teleporting to the " + playerName + "'s Island!"));
+								island.visit(visitor);
+							}
+							else {
+								visitor.sendMessage(Text.of("Skylands > You are not member of this island."));
+							}
+						}
+					}, () -> {
+						visitor.sendMessage(Text.of("Skylands > This player doesn't have an island yet!"));
+					});
+				}
+				return 1;
+			}))).then(CommandManager.literal("visit").then(CommandManager.argument("player", EntityArgumentType.player()).executes(context -> {
 				var visitor = context.getSource().getPlayer();
 				if(visitor != null) {
 					PlayerEntity player = EntityArgumentType.getPlayer(context, "player");
@@ -74,6 +99,54 @@ public class ModCommands {
 						island.visit(visitor);
 					}, () -> {
 						visitor.sendMessage(Text.of("Skylands > " + player.getName().getString() + " doesn't have an island yet!"));
+					});
+				}
+				return 1;
+			}))).then(CommandManager.literal("add-member").then(CommandManager.argument("player", EntityArgumentType.player()).executes(context -> {
+				var player = context.getSource().getPlayer();
+				if(player != null) {
+					PlayerEntity newcomer = EntityArgumentType.getPlayer(context, "player");
+					Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
+						if(island.isMember(newcomer)) {
+							player.sendMessage(Text.of("Skylands > This player is already member of your island!"));
+						}
+						else {
+							if(Skylands.instance.invites.hasInvite(island, newcomer)) {
+								player.sendMessage(Text.of("Skylands > You have already invited this player!"));
+							}
+							else {
+								player.sendMessage(Text.of("Skylands > " + newcomer.getName().getString() + " got successfully invited! They got 5 minutes to accept your invite."));
+								newcomer.sendMessage(Text.of("Skylands > You have been invited to join the " + player.getName().getString() + "'s island!"));
+								newcomer.sendMessage(Text.literal("Skylands > Click here to accept this invite.").fillStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/accept-sl " + player.getName().getString()))));
+								Skylands.instance.invites.create(island, newcomer);
+							}
+						}
+
+					}, () -> {
+						player.sendMessage(Text.of("Skylands > You don't have an island yet!"));
+					});
+				}
+				return 1;
+			}))).then(CommandManager.literal("remove-member").then(CommandManager.argument("player", StringArgumentType.word()).executes(context -> {
+				String memberToRemove = StringArgumentType.getString(context, "player");
+				PlayerEntity player = context.getSource().getPlayer();
+				if(player != null) {
+					Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
+						if(player.getName().getString().equals(memberToRemove)) {
+							player.sendMessage(Text.of("Skylands > You can't remove yourself."));
+						}
+						else {
+							if(island.isMember(memberToRemove)) {
+								island.members.removeIf(member -> member.name.equals(memberToRemove));
+								player.sendMessage(Text.of("Skylands > " + memberToRemove + " got successfully removed."));
+							}
+							else {
+								player.sendMessage(Text.of("Skylands > This player is not member of your island."));
+							}
+						}
+
+					}, () -> {
+						player.sendMessage(Text.of("Skylands > You don't have an island yet!"));
 					});
 				}
 				return 1;
@@ -95,6 +168,30 @@ public class ModCommands {
 				else {
 					hub.hasProtection = true;
 					context.getSource().sendFeedback(Text.of("Skylands > Hub protection is now enabled!"), true);
+				}
+				return 1;
+			})));
+
+			dispatcher.register(CommandManager.literal("accept-sl").then(CommandManager.argument("player", StringArgumentType.word()).executes(context -> {
+				String inviter = StringArgumentType.getString(context, "player");
+				PlayerEntity player = context.getSource().getPlayer();
+
+				if(player != null) {
+					Players.get(inviter).ifPresentOrElse(playerInviter -> {
+						Skylands.instance.islandStuck.get(playerInviter).ifPresentOrElse(island -> {
+							Skylands.instance.invites.get(island, player).ifPresentOrElse(invite -> {
+								if(!invite.accepted) {
+									invite.accept(player);
+								}
+							}, () -> {
+								player.sendMessage(Text.of("Skylands > This player did not invite you."));
+							});
+						}, () -> {
+							player.sendMessage(Text.of("Skylands > This player does not have an island yet."));
+						});
+					}, () -> {
+						player.sendMessage(Text.of("Skylands > Such player does not exist!"));
+					});
 				}
 				return 1;
 			})));

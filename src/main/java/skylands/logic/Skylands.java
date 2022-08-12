@@ -6,18 +6,20 @@ import skylands.util.NbtMigrator;
 import xyz.nucleoid.fantasy.Fantasy;
 
 public class Skylands {
-	public int format = 0;
+	public int format = 2;
 	public static Skylands instance;
 	public MinecraftServer server;
 	public Fantasy fantasy;
 	public IslandStuck islandStuck;
 	public Hub hub;
+	public Invites invites;
 
 	public Skylands(MinecraftServer server) {
 		this.server = server;
 		this.fantasy = Fantasy.get(server);
 		this.islandStuck = new IslandStuck();
 		this.hub = new Hub();
+		this.invites = new Invites();
 	}
 
 	public void readFromNbt(NbtCompound nbt) {
@@ -44,7 +46,7 @@ public class Skylands {
 	}
 
 	public void onTick(MinecraftServer server) {
-
+		this.invites.tick(server);
 	}
 
 }

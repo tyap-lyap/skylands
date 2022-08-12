@@ -37,7 +37,7 @@ dependencies {
 	modLocalRuntime "maven.modrinth:ferrite-core:5.0.0-fabric"
 	modLocalRuntime "maven.modrinth:lazydfu:0.1.3"
 	modLocalRuntime "maven.modrinth:starlight:1.1.1+1.19"
-	modLocalRuntime "maven.modrinth:lithium:mc1.19.1-0.8.3"
+	modLocalRuntime "maven.modrinth:lithium:mc1.19.2-0.8.3"
 }
 
 processResources {

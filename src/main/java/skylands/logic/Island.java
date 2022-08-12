@@ -2,6 +2,7 @@ package skylands.logic;
 
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.BuiltinRegistries;
@@ -19,19 +20,64 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class Island {
-	public UUID ownerUUID;
-	public ArrayList<UUID> members = new ArrayList<>();
+	public Member owner;
+	public ArrayList<Member> members = new ArrayList<>();
 
 	public Vec3d spawnPos = new Vec3d(0.5D, 75D, 0.5D);
 
-	public Island(UUID uuid) {
-		this.ownerUUID = uuid;
+	public Island(UUID uuid, String name) {
+		this.owner = new Member(uuid, name);
+	}
+
+	public Island(PlayerEntity owner) {
+		this.owner = new Member(owner);
+	}
+
+	public Island(Member owner) {
+		this.owner = owner;
+	}
+
+	public static Island fromNbt(NbtCompound nbt) {
+		Island island = new Island(Member.fromNbt(nbt.getCompound("owner")));
+		NbtCompound membersNbt = nbt.getCompound("members");
+		int size = membersNbt.getInt("size");
+		for(int i = 0; i < size; i++) {
+			NbtCompound member = membersNbt.getCompound(String.valueOf(i));
+			island.members.add(Member.fromNbt(member));
+		}
+		return island;
+	}
+
+	public NbtCompound toNbt() {
+		NbtCompound nbt = new NbtCompound();
+		nbt.put("owner", this.owner.toNbt());
+
+		NbtCompound membersNbt = new NbtCompound();
+		membersNbt.putInt("size", this.members.size());
+		for(int i = 0; i < this.members.size(); i++) {
+			Member member = this.members.get(i);
+			NbtCompound memberNbt = member.toNbt();
+			membersNbt.put(Integer.toString(i), memberNbt);
+		}
+		return nbt;
 	}
 
 	public boolean isMember(PlayerEntity player) {
-		if(ownerUUID.equals(player.getUuid())) return true;
-		for(var uuid : members) {
-			if(uuid.equals(player.getUuid())) return true;
+		if(this.owner.uuid.equals(player.getUuid())) {
+			return true;
+		}
+		for(var member : this.members) {
+			if(member.uuid.equals(player.getUuid())) return true;
+		}
+		return false;
+	}
+
+	public boolean isMember(String name) {
+		if(this.owner.name.equals(name)) {
+			return true;
+		}
+		for(var member : this.members) {
+			if(member.name.equals(name)) return true;
 		}
 		return false;
 	}
@@ -47,7 +93,7 @@ public class Island {
 				.setDifficulty(Difficulty.HARD)
 				.setSeed(123L);
 
-		return Skylands.instance.fantasy.getOrOpenPersistentWorld(Mod.id(this.ownerUUID.toString()), config);
+		return Skylands.instance.fantasy.getOrOpenPersistentWorld(Mod.id(this.owner.uuid.toString()), config);
 	}
 
 	public ServerWorld getWorld() {

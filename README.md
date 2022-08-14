@@ -16,7 +16,10 @@ development.
 - /sl hub -> Teleport to the hub.
 - /sl create -> Creates an island.
 - /sl home -> Teleport to your island.
-- /sl visit -> Visit someone's island.
+- /sl visit <player> -> Visit someone's island.
+- /sl home <player> -> Teleport to an island you are member of.
+- /sl add-member <player> -> Invite player to your island.
+- /sl remove-member <player> -> Remove player from your island.
 
 ### Admin Commands
 

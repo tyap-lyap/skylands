@@ -195,7 +195,7 @@ public class ModCommands {
 							Skylands.instance.invites.get(island, player).ifPresentOrElse(invite -> {
 								if(!invite.accepted) {
 									invite.accept(player);
-									player.sendMessage(Text.of("Skylands > You successfully accepted " + inviter + "'s invite!"));
+									player.sendMessage(Text.of("Skylands > You successfully accepted " + inviter + "'s invite! You can visit the island with \"/sl home " + inviter + "\" command."));
 								}
 							}, () -> {
 								player.sendMessage(Text.of("Skylands > This player did not invite you."));

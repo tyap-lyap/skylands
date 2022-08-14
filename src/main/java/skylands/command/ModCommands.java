@@ -12,6 +12,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplate;
 import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
@@ -124,8 +125,12 @@ public class ModCommands {
 							}
 							else {
 								player.sendMessage(Text.of("Skylands > " + newcomer.getName().getString() + " got successfully invited! They got 5 minutes to accept your invite."));
-								newcomer.sendMessage(Text.of("Skylands > You have been invited to join the " + player.getName().getString() + "'s island!"));
-								newcomer.sendMessage(Text.literal("Skylands > Click here to accept this invite.").fillStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/accept-sl " + player.getName().getString()))));
+
+								Style style = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/accept-sl " + player.getName().getString()));
+								style = style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Click here to accept this invite or type \"/accept-sl " + player.getName().getString() + "\" command")));
+
+								newcomer.sendMessage(Text.literal("Skylands > " + player.getName().getString() + " wants you to join their Island!").fillStyle(style));
+								newcomer.sendMessage(Text.literal("Skylands > Click here to accept this invite.").fillStyle(style));
 								Skylands.instance.invites.create(island, newcomer);
 							}
 						}
@@ -190,6 +195,7 @@ public class ModCommands {
 							Skylands.instance.invites.get(island, player).ifPresentOrElse(invite -> {
 								if(!invite.accepted) {
 									invite.accept(player);
+									player.sendMessage(Text.of("Skylands > You successfully accepted " + inviter + "'s invite!"));
 								}
 							}, () -> {
 								player.sendMessage(Text.of("Skylands > This player did not invite you."));

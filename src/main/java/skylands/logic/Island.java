@@ -82,7 +82,7 @@ public class Island {
 		return false;
 	}
 
-	private RuntimeWorldHandle getHandler() {
+	public RuntimeWorldHandle getHandler() {
 		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), BuiltinRegistries.BIOME);
 		var generator = new FlatChunkGenerator(BuiltinRegistries.STRUCTURE_SET, flat);
 //		long seed = Long.parseLong(RandomStringUtils.randomNumeric(9));
@@ -98,12 +98,8 @@ public class Island {
 
 	public ServerWorld getWorld() {
 		RuntimeWorldHandle handler = this.getHandler();
+		handler.setTickWhenEmpty(false);
 		return handler.asWorld();
-	}
-
-	public void deleteWorld() {
-		RuntimeWorldHandle handler = this.getHandler();
-		handler.delete();
 	}
 
 	public void visit(PlayerEntity player) {

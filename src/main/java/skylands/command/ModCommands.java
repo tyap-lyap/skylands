@@ -93,12 +93,20 @@ public class ModCommands {
 			}))).then(CommandManager.literal("visit").then(CommandManager.argument("player", EntityArgumentType.player()).executes(context -> {
 				var visitor = context.getSource().getPlayer();
 				if(visitor != null) {
+					// TODO: visitors should have different spawn point and
+					// TODO: it should be configurable by an island's owner
 					PlayerEntity player = EntityArgumentType.getPlayer(context, "player");
 					Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
-						visitor.sendMessage(Text.of("Skylands > Teleporting to the " + player.getName().getString() + "'s island!"));
-						island.visit(visitor);
+						if(visitor.getWorld().getRegistryKey().getValue().equals(Mod.id(island.owner.uuid.toString()))) {
+							visitor.sendMessage(Text.of("Skylands > You are already on the " + player.getName().getString() + "'s Island!"));
+						}
+						else {
+							visitor.sendMessage(Text.of("Skylands > Teleporting to the " + player.getName().getString() + "'s Island!"));
+							island.visit(visitor);
+						}
+
 					}, () -> {
-						visitor.sendMessage(Text.of("Skylands > " + player.getName().getString() + " doesn't have an island yet!"));
+						visitor.sendMessage(Text.of("Skylands > " + player.getName().getString() + " doesn't have an Island yet!"));
 					});
 				}
 				return 1;

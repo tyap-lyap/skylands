@@ -26,7 +26,8 @@
     "ShovelItemMixin",
     "ShulkerBoxBlockMixin",
     "StorageMinecartMixin",
-    "VillagerEntityMixin"
+    "VillagerEntityMixin",
+    "common.ServerWorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

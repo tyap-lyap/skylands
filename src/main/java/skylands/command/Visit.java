@@ -13,13 +13,19 @@ public class Visit {
 		String ownerName = owner.getName().getString();
 
 		Skylands.instance.islandStuck.get(owner).ifPresentOrElse(island -> {
-			if(visitor.getWorld().getRegistryKey().getValue().equals(Mod.id(island.owner.uuid.toString()))) {
-				visitor.sendMessage(Text.of("Skylands > You are already on the " + ownerName + "'s Island!"));
+			if(!island.isMember(visitor) && island.isBanned(visitor)) {
+				visitor.sendMessage(Text.of("Skylands > You are banned from visiting " + ownerName + "'s Island!"));
 			}
 			else {
-				visitor.sendMessage(Text.of("Skylands > Teleporting to the " + ownerName + "'s Island!"));
-				island.visit(visitor);
+				if(visitor.getWorld().getRegistryKey().getValue().equals(Mod.id(island.owner.uuid.toString()))) {
+					visitor.sendMessage(Text.of("Skylands > You are already on the " + ownerName + "'s Island!"));
+				}
+				else {
+					visitor.sendMessage(Text.of("Skylands > Teleporting to the " + ownerName + "'s Island!"));
+					island.visit(visitor);
+				}
 			}
+
 		}, () -> visitor.sendMessage(Text.of("Skylands > " + ownerName + " doesn't have an Island yet!")));
 	}
 }

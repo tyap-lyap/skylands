@@ -9,7 +9,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 
 import static net.minecraft.server.command.CommandManager.literal;
 import static net.minecraft.server.command.CommandManager.argument;
@@ -73,6 +72,14 @@ public class ModCommands {
 			}
 			return 1;
 		}))));
+		dispatcher.register(literal("sl").then(literal("remove-member").then(argument("player", word()).executes(context -> {
+			String memberToRemove = StringArgumentType.getString(context, "player");
+			var player = context.getSource().getPlayer();
+			if(player != null) {
+				InviteMembers.remove(player, memberToRemove);
+			}
+			return 1;
+		}))));
 		dispatcher.register(literal("sl").then(literal("ban").then(argument("player", player()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var bannedPlayer = EntityArgumentType.getPlayer(context, "player");
@@ -81,11 +88,11 @@ public class ModCommands {
 			}
 			return 1;
 		}))));
-		dispatcher.register(literal("sl").then(literal("remove-member").then(argument("player", word()).executes(context -> {
-			String memberToRemove = StringArgumentType.getString(context, "player");
+		dispatcher.register(literal("sl").then(literal("kick").then(argument("player", player()).executes(context -> {
 			var player = context.getSource().getPlayer();
-			if(player != null) {
-				InviteMembers.remove(player, memberToRemove);
+			var kickedPlayer = EntityArgumentType.getPlayer(context, "player");
+			if(player != null && kickedPlayer != null) {
+				Kick.cmd(player, kickedPlayer);
 			}
 			return 1;
 		}))));

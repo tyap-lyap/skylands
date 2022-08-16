@@ -21,6 +21,8 @@ development.
 - /sl add-member <player> -> Invite player to your island.
 - /sl remove-member <player> -> Remove player from your island.
 - /sl accept <player> -> Accept island join invite request.
+- /sl kick <player> -> Kick player from your island.
+- /sl ban <player> -> Ban player from visiting your island.
 - /sl help -> Sends this list.
 
 ### Admin Commands

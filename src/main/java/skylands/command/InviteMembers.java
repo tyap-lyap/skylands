@@ -21,8 +21,8 @@ public class InviteMembers {
 				else {
 					inviter.sendMessage(Text.of("Skylands > " + newcomer.getName().getString() + " got successfully invited! They got 5 minutes to accept your invite."));
 
-					Style style = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/accept-sl " + inviter.getName().getString()));
-					style = style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Click here to accept this invite or type \"/accept-sl " + inviter.getName().getString() + "\" command")));
+					Style style = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sl accept" + inviter.getName().getString()));
+					style = style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Click here to accept this invite or type \"/sl accept " + inviter.getName().getString() + "\" command.")));
 
 					newcomer.sendMessage(Text.literal("Skylands > " + inviter.getName().getString() + " wants you to join their Island!").fillStyle(style));
 					newcomer.sendMessage(Text.literal("Skylands > Click here to accept this invite.").fillStyle(style));

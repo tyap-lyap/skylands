@@ -85,7 +85,26 @@ public class ModCommands {
 			ServerPlayerEntity player = context.getSource().getPlayer();
 			// TODO: help command that lists all commands and their descriptions
 			if(player != null) {
-				player.sendMessage(Text.of("You need help? lmao"));
+				String text = """
+						- /sl hub ->
+						Teleport to the hub.
+						- /sl create ->
+						Creates an island.
+						- /sl home ->
+						Teleport to your island.
+						- /sl visit <player> ->
+						Visit someone's island.
+						- /sl home <player> ->
+						Teleport to an island you are member of.
+						- /sl add-member <player> ->
+						Invite player to your island.
+						- /sl remove-member <player> ->
+						Remove player from your island.
+						- /sl accept <player> ->
+						Accept island join invite request.
+						- /sl help ->
+						Sends this list.""";
+				player.sendMessage(Text.of(text));
 			}
 			return 1;
 		})));
@@ -103,7 +122,7 @@ public class ModCommands {
 			return 1;
 		})));
 
-		dispatcher.register(literal("accept-sl").then(argument("player", word()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("accept")).then(argument("player", word()).executes(context -> {
 			String inviter = StringArgumentType.getString(context, "player");
 			var player = context.getSource().getPlayer();
 

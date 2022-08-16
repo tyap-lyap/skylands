@@ -20,6 +20,8 @@ development.
 - /sl home <player> -> Teleport to an island you are member of.
 - /sl add-member <player> -> Invite player to your island.
 - /sl remove-member <player> -> Remove player from your island.
+- /sl accept <player> -> Accept island join invite request.
+- /sl help -> Sends this list.
 
 ### Admin Commands
 

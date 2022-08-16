@@ -117,7 +117,7 @@ public class ModCommands {
 			return 1;
 		})));
 
-		dispatcher.register(literal("sl").then(literal("accept")).then(argument("player", word()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("accept").then(argument("player", word()).executes(context -> {
 			String inviter = StringArgumentType.getString(context, "player");
 			var player = context.getSource().getPlayer();
 
@@ -125,6 +125,6 @@ public class ModCommands {
 				Accept.cmd(player, inviter);
 			}
 			return 1;
-		})));
+		}))));
 	}
 }

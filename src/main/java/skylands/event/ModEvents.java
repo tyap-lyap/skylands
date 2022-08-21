@@ -6,12 +6,30 @@ import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
+import nota.Nota;
+import nota.event.SongStartEvent;
+import nota.player.PositionSongPlayer;
+
+import java.util.UUID;
 
 public class ModEvents {
 
 	public static void init() {
+		SongStartEvent.EVENT.register(songPlayer -> {
+			if(songPlayer.getId().equals(new Identifier("skylands:hub_song_player")) && songPlayer instanceof PositionSongPlayer sp) {
+				for(UUID uuid : sp.getPlayerUUIDs()) {
+					PlayerEntity player = Nota.getAPI().getServer().getPlayerManager().getPlayer(uuid);
+					if(player != null && sp.isInRange(player)) {
+						player.sendMessage(Text.of("Now Playing: " + sp.getSong().getTitle()), true);
+					}
+				}
+			}
+		});
 		ServerLifecycleEvents.SERVER_STARTING.register(ServerStartEvent::onStart);
 		ServerTickEvents.END_SERVER_TICK.register(ServerTickEvent::onTick);
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> PlayerConnectEvent.onJoin(server, handler.player));

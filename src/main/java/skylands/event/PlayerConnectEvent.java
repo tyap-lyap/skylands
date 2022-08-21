@@ -6,6 +6,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
+import nota.player.SongPlayer;
 import skylands.Mod;
 import skylands.logic.Member;
 import skylands.logic.Skylands;
@@ -16,6 +17,11 @@ import java.util.UUID;
 public class PlayerConnectEvent {
 
 	public static void onJoin(MinecraftServer server, ServerPlayerEntity player) {
+		SongPlayer sp = Skylands.instance.hub.songPlayer;
+		if(sp != null) {
+			sp.addPlayer(player);
+		}
+
 		Skylands.instance.islandStuck.get(player).ifPresent(island -> {
 			island.owner.name = player.getName().getString();
 		});

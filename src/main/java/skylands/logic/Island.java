@@ -135,6 +135,10 @@ public class Island {
 	public void visit(PlayerEntity player) {
 		ServerWorld world = this.getWorld();
 		FabricDimensions.teleport(player, world, new TeleportTarget(this.spawnPos, new Vec3d(0, 0, 0), 0, 0));
-		Players.get(this.owner.name).ifPresent(owner -> owner.sendMessage(Text.of(player.getName().getString() + " visited your Island!")));
+		Players.get(this.owner.name).ifPresent(owner -> {
+			if(!player.getUuid().equals(owner.getUuid())) {
+				owner.sendMessage(Text.of("Skylands > " + player.getName().getString() + " visited your Island!"));
+			}
+		});
 	}
 }

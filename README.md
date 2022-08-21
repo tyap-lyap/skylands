@@ -4,10 +4,8 @@
 <!-- modrinth_exclude.end -->
 
 Skylands is a Minecraft mod/plugin for fabric loader. Simple skyblock islands generator and manager allowing your
-server's players create and visit islands.
-Skylands provides its own island template, so you don't have to worry about creating it. On the other hand, the hub,
-shops, and other stuffs should be arranged by server developers. This mod is not complete and still in active
-development.
+server's players create and visit islands. The mod can be used server-side only, however it's compatible with singleplayer
+and modpacks. This mod is not complete and still in active development.
 
 #### [Discord Server](https://discord.gg/DcemWeskeZ) | [Modrinth Page](https://modrinth.com/mod/skylands)
 
@@ -29,4 +27,5 @@ development.
 
 - /force-sl set-hub-pos -> Changes position of the hub.
 - /force-sl toggle-hub-protection -> Enables/disables hub protection.
+- /force-sl toggle-hub-music -> Enables/disables hub background music.
 

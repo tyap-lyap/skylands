@@ -18,7 +18,7 @@ public class Mod implements ModInitializer {
 	public void onInitialize() {
 		ModEvents.init();
 		ModCommands.init();
-//		SongsData.init();
+		SongsData.init();
 		//Example code, you can remove it
 		FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(mod -> {
 			ModMetadata meta = mod.getMetadata();

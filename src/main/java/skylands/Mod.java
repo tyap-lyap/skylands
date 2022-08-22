@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skylands.command.ModCommands;
+import skylands.data.reloadable.SongsData;
 import skylands.event.ModEvents;
 
 public class Mod implements ModInitializer {
@@ -17,6 +18,7 @@ public class Mod implements ModInitializer {
 	public void onInitialize() {
 		ModEvents.init();
 		ModCommands.init();
+//		SongsData.init();
 		//Example code, you can remove it
 		FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(mod -> {
 			ModMetadata meta = mod.getMetadata();

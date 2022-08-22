@@ -4,6 +4,9 @@
   "package": "skylands.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "block.FireBlockMixin",
+    "entity.PlayerEntityMixin",
+    "world.ServerWorldMixin",
     "world.protection.AxeItemMixin",
     "world.protection.BarrelBlockMixin",
     "world.protection.BlockItemMixin",
@@ -26,8 +29,7 @@
     "world.protection.ShovelItemMixin",
     "world.protection.ShulkerBoxBlockMixin",
     "world.protection.StorageMinecartMixin",
-    "world.protection.VillagerEntityMixin",
-    "world.ServerWorldMixin"
+    "world.protection.VillagerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -56,6 +56,9 @@ public class IslandStuck {
 			if(!this.hasIsland(island.owner.uuid)) {
 				this.islands.add(island);
 				island.getWorld();
+				if(island.hasNether) {
+					island.getNether();
+				}
 			}
 		}
 	}

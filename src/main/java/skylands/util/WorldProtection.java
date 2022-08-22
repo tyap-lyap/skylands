@@ -10,7 +10,7 @@ import java.util.UUID;
 public class WorldProtection {
 
 	public static boolean canModify(World world, PlayerEntity player) {
-		if(world.getRegistryKey().getValue().getNamespace().equals(Mod.MOD_ID)) {
+		if(world.getRegistryKey().getValue().getNamespace().equals(Mod.MOD_ID) || world.getRegistryKey().getValue().getNamespace().equals("nether")) {
 			var uuid = UUID.fromString(world.getRegistryKey().getValue().getPath());
 			var island = Skylands.instance.islandStuck.get(uuid);
 			if(island.isPresent() && !island.get().isMember(player)) {

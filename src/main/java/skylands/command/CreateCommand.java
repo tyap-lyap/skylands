@@ -29,7 +29,6 @@ public class CreateCommand {
 			StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(Mod.id("main"));
 			StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
 			structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, player.getRandom(), Block.NOTIFY_ALL);
-//			player.setSpawnPoint(world.getRegistryKey(), new BlockPos(island.spawnPos), 0, false, false);
 			player.sendMessage(Text.of("Skylands > Your island got successfully created, you can now visit it with the \"/sl home\" command!"));
 		}
 	}

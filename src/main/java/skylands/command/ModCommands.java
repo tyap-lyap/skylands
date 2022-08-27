@@ -86,7 +86,7 @@ public class ModCommands {
 			var player = context.getSource().getPlayer();
 			var bannedPlayer = EntityArgumentType.getPlayer(context, "player");
 			if(player != null && bannedPlayer != null) {
-				BanCommand.run(player, bannedPlayer);
+				BanCommands.ban(player, bannedPlayer);
 			}
 			return 1;
 		}))));
@@ -143,5 +143,26 @@ public class ModCommands {
 			}
 			return 1;
 		}))));
+
+		dispatcher.register(literal("sl").then(literal("unban").then(argument("player", word()).executes(context -> {
+			String unbanned = StringArgumentType.getString(context, "player");
+			var player = context.getSource().getPlayer();
+
+			if(player != null) {
+				BanCommands.unban(player, unbanned);
+			}
+			return 1;
+		}))));
+
+//		dispatcher.register(literal("cutscene").then(argument("duration", IntegerArgumentType.integer()).executes(context -> {
+//			var player = context.getSource().getPlayer();
+//			var world = context.getSource().getWorld();
+//			int duration = IntegerArgumentType.getInteger(context, "duration");
+//
+//			if(player != null) {
+//				Cutscenes.create(world, player, duration);
+//			}
+//			return 1;
+//		})));
 	}
 }

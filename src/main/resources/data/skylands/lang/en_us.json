@@ -48,6 +48,10 @@
   "message.skylands.ban_player.success": "%player% got successfully banned.",
   "message.skylands.ban_player.ban": "You have been banned from visiting %owner%'s Island!",
 
+  "message.skylands.unban_player.no_island": "You don't have an Island yet!",
+  "message.skylands.unban_player.fail": "This player is not banned.",
+  "message.skylands.unban_player.success": "%player% got successfully unbanned.",
+
   "message.skylands.visit_home.not_member": "You are not member of this Island.",
   "message.skylands.visit_home.no_island": "This player doesn't have an Island yet!",
   "message.skylands.visit_home.fail": "You are already on the %owner%'s Island!",

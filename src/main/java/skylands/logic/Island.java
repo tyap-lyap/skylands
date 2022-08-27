@@ -133,6 +133,13 @@ public class Island {
 		return false;
 	}
 
+	public boolean isBanned(String player) {
+		for(var bannedMember : this.bans) {
+			if(bannedMember.name.equals(player)) return true;
+		}
+		return false;
+	}
+
 	public RuntimeWorldHandle getHandler() {
 		if(this.islandConfig == null) {
 			this.islandConfig = createIslandConfig();

@@ -11,9 +11,9 @@ import skylands.util.Texts;
 
 import java.util.UUID;
 
-public class BanCommand {
+public class BanCommands {
 
-	static void run(ServerPlayerEntity player, ServerPlayerEntity banned) {
+	static void ban(ServerPlayerEntity player, ServerPlayerEntity banned) {
 		Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
 			if(player.getName().getString().equals(banned.getName().getString())) {
 				player.sendMessage(Texts.prefixed("message.skylands.ban_player.yourself"));
@@ -42,5 +42,17 @@ public class BanCommand {
 				}
 			}
 		}, () -> player.sendMessage(Texts.prefixed("message.skylands.ban_player.no_island")));
+	}
+
+	static void unban(ServerPlayerEntity player, String unbanned) {
+		Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
+			if(!island.isBanned(unbanned)) {
+				player.sendMessage(Texts.prefixed("message.skylands.unban_player.fail"));
+			}
+			else {
+				island.bans.removeIf(member -> member.name.equals(unbanned));
+				player.sendMessage(Texts.prefixed("message.skylands.unban_player.success", map -> map.put("%player%", unbanned)));
+			}
+		}, () -> player.sendMessage(Texts.prefixed("message.skylands.unban_player.no_island")));
 	}
 }

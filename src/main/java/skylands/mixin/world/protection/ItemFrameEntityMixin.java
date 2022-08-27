@@ -5,7 +5,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -13,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import skylands.util.Texts;
 import skylands.util.WorldProtection;
 
 @Mixin(ItemFrameEntity.class)
@@ -26,7 +26,7 @@ public abstract class ItemFrameEntityMixin extends AbstractDecorationEntity {
 	void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
 		if(!world.isClient && source.getAttacker() instanceof PlayerEntity attacker) {
 			if(!WorldProtection.canModify(world, attacker)) {
-				attacker.sendMessage(Text.of("Skylands > You can't damage entities on someone's island!"), true);
+				attacker.sendMessage(Texts.prefixed("message.skylands.world_protection.entity_hurt"), true);
 				cir.setReturnValue(false);
 			}
 		}
@@ -36,7 +36,7 @@ public abstract class ItemFrameEntityMixin extends AbstractDecorationEntity {
 	void interact(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
 		if(!player.world.isClient) {
 			if(!WorldProtection.canModify(world, player)) {
-				player.sendMessage(Text.of("Skylands > You can't interact with entities out here!"), true);
+				player.sendMessage(Texts.prefixed("message.skylands.world_protection.item_frame_use"), true);
 				cir.setReturnValue(ActionResult.FAIL);
 			}
 		}

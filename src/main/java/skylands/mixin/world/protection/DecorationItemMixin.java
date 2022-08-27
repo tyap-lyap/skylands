@@ -4,13 +4,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DecorationItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import skylands.util.Texts;
 import skylands.util.WorldProtection;
 
 @Mixin(DecorationItem.class)
@@ -26,7 +26,7 @@ public abstract class DecorationItemMixin extends Item {
 		PlayerEntity player = context.getPlayer();
 		if(!world.isClient && player != null) {
 			if(!WorldProtection.canModify(world, player)) {
-				player.sendMessage(Text.of("Skylands > You can't place items out here!"), true);
+				player.sendMessage(Texts.prefixed("message.skylands.world_protection.item_place"), true);
 				cir.setReturnValue(ActionResult.FAIL);
 			}
 		}

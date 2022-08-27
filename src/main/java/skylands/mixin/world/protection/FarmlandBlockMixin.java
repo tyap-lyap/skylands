@@ -4,13 +4,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.FarmlandBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import skylands.util.Texts;
 import skylands.util.WorldProtection;
 
 @Mixin(FarmlandBlock.class)
@@ -20,7 +20,7 @@ public abstract class FarmlandBlockMixin {
 	void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance, CallbackInfo ci) {
 		if(!world.isClient && entity instanceof PlayerEntity player) {
 			if(!WorldProtection.canModify(world, player)) {
-				player.sendMessage(Text.of("Skylands > You can't spoil farmlands out here!"), true);
+				player.sendMessage(Texts.prefixed("message.skylands.world_protection.farmland_spoil"), true);
 				ci.cancel();
 			}
 		}

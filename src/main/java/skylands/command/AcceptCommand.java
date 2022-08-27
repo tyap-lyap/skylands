@@ -1,9 +1,9 @@
 package skylands.command;
 
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import skylands.logic.Skylands;
 import skylands.util.Players;
+import skylands.util.Texts;
 
 public class AcceptCommand {
 
@@ -16,19 +16,19 @@ public class AcceptCommand {
 				if(invite.isPresent()) {
 					if(!invite.get().accepted) {
 						invite.get().accept(player);
-						player.sendMessage(Text.of("Skylands > You successfully accepted " + ownerName + "'s invite! You can now visit the island with \"/sl home " + ownerName + "\" command."));
+						player.sendMessage(Texts.prefixed("message.skylands.accept.success", map -> map.put("%owner%", ownerName)));
 					}
 				}
 				else {
-					player.sendMessage(Text.of("Skylands > This player did not invite you."));
+					player.sendMessage(Texts.prefixed("message.skylands.accept.fail"));
 				}
 			}
 			else {
-				player.sendMessage(Text.of("Skylands > This player does not have an island yet."));
+				player.sendMessage(Texts.prefixed("message.skylands.accept.no_island"));
 			}
 		}
 		else {
-			player.sendMessage(Text.of("Skylands > Such player does not exist!"));
+			player.sendMessage(Texts.prefixed("message.skylands.accept.no_player"));
 		}
 	}
 }

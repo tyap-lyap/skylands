@@ -36,7 +36,7 @@ dependencies {
 	modImplementation include("maven.modrinth:nota:0.1.0+1.19")
 //	modImplementation include("eu.pb4:sidebar-api:0.1.1+1.19")
 //	modImplementation include("eu.pb4:placeholder-api:2.0.0-beta.7+1.19")
-//	modImplementation include("fr.catcore:server-translations-api:1.4.16+1.19")
+	modImplementation include("fr.catcore:server-translations-api:1.4.16+1.19")
 //	modImplementation include("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
 
 	modLocalRuntime "maven.modrinth:dashloader:4.0.0+1.19"

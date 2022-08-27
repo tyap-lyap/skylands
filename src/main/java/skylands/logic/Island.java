@@ -10,7 +10,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureSet;
 import net.minecraft.structure.StructureTemplate;
-import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -26,6 +25,7 @@ import net.minecraft.world.gen.chunk.FlatChunkGenerator;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
 import skylands.Mod;
 import skylands.util.Players;
+import skylands.util.Texts;
 import xyz.nucleoid.fantasy.Fantasy;
 import xyz.nucleoid.fantasy.RuntimeWorldConfig;
 import xyz.nucleoid.fantasy.RuntimeWorldHandle;
@@ -190,7 +190,7 @@ public class Island {
 		FabricDimensions.teleport(player, world, new TeleportTarget(this.spawnPos, new Vec3d(0, 0, 0), 0, 0));
 		Players.get(this.owner.name).ifPresent(owner -> {
 			if(!player.getUuid().equals(owner.getUuid())) {
-				owner.sendMessage(Text.of("Skylands > " + player.getName().getString() + " visited your Island!"));
+				owner.sendMessage(Texts.prefixed("message.skylands.island_visit.visit", map -> map.put("%visitor%", player.getName().getString())));
 			}
 		});
 	}

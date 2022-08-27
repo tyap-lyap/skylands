@@ -1,6 +1,6 @@
 ## About
 <!-- modrinth_exclude.start -->
-<img align="right" width="160" src="src/main/resources/assets/skylands/icon.png">
+<img align="right" width="128" src="src/main/resources/assets/skylands/icon.png">
 <!-- modrinth_exclude.end -->
 
 Skylands is a Minecraft mod/plugin for fabric loader. Simple skyblock islands generator and manager allowing your

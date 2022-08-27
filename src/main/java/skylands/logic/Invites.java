@@ -2,7 +2,7 @@ package skylands.logic;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.text.Text;
+import skylands.util.Texts;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -58,7 +58,7 @@ public class Invites {
 				island.members.add(new Member(player));
 			}
 			else {
-				player.sendMessage(Text.of("Skylands > This island does not exist anymore."));
+				player.sendMessage(Texts.prefixed("message.skylands.accept.no_island"));
 			}
 		}
 	}

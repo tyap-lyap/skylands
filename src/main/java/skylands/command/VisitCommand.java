@@ -1,9 +1,9 @@
 package skylands.command;
 
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import skylands.Mod;
 import skylands.logic.Skylands;
+import skylands.util.Texts;
 
 public class VisitCommand {
 
@@ -14,18 +14,18 @@ public class VisitCommand {
 
 		Skylands.instance.islandStuck.get(owner).ifPresentOrElse(island -> {
 			if(!island.isMember(visitor) && island.isBanned(visitor)) {
-				visitor.sendMessage(Text.of("Skylands > You are banned from visiting " + ownerName + "'s Island!"));
+				visitor.sendMessage(Texts.prefixed("message.skylands.island_visit.ban", map -> map.put("%owner%", ownerName)));
 			}
 			else {
 				if(visitor.getWorld().getRegistryKey().getValue().equals(Mod.id(island.owner.uuid.toString()))) {
-					visitor.sendMessage(Text.of("Skylands > You are already on the " + ownerName + "'s Island!"));
+					visitor.sendMessage(Texts.prefixed("message.skylands.island_visit.fail", map -> map.put("%owner%", ownerName)));
 				}
 				else {
-					visitor.sendMessage(Text.of("Skylands > Teleporting to the " + ownerName + "'s Island!"));
+					visitor.sendMessage(Texts.prefixed("message.skylands.island_visit.success", map -> map.put("%owner%", ownerName)));
 					island.visit(visitor);
 				}
 			}
 
-		}, () -> visitor.sendMessage(Text.of("Skylands > " + ownerName + " doesn't have an Island yet!")));
+		}, () -> visitor.sendMessage(Texts.prefixed("message.skylands.island_visit.no_island", map -> map.put("%owner%", ownerName))));
 	}
 }

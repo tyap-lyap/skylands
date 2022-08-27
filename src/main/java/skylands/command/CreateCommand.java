@@ -6,13 +6,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplate;
-import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.math.BlockPos;
 import skylands.Mod;
 import skylands.logic.Island;
 import skylands.logic.IslandStuck;
 import skylands.logic.Skylands;
+import skylands.util.Texts;
 
 public class CreateCommand {
 
@@ -21,7 +21,7 @@ public class CreateCommand {
 		IslandStuck islands = Skylands.instance.islandStuck;
 
 		if(islands.get(player).isPresent()) {
-			player.sendMessage(Text.of("Skylands > You're already have an island!"));
+			player.sendMessage(Texts.prefixed("message.skylands.island_create.fail"));
 		}
 		else {
 			Island island = islands.create(player);
@@ -29,7 +29,7 @@ public class CreateCommand {
 			StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(Mod.id("main"));
 			StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
 			structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, player.getRandom(), Block.NOTIFY_ALL);
-			player.sendMessage(Text.of("Skylands > Your island got successfully created, you can now visit it with the \"/sl home\" command!"));
+			player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
 		}
 	}
 }

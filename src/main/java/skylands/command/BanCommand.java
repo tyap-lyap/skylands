@@ -2,12 +2,12 @@ package skylands.command;
 
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import skylands.Mod;
 import skylands.logic.Member;
 import skylands.logic.Skylands;
+import skylands.util.Texts;
 
 import java.util.UUID;
 
@@ -16,31 +16,31 @@ public class BanCommand {
 	static void run(ServerPlayerEntity player, ServerPlayerEntity banned) {
 		Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
 			if(player.getName().getString().equals(banned.getName().getString())) {
-				player.sendMessage(Text.of("Skylands > You can't ban yourself."));
+				player.sendMessage(Texts.prefixed("message.skylands.ban_player.yourself"));
 			}
 			else {
 				if(island.isMember(banned)) {
-					player.sendMessage(Text.of("Skylands > You can't ban member of your island."));
+					player.sendMessage(Texts.prefixed("message.skylands.ban_player.member"));
 				}
 				else {
 					if(island.isBanned(banned)) {
-						player.sendMessage(Text.of("Skylands > This player is already banned."));
+						player.sendMessage(Texts.prefixed("message.skylands.ban_player.fail"));
 					}
 					else {
 						island.bans.add(new Member(banned));
-						player.sendMessage(Text.of("Skylands > " + banned + " got successfully banned."));
-						banned.sendMessage(Text.of("Skylands > You have been banned from visiting " + island.owner.name + "'s Island!"));
+						player.sendMessage(Texts.prefixed("message.skylands.ban_player.success", map -> map.put("%player%", banned.getName().getString())));
+						banned.sendMessage(Texts.prefixed("message.skylands.ban_player.ban", map -> map.put("%owner%", island.owner.name)));
 
 						if(banned.getWorld().getRegistryKey().getValue().getNamespace().equals(Mod.MOD_ID)) {
 							var uuid = UUID.fromString(banned.getWorld().getRegistryKey().getValue().getPath());
 							if(uuid.equals(island.owner.uuid)) {
-								banned.sendMessage(Text.of("Skylands > Teleporting to the Hub!"));
+								banned.sendMessage(Texts.prefixed("message.skylands.hub_visit"));
 								FabricDimensions.teleport(banned, Skylands.instance.server.getOverworld(), new TeleportTarget(Skylands.instance.hub.pos, new Vec3d(0, 0, 0), 0, 0));
 							}
 						}
 					}
 				}
 			}
-		}, () -> player.sendMessage(Text.of("Skylands > You don't have an island yet!")));
+		}, () -> player.sendMessage(Texts.prefixed("message.skylands.ban_player.no_island")));
 	}
 }

@@ -25,6 +25,8 @@ public class KickCommand {
 					if(kicked.getWorld().getRegistryKey().getValue().getNamespace().equals(Mod.MOD_ID)) {
 						var uuid = UUID.fromString(kicked.getWorld().getRegistryKey().getValue().getPath());
 						if(uuid.equals(island.owner.uuid)) {
+							player.sendMessage(Text.of("Skylands > " + kicked.getName().getString() + " got successfully kicked from your Island."));
+							
 							kicked.sendMessage(Text.of("Skylands > " + player.getName().getString() + " kicked you from their island."));
 							kicked.sendMessage(Text.of("Skylands > Teleporting to the Hub!"));
 							FabricDimensions.teleport(kicked, Skylands.instance.server.getOverworld(), new TeleportTarget(Skylands.instance.hub.pos, new Vec3d(0, 0, 0), 0, 0));

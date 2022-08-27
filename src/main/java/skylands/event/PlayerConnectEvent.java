@@ -3,13 +3,13 @@ package skylands.event;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import nota.player.SongPlayer;
 import skylands.Mod;
 import skylands.logic.Member;
 import skylands.logic.Skylands;
+import skylands.util.Texts;
 
 import java.util.UUID;
 
@@ -44,8 +44,8 @@ public class PlayerConnectEvent {
 			var island = Skylands.instance.islandStuck.get(uuid);
 
 			if(island.isPresent() && !island.get().isMember(player) && island.get().isBanned(player)) {
-				player.sendMessage(Text.of("Skylands > You have been banned from visiting " + island.get().owner.name + "'s Island!"));
-				player.sendMessage(Text.of("Skylands > Teleporting to the Hub!"));
+				player.sendMessage(Texts.prefixed("message.skylands.ban_player.ban", map -> map.put("%owner%", island.get().owner.name)));
+				player.sendMessage(Texts.prefixed("message.skylands.hub_visit"));
 				FabricDimensions.teleport(player, server.getOverworld(), new TeleportTarget(Skylands.instance.hub.pos, new Vec3d(0, 0, 0), 0, 0));
 			}
 		}

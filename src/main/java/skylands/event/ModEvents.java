@@ -7,13 +7,13 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import nota.Nota;
 import nota.event.SongStartEvent;
 import nota.player.PositionSongPlayer;
+import skylands.util.Texts;
 
 import java.util.UUID;
 
@@ -25,7 +25,7 @@ public class ModEvents {
 				for(UUID uuid : sp.getPlayerUUIDs()) {
 					PlayerEntity player = Nota.getAPI().getServer().getPlayerManager().getPlayer(uuid);
 					if(player != null && sp.isInRange(player)) {
-						player.sendMessage(Text.of("Now Playing: " + sp.getSong().getTitle()), true);
+						player.sendMessage(Texts.of("message.skylands.now_playing", map -> map.put("%song%", sp.getSong().getTitle())), true);
 					}
 				}
 			}

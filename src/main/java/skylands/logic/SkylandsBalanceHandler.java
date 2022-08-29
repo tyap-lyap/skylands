@@ -19,19 +19,19 @@ public class SkylandsBalanceHandler implements BalanceHandler {
 	}
 
 	@Override
-	public int getBalance(PlayerEntity player) {
+	public double getBalance(PlayerEntity player) {
 		return getWallet(player).balance;
 	}
 
 	@Override
-	public void setBalance(PlayerEntity player, int balance) {
+	public void setBalance(PlayerEntity player, double balance) {
 		Wallet wallet = this.getWallet(player);
 		wallet.balance = balance;
 	}
 
 	public static class Wallet {
 		public UUID playerUuid;
-		public int balance = 0;
+		public double balance = 0;
 
 		public Wallet(PlayerEntity player) {
 			this.playerUuid = player.getUuid();

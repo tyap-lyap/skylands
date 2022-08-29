@@ -202,6 +202,13 @@ public class Island {
 		});
 	}
 
+	public void onFirstLoad() {
+		ServerWorld world = this.getWorld();
+		StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(Mod.id("start_island"));
+		StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
+		structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, world.getRandom(), Block.NOTIFY_ALL);
+	}
+
 	void onFirstNetherLoad(ServerWorld world) {
 		if(this.hasNether) return;
 

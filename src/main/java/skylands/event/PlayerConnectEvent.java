@@ -6,12 +6,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import nota.player.SongPlayer;
-import skylands.Mod;
 import skylands.logic.Member;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
-
-import java.util.UUID;
+import skylands.util.Worlds;
 
 @SuppressWarnings("unused")
 public class PlayerConnectEvent {
@@ -37,18 +35,14 @@ public class PlayerConnectEvent {
 				}
 			}
 		});
-		var world = player.getWorld();
 
-		if(world.getRegistryKey().getValue().getNamespace().equals(Mod.MOD_ID)) {
-			var uuid = UUID.fromString(world.getRegistryKey().getValue().getPath());
-			var island = Skylands.instance.islandStuck.get(uuid);
-
-			if(island.isPresent() && !island.get().isMember(player) && island.get().isBanned(player)) {
-				player.sendMessage(Texts.prefixed("message.skylands.ban_player.ban", map -> map.put("%owner%", island.get().owner.name)));
+		Worlds.getIsland(player.getWorld()).ifPresent(island -> {
+			if(!island.isMember(player) && island.isBanned(player)) {
+				player.sendMessage(Texts.prefixed("message.skylands.ban_player.ban", map -> map.put("%owner%", island.owner.name)));
 				player.sendMessage(Texts.prefixed("message.skylands.hub_visit"));
 				FabricDimensions.teleport(player, server.getOverworld(), new TeleportTarget(Skylands.instance.hub.pos, new Vec3d(0, 0, 0), 0, 0));
 			}
-		}
+		});
 	}
 
 	public static void onLeave(MinecraftServer server, ServerPlayerEntity player) {

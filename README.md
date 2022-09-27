@@ -7,7 +7,7 @@ Skylands is a Minecraft mod/plugin for fabric loader. Simple skyblock islands ge
 server's players create and visit islands. The mod can be used server-side only, however it's compatible with singleplayer
 and modpacks. This mod is not complete and still in active development.
 
-#### [Discord Server](https://discord.gg/DcemWeskeZ) | [Modrinth Page](https://modrinth.com/mod/skylands)
+[![Discord Server](https://raw.githubusercontent.com/intergrav/devins-badges/main/badges/discord_64h.png)](https://discord.gg/DcemWeskeZ) [![Modrinth Page](https://raw.githubusercontent.com/intergrav/devins-badges/main/badges/modrinth_64h.png)](https://modrinth.com/mod/skylands)
 
 ### User Commands
 
@@ -21,6 +21,7 @@ and modpacks. This mod is not complete and still in active development.
 - /sl accept <player> -> Accept island join invite request.
 - /sl kick <player> -> Kick player from your island.
 - /sl ban <player> -> Ban player from visiting your island.
+- /sl unban <player> -> Unban player to allow visiting your island.
 - /sl help -> Sends this list.
 
 ### Admin Commands

@@ -95,5 +95,6 @@
   "message.skylands.help.7": "- /sl accept <player> -> Accept island join invite request.",
   "message.skylands.help.8": "- /sl kick <player> -> Kick player from your island.",
   "message.skylands.help.9": "- /sl ban <player> -> Ban player from visiting your island.",
-  "message.skylands.help.10": "- /sl help -> Sends this list."
+  "message.skylands.help.10": "- /sl unban <player> -> Unban player to allow visiting your island.",
+  "message.skylands.help.11": "- /sl help -> Sends this list."
 }

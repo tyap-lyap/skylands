@@ -16,6 +16,7 @@ import net.minecraft.world.GameMode;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: make a seperate library mod
 public class Cutscenes {
 	public static final Logic TEST = new Logic(new BlockPos(0, 64, 0));
 

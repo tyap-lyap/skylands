@@ -1,7 +1,7 @@
 package skylands.command;
 
+import eu.pb4.placeholders.api.TextParserUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Language;
 
 public class HelpCommand {
@@ -22,6 +22,6 @@ public class HelpCommand {
 				break;
 			}
 		}
-		player.sendMessage(Text.of(text));
+		player.sendMessage(TextParserUtils.formatText(text));
 	}
 }

@@ -156,6 +156,7 @@ public class Island {
 				.setDimensionType(DimensionTypes.OVERWORLD)
 				.setGenerator(generator)
 				.setDifficulty(Difficulty.NORMAL)
+				.setShouldTickTime(true)
 				.setSeed(123L);
 	}
 
@@ -175,6 +176,7 @@ public class Island {
 				.setDimensionType(DimensionTypes.THE_NETHER)
 				.setGenerator(generator)
 				.setDifficulty(Difficulty.NORMAL)
+				.setShouldTickTime(true)
 				.setSeed(123L);
 	}
 

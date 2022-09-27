@@ -27,8 +27,8 @@ public class InviteCommands {
 
 					var inviteText = Texts.prefixed("message.skylands.invite_member.invite", (map) -> map.put("%inviter%", inviter.getName().getString()));
 
-					newcomer.sendMessage(inviteText.fillStyle(style));
-					newcomer.sendMessage(Texts.prefixed("message.skylands.invite_member.accept").fillStyle(style));
+					newcomer.sendMessage(inviteText.getWithStyle(style).get(0));
+					newcomer.sendMessage(Texts.prefixed("message.skylands.invite_member.accept").getWithStyle(style).get(0));
 					Skylands.instance.invites.create(island, newcomer);
 				}
 			}

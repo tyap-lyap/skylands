@@ -22,7 +22,7 @@ public class InviteCommands {
 					inviter.sendMessage(Texts.prefixed("message.skylands.invite_member.success", (map) -> map.put("%newcomer%", newcomer.getName().getString())));
 
 					var hoverText = Texts.prefixed("hover_event.skylands.invite_member.accept", (map) -> map.put("%inviter%", inviter.getName().getString()));
-					Style style = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sl accept" + inviter.getName().getString()));
+					Style style = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sl accept " + inviter.getName().getString()));
 					style = style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
 
 					var inviteText = Texts.prefixed("message.skylands.invite_member.invite", (map) -> map.put("%inviter%", inviter.getName().getString()));

@@ -6,6 +6,7 @@ import skylands.logic.Island;
 import skylands.logic.Skylands;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class Worlds {
 
@@ -16,7 +17,7 @@ public class Worlds {
 
 	public static Optional<Island> getIsland(World world) {
 		if(isIsland(world)) {
-			return Skylands.instance.islandStuck.get(world.getRegistryKey().getValue().getPath());
+			return Skylands.instance.islandStuck.get(UUID.fromString(world.getRegistryKey().getValue().getPath()));
 		}
 		return Optional.empty();
 	}

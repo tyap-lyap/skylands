@@ -11,7 +11,7 @@ import skylands.util.Worlds;
 public class KickCommand {
 
 	static void run(ServerPlayerEntity player, ServerPlayerEntity kicked) {
-		Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
+		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
 			if(player.getName().getString().equals(kicked.getName().getString())) {
 				player.sendMessage(Texts.prefixed("message.skylands.kick_visitor.yourself"));
 			}

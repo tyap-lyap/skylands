@@ -12,7 +12,7 @@ import skylands.util.Worlds;
 public class BanCommands {
 
 	static void ban(ServerPlayerEntity player, ServerPlayerEntity banned) {
-		Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
+		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
 			if(player.getName().getString().equals(banned.getName().getString())) {
 				player.sendMessage(Texts.prefixed("message.skylands.ban_player.yourself"));
 			}
@@ -42,7 +42,7 @@ public class BanCommands {
 	}
 
 	static void unban(ServerPlayerEntity player, String unbanned) {
-		Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
+		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
 			if(!island.isBanned(unbanned)) {
 				player.sendMessage(Texts.prefixed("message.skylands.unban_player.fail"));
 			}

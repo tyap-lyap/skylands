@@ -30,12 +30,12 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 	protected void tickPortal() {
 		if(world.getRegistryKey().getValue().getNamespace().equals(Mod.MOD_ID)) {
 			var uuid = UUID.fromString(world.getRegistryKey().getValue().getPath());
-			var island = Skylands.instance.islandStuck.get(uuid);
+			var island = Skylands.instance.islands.get(uuid);
 			island.ifPresent(this::tickPortalOnIsland);
 		}
 		else if(world.getRegistryKey().getValue().getNamespace().equals("nether")) {
 			var uuid = UUID.fromString(world.getRegistryKey().getValue().getPath());
-			var island = Skylands.instance.islandStuck.get(uuid);
+			var island = Skylands.instance.islands.get(uuid);
 			island.ifPresent(this::tickPortalInNether);
 		}
 		else {

@@ -10,14 +10,14 @@ public class Skylands {
 	public static Skylands instance;
 	public MinecraftServer server;
 	public Fantasy fantasy;
-	public IslandStuck islandStuck;
+	public IslandStuck islands;
 	public Hub hub;
 	public Invites invites;
 
 	public Skylands(MinecraftServer server) {
 		this.server = server;
 		this.fantasy = Fantasy.get(server);
-		this.islandStuck = new IslandStuck();
+		this.islands = new IslandStuck();
 		this.hub = new Hub();
 		this.invites = new Invites();
 	}
@@ -29,7 +29,7 @@ public class Skylands {
 		NbtMigrator.update(skylandsNbt);
 
 		this.format = skylandsNbt.getInt("format");
-		this.islandStuck.readFromNbt(skylandsNbt);
+		this.islands.readFromNbt(skylandsNbt);
 		this.hub.readFromNbt(skylandsNbt);
 	}
 
@@ -37,7 +37,7 @@ public class Skylands {
 		NbtCompound skylandsNbt = new NbtCompound();
 
 		skylandsNbt.putInt("format", this.format);
-		this.islandStuck.writeToNbt(skylandsNbt);
+		this.islands.writeToNbt(skylandsNbt);
 		this.hub.writeToNbt(skylandsNbt);
 
 		nbt.put("skylands", skylandsNbt);

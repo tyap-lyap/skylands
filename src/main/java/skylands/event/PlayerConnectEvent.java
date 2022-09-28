@@ -20,10 +20,10 @@ public class PlayerConnectEvent {
 			sp.addPlayer(player);
 		}
 
-		Skylands.instance.islandStuck.get(player).ifPresent(island -> {
+		Skylands.instance.islands.get(player).ifPresent(island -> {
 			island.owner.name = player.getName().getString();
 		});
-		Skylands.instance.islandStuck.islands.forEach(island -> {
+		Skylands.instance.islands.stuck.forEach(island -> {
 			for(Member member : island.members) {
 				if(member.uuid.equals(player.getUuid())) {
 					member.name = player.getName().getString();

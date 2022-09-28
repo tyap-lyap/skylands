@@ -10,7 +10,7 @@ import skylands.util.Texts;
 public class InviteCommands {
 
 	static void add(ServerPlayerEntity inviter, ServerPlayerEntity newcomer) {
-		Skylands.instance.islandStuck.get(inviter).ifPresentOrElse(island -> {
+		Skylands.instance.islands.get(inviter).ifPresentOrElse(island -> {
 			if(island.isMember(newcomer)) {
 				inviter.sendMessage(Texts.prefixed("message.skylands.invite_member.already_member"));
 			}
@@ -36,7 +36,7 @@ public class InviteCommands {
 	}
 
 	static void remove(ServerPlayerEntity player, String removed) {
-		Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
+		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
 			if(player.getName().getString().equals(removed)) {
 				player.sendMessage(Texts.prefixed("message.skylands.remove_member.yourself"));
 			}

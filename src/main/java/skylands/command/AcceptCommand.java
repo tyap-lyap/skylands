@@ -11,7 +11,7 @@ public class AcceptCommand {
 	static void run(ServerPlayerEntity player, String ownerName) {
 		var inviter = Players.get(ownerName);
 		if(inviter.isPresent()) {
-			var island = Skylands.instance.islandStuck.get(inviter.get());
+			var island = Skylands.instance.islands.get(inviter.get());
 			if(island.isPresent()) {
 				var invite = Skylands.instance.invites.get(island.get(), player);
 				if(invite.isPresent()) {

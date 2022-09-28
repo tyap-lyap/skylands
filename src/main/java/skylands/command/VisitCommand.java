@@ -12,7 +12,7 @@ public class VisitCommand {
 	static void run(ServerPlayerEntity visitor, ServerPlayerEntity owner) {
 		String ownerName = owner.getName().getString();
 
-		Skylands.instance.islandStuck.get(owner).ifPresentOrElse(island -> {
+		Skylands.instance.islands.get(owner).ifPresentOrElse(island -> {
 			if(!island.isMember(visitor) && island.isBanned(visitor)) {
 				visitor.sendMessage(Texts.prefixed("message.skylands.island_visit.ban", map -> map.put("%owner%", ownerName)));
 			}

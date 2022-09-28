@@ -9,7 +9,7 @@ import skylands.util.Texts;
 public class CreateCommand {
 
 	static void run(ServerPlayerEntity player) {
-		IslandStuck islands = Skylands.instance.islandStuck;
+		IslandStuck islands = Skylands.instance.islands;
 
 		if(islands.get(player).isPresent()) {
 			player.sendMessage(Texts.prefixed("message.skylands.island_create.fail"));

@@ -9,7 +9,7 @@ import skylands.util.Texts;
 public class HomeCommand {
 
 	static void run(ServerPlayerEntity player) {
-		Skylands.instance.islandStuck.get(player).ifPresentOrElse(island -> {
+		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
 			if(player.getWorld().getRegistryKey().getValue().equals(Mod.id(player.getUuid().toString()))) {
 				player.sendMessage(Texts.prefixed("message.skylands.home.fail"));
 			}
@@ -21,7 +21,7 @@ public class HomeCommand {
 	}
 
 	static void run(ServerPlayerEntity visitor, String islandOwner) {
-		Skylands.instance.islandStuck.get(islandOwner).ifPresentOrElse(island -> {
+		Skylands.instance.islands.get(islandOwner).ifPresentOrElse(island -> {
 			if(visitor.getWorld().getRegistryKey().getValue().equals(Mod.id(island.owner.uuid.toString()))) {
 				visitor.sendMessage(Texts.prefixed("message.skylands.visit_home.fail", map -> map.put("%owner%", islandOwner)));
 			}

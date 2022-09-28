@@ -17,7 +17,6 @@ repositories {
 	maven { url "https://maven.nucleoid.xyz" }
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 	maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
-	maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -76,7 +75,7 @@ modrinth {
 	syncBodyFrom = rootProject.file("README.md").text
 	projectId = "skylands"
 	versionNumber = version
-	versionName = "build." + version
+	versionName = "Skylands Build " + version
 	versionType = "alpha"
 	uploadFile = remapJar
 	additionalFiles = [remapSourcesJar]

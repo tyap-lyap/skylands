@@ -17,7 +17,7 @@ public class Worlds {
 
 	public static Optional<Island> getIsland(World world) {
 		if(isIsland(world)) {
-			return Skylands.instance.islandStuck.get(UUID.fromString(world.getRegistryKey().getValue().getPath()));
+			return Skylands.instance.islands.get(UUID.fromString(world.getRegistryKey().getValue().getPath()));
 		}
 		return Optional.empty();
 	}

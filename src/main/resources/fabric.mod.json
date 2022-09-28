@@ -28,7 +28,8 @@
   ],
   "custom": {
     "cardinal-components": [
-      "skylands:world_data"
+      "skylands:world_data",
+      "skylands:player_data"
     ]
   },
   "depends": {

@@ -2,6 +2,7 @@ package skylands.command;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import skylands.Mod;
+import skylands.data.Components;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
 
@@ -28,11 +29,16 @@ public class HomeCommand {
 				if(island.isMember(visitor)) {
 					visitor.sendMessage(Texts.prefixed("message.skylands.visit_home.success", map -> map.put("%owner%", islandOwner)));
 					island.visit(visitor);
+					Components.PLAYER_DATA.get(visitor).addIsland(islandOwner);
 				}
 				else {
 					visitor.sendMessage(Texts.prefixed("message.skylands.visit_home.not_member"));
+					Components.PLAYER_DATA.get(visitor).removeIsland(islandOwner);
 				}
 			}
-		}, () -> visitor.sendMessage(Texts.prefixed("message.skylands.visit_home.no_island")));
+		}, () -> {
+			visitor.sendMessage(Texts.prefixed("message.skylands.visit_home.no_island"));
+			Components.PLAYER_DATA.get(visitor).removeIsland(islandOwner);
+		});
 	}
 }

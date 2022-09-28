@@ -24,6 +24,8 @@ public class Skylands {
 
 	public void readFromNbt(NbtCompound nbt) {
 		NbtCompound skylandsNbt = nbt.getCompound("skylands");
+		if(skylandsNbt.isEmpty()) return;
+
 		NbtMigrator.update(skylandsNbt);
 
 		this.format = skylandsNbt.getInt("format");

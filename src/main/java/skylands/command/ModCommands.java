@@ -10,6 +10,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import nota.player.SongPlayer;
+import skylands.data.Components;
 import skylands.logic.Skylands;
 
 import static net.minecraft.server.command.CommandManager.literal;
@@ -50,7 +51,23 @@ public class ModCommands {
 			}
 			return 1;
 		})));
-		dispatcher.register(literal("sl").then(literal("home").then(argument("player", word()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("home").then(argument("player", word()).suggests((context, builder) -> {
+			var player = context.getSource().getPlayer();
+
+			if(player != null) {
+				var islands = Components.PLAYER_DATA.get(player).getIslands();
+
+				String remains = builder.getRemaining();
+
+				for(String ownerName : islands) {
+					if(ownerName.contains(remains)) {
+						builder.suggest(ownerName);
+					}
+				}
+				return builder.buildFuture();
+			}
+			return builder.buildFuture();
+		}).executes(context -> {
 			var ownerName = StringArgumentType.getString(context, "player");
 			var visitor = context.getSource().getPlayer();
 			if(visitor != null) {

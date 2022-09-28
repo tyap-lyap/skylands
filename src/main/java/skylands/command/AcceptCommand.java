@@ -1,6 +1,7 @@
 package skylands.command;
 
 import net.minecraft.server.network.ServerPlayerEntity;
+import skylands.data.Components;
 import skylands.logic.Skylands;
 import skylands.util.Players;
 import skylands.util.Texts;
@@ -17,6 +18,7 @@ public class AcceptCommand {
 					if(!invite.get().accepted) {
 						invite.get().accept(player);
 						player.sendMessage(Texts.prefixed("message.skylands.accept.success", map -> map.put("%owner%", ownerName)));
+						Components.PLAYER_DATA.get(player).addIsland(ownerName);
 					}
 				}
 				else {

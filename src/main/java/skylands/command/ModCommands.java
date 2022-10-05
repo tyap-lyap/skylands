@@ -91,7 +91,26 @@ public class ModCommands {
 			}
 			return 1;
 		}))));
-		dispatcher.register(literal("sl").then(literal("remove-member").then(argument("player", word()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("remove-member").then(argument("player", word()).suggests((context, builder) -> {
+			var player = context.getSource().getPlayer();
+
+			if(player != null) {
+				var island = Skylands.instance.islands.get(player);
+				if(island.isPresent()) {
+					var members = island.get().members;
+
+					String remains = builder.getRemaining();
+
+					for(var member : members) {
+						if(member.name.contains(remains)) {
+							builder.suggest(member.name);
+						}
+					}
+					return builder.buildFuture();
+				}
+			}
+			return builder.buildFuture();
+		}).executes(context -> {
 			String memberToRemove = StringArgumentType.getString(context, "player");
 			var player = context.getSource().getPlayer();
 			if(player != null) {
@@ -161,7 +180,26 @@ public class ModCommands {
 			return 1;
 		}))));
 
-		dispatcher.register(literal("sl").then(literal("unban").then(argument("player", word()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("unban").then(argument("player", word()).suggests((context, builder) -> {
+			var player = context.getSource().getPlayer();
+
+			if(player != null) {
+				var island = Skylands.instance.islands.get(player);
+				if(island.isPresent()) {
+					var bans = island.get().bans;
+
+					String remains = builder.getRemaining();
+
+					for(var member : bans) {
+						if(member.name.contains(remains)) {
+							builder.suggest(member.name);
+						}
+					}
+					return builder.buildFuture();
+				}
+			}
+			return builder.buildFuture();
+		}).executes(context -> {
 			String unbanned = StringArgumentType.getString(context, "player");
 			var player = context.getSource().getPlayer();
 

@@ -13,7 +13,7 @@ import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import skylands.Mod;
+import skylands.SkylandsMod;
 import skylands.logic.Island;
 import skylands.logic.Skylands;
 
@@ -28,7 +28,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
 	@Override
 	protected void tickPortal() {
-		if(world.getRegistryKey().getValue().getNamespace().equals(Mod.MOD_ID)) {
+		if(world.getRegistryKey().getValue().getNamespace().equals(SkylandsMod.MOD_ID)) {
 			var uuid = UUID.fromString(world.getRegistryKey().getValue().getPath());
 			var island = Skylands.instance.islands.get(uuid);
 			island.ifPresent(this::tickPortalOnIsland);

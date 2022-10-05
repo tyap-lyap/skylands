@@ -2,6 +2,7 @@ package skylands.util;
 
 import net.minecraft.nbt.NbtCompound;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class NbtMigrator {
@@ -12,9 +13,14 @@ public class NbtMigrator {
 		if(format == 0) {
 			from0to1(nbt);
 			from1to2(nbt);
+			from2to3(nbt);
 		}
 		else if(format == 1) {
 			from1to2(nbt);
+			from2to3(nbt);
+		}
+		else if(format == 2) {
+			from2to3(nbt);
 		}
 	}
 
@@ -40,6 +46,17 @@ public class NbtMigrator {
 			NbtCompound membersNbt = new NbtCompound();
 			membersNbt.putInt("size", 0);
 			islandNbt.put("members", membersNbt);
+		}
+		nbt.put("islandStuck", islandStuckNbt);
+	}
+
+	private static void from2to3(NbtCompound nbt) {
+		nbt.putInt("format", 3);
+		NbtCompound islandStuckNbt = nbt.getCompound("islandStuck");
+		int size = islandStuckNbt.getInt("size");
+		for(int i = 0; i < size; i++) {
+			NbtCompound islandNbt = islandStuckNbt.getCompound(String.valueOf(i));
+			islandNbt.putString("created", Instant.now().toString());
 		}
 		nbt.put("islandStuck", islandStuckNbt);
 	}

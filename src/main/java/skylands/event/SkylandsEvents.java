@@ -17,7 +17,7 @@ import skylands.util.Texts;
 
 import java.util.UUID;
 
-public class ModEvents {
+public class SkylandsEvents {
 
 	public static void init() {
 		SongStartEvent.EVENT.register(songPlayer -> {

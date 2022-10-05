@@ -1,7 +1,7 @@
 package skylands.command;
 
 import net.minecraft.server.network.ServerPlayerEntity;
-import skylands.Mod;
+import skylands.SkylandsMod;
 import skylands.data.Components;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
@@ -10,7 +10,7 @@ public class HomeCommand {
 
 	static void run(ServerPlayerEntity player) {
 		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
-			if(player.getWorld().getRegistryKey().getValue().equals(Mod.id(player.getUuid().toString()))) {
+			if(player.getWorld().getRegistryKey().getValue().equals(SkylandsMod.id(player.getUuid().toString()))) {
 				player.sendMessage(Texts.prefixed("message.skylands.home.fail"));
 			}
 			else {
@@ -22,7 +22,7 @@ public class HomeCommand {
 
 	static void run(ServerPlayerEntity visitor, String islandOwner) {
 		Skylands.instance.islands.get(islandOwner).ifPresentOrElse(island -> {
-			if(visitor.getWorld().getRegistryKey().getValue().equals(Mod.id(island.owner.uuid.toString()))) {
+			if(visitor.getWorld().getRegistryKey().getValue().equals(SkylandsMod.id(island.owner.uuid.toString()))) {
 				visitor.sendMessage(Texts.prefixed("message.skylands.visit_home.fail", map -> map.put("%owner%", islandOwner)));
 			}
 			else {

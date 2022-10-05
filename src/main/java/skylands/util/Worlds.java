@@ -1,7 +1,7 @@
 package skylands.util;
 
 import net.minecraft.world.World;
-import skylands.Mod;
+import skylands.SkylandsMod;
 import skylands.logic.Island;
 import skylands.logic.Skylands;
 
@@ -12,7 +12,7 @@ public class Worlds {
 
 	public static boolean isIsland(World world) {
 		var namespace = world.getRegistryKey().getValue().getNamespace();
-		return namespace.equals(Mod.MOD_ID) || namespace.equals("nether");
+		return namespace.equals(SkylandsMod.MOD_ID) || namespace.equals("nether");
 	}
 
 	public static Optional<Island> getIsland(World world) {

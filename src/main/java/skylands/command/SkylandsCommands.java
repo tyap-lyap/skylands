@@ -12,6 +12,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import nota.player.SongPlayer;
 import skylands.data.Components;
 import skylands.logic.Skylands;
+import skylands.util.Texts;
 
 import static net.minecraft.server.command.CommandManager.literal;
 import static net.minecraft.server.command.CommandManager.argument;
@@ -20,10 +21,10 @@ import static com.mojang.brigadier.arguments.StringArgumentType.word;
 import static net.minecraft.command.argument.BlockPosArgumentType.blockPos;
 import static net.minecraft.command.argument.EntityArgumentType.player;
 
-public class ModCommands {
+public class SkylandsCommands {
 
 	public static void init() {
-		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> ModCommands.register(dispatcher));
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> SkylandsCommands.register(dispatcher));
 	}
 
 	private static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -148,7 +149,17 @@ public class ModCommands {
 			HubCommands.setPos(pos, source);
 			return 1;
 		}))).then(literal("delete-island").then(CommandManager.argument("player", word()).executes(context -> {
-			var player = StringArgumentType.getString(context, "player");
+			var playerName = StringArgumentType.getString(context, "player");
+			var island = Skylands.instance.islands.get(playerName);
+
+			if(island.isPresent()) {
+				Skylands.instance.islands.delete(playerName);
+				context.getSource().sendFeedback(Texts.of("message.skylands.force_delete.success", map -> map.put("%player%", playerName)), true);
+			}
+			else {
+				context.getSource().sendFeedback(Texts.of("message.skylands.force_delete.fail", map -> map.put("%player%", playerName)), true);
+			}
+
 			return 1;
 		}))).then(literal("toggle-hub-protection").executes(context -> {
 			HubCommands.toggleProtection(context.getSource());
@@ -208,6 +219,15 @@ public class ModCommands {
 			}
 			return 1;
 		}))));
+
+		dispatcher.register(literal("sl").then(literal("delete").executes(context -> {
+			var player = context.getSource().getPlayer();
+
+			if(player != null) {
+				DeleteCommand.run(player);
+			}
+			return 1;
+		})));
 
 //		dispatcher.register(literal("cutscene").then(argument("duration", IntegerArgumentType.integer()).executes(context -> {
 //			var player = context.getSource().getPlayer();

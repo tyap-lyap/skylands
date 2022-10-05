@@ -23,13 +23,14 @@ import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.gen.chunk.FlatChunkGenerator;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
-import skylands.Mod;
+import skylands.SkylandsMod;
 import skylands.util.Players;
 import skylands.util.Texts;
 import xyz.nucleoid.fantasy.Fantasy;
 import xyz.nucleoid.fantasy.RuntimeWorldConfig;
 import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,6 +48,8 @@ public class Island {
 	public Vec3d spawnPos = new Vec3d(0.5D, 75D, 0.5D);
 	public boolean hasNether = false;
 
+	public Instant created = Instant.now();
+
 	public Island(UUID uuid, String name) {
 		this.owner = new Member(uuid, name);
 	}
@@ -62,6 +65,7 @@ public class Island {
 	public static Island fromNbt(NbtCompound nbt) {
 		Island island = new Island(Member.fromNbt(nbt.getCompound("owner")));
 		island.hasNether = nbt.getBoolean("hasNether");
+		island.created = Instant.parse(nbt.getString("created"));
 
 		NbtCompound membersNbt = nbt.getCompound("members");
 		int membersSize = membersNbt.getInt("size");
@@ -84,6 +88,7 @@ public class Island {
 		NbtCompound nbt = new NbtCompound();
 		nbt.put("owner", this.owner.toNbt());
 		nbt.putBoolean("hasNether", this.hasNether);
+		nbt.putString("created", this.created.toString());
 
 		NbtCompound membersNbt = new NbtCompound();
 		membersNbt.putInt("size", this.members.size());
@@ -144,7 +149,7 @@ public class Island {
 		if(this.islandConfig == null) {
 			this.islandConfig = createIslandConfig();
 		}
-		return this.fantasy.getOrOpenPersistentWorld(Mod.id(this.owner.uuid.toString()), this.islandConfig);
+		return this.fantasy.getOrOpenPersistentWorld(SkylandsMod.id(this.owner.uuid.toString()), this.islandConfig);
 	}
 
 	private RuntimeWorldConfig createIslandConfig() {
@@ -206,7 +211,7 @@ public class Island {
 
 	public void onFirstLoad() {
 		ServerWorld world = this.getWorld();
-		StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(Mod.id("start_island"));
+		StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(SkylandsMod.id("start_island"));
 		StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
 		structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, world.getRandom(), Block.NOTIFY_ALL);
 	}
@@ -216,7 +221,7 @@ public class Island {
 
 		MinecraftServer server = world.getServer();
 
-		StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(Mod.id("nether_island"));
+		StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(SkylandsMod.id("nether_island"));
 		StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
 		structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, world.getRandom(), Block.NOTIFY_ALL);
 

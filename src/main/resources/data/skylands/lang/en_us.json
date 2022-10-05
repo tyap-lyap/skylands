@@ -5,6 +5,13 @@
   "message.skylands.island_create.fail": "<color:#ff816a>You're already have an Island!",
   "message.skylands.island_create.success": "Your Island got successfully created, you can now visit it with the <color:#3fd9ff>/sl home <color:#98f9ff>command!",
 
+  "message.skylands.island_delete.fail": "<color:#ff816a>You don't have an Island yet!",
+  "message.skylands.island_delete.too_often": "<color:#ff816a>You can't delete Islands that often!",
+  "message.skylands.island_delete.success": "Your Island got successfully deleted!",
+
+  "message.skylands.force_delete.fail": "<color:#ff816a>%player% does not have an Island yet!",
+  "message.skylands.force_delete.success": "%player%'s Island got successfully deleted!",
+
   "message.skylands.hub_visit": "Teleporting to the Hub!",
   "message.skylands.hub_pos_change": "Position of the hub got changed to <color:#3fd9ff>%pos%",
   "message.skylands.hub_protection.enable": "Hub protection is now enabled.",
@@ -96,5 +103,6 @@
   "message.skylands.help.8": "- <color:#98f9ff>/sl kick <player> <r>-> Kick player from your Island.",
   "message.skylands.help.9": "- <color:#98f9ff>/sl ban <player> <r>-> Ban player from visiting your Island.",
   "message.skylands.help.10": "- <color:#98f9ff>/sl unban <player> <r>-> Unban player to allow visiting your Island.",
-  "message.skylands.help.11": "- <color:#98f9ff>/sl help <r>-> Sends this list."
+  "message.skylands.help.11": "- <color:#98f9ff>/sl delete <r>-> Deletes your Island.",
+  "message.skylands.help.12": "- <color:#98f9ff>/sl help <r>-> Sends this list."
 }

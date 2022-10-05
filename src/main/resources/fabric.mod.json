@@ -17,7 +17,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "skylands.Mod"
+      "skylands.SkylandsMod"
     ],
     "cardinal-components": [
       "skylands.data.Components"

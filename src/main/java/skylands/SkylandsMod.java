@@ -4,18 +4,18 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skylands.command.ModCommands;
+import skylands.command.SkylandsCommands;
 import skylands.data.reloadable.SongsData;
-import skylands.event.ModEvents;
+import skylands.event.SkylandsEvents;
 
-public class Mod implements ModInitializer {
+public class SkylandsMod implements ModInitializer {
 	public static final String MOD_ID = "skylands";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
 	public void onInitialize() {
-		ModEvents.init();
-		ModCommands.init();
+		SkylandsEvents.init();
+		SkylandsCommands.init();
 		SongsData.init();
 	}
 

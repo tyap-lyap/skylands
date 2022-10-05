@@ -14,22 +14,24 @@ and modpacks. This mod is not complete and still in active development.
 
 ### User Commands
 
-- **/sl hub** -> Teleport to the hub.
-- **/sl create** -> Creates an island.
-- **/sl home** -> Teleport to your island.
-- **/sl visit <player>** -> Visit someone's island.
-- **/sl home <player>** -> Teleport to an island you are member of.
-- **/sl add-member <player>** -> Invite player to your island.
-- **/sl remove-member <player>** -> Remove player from your island.
-- **/sl accept <player>** -> Accept island join invite request.
-- **/sl kick <player>** -> Kick player from your island.
-- **/sl ban <player>** -> Ban player from visiting your island.
-- **/sl unban <player>** -> Unban player to allow visiting your island.
+- **/sl hub** -> Teleport to the Hub.
+- **/sl create** -> Creates an Island.
+- **/sl delete** -> Deletes your Island.
+- **/sl home** -> Teleport to your Island.
+- **/sl visit <player>** -> Visit someone's Island.
+- **/sl home <player>** -> Teleport to an Island you are member of.
+- **/sl add-member <player>** -> Invite player to your Island.
+- **/sl remove-member <player>** -> Remove player from your Island.
+- **/sl accept <player>** -> Accept Island join invite request.
+- **/sl kick <player>** -> Kick player from your Island.
+- **/sl ban <player>** -> Ban player from visiting your Island.
+- **/sl unban <player>** -> Unban player to allow visiting your Island.
 - **/sl help** -> Sends this list.
 
 ### Admin Commands
 
 - **/force-sl set-hub-pos** -> Changes position of the hub.
+- **/force-sl delete-island <player>** -> Deletes player's Island.
 - **/force-sl toggle-hub-protection** -> Enables/disables hub protection.
 - **/force-sl toggle-hub-music** -> Enables/disables hub background music.
 

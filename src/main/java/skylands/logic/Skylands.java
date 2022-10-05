@@ -6,7 +6,7 @@ import skylands.util.NbtMigrator;
 import xyz.nucleoid.fantasy.Fantasy;
 
 public class Skylands {
-	public int format = 2;
+	public int format = 3;
 	public static Skylands instance;
 	public MinecraftServer server;
 	public Fantasy fantasy;

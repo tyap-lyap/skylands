@@ -7,7 +7,7 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import nota.model.Playlist;
 import nota.utils.NBSDecoder;
-import skylands.Mod;
+import skylands.SkylandsMod;
 
 import java.io.InputStream;
 
@@ -22,7 +22,7 @@ public class SongsData implements SimpleSynchronousResourceReloadListener {
 
 	@Override
 	public Identifier getFabricId() {
-		return Mod.id("songs");
+		return SkylandsMod.id("songs");
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class SongsData implements SimpleSynchronousResourceReloadListener {
 					}
 				}
 				catch(Exception e) {
-					Mod.LOGGER.error("Error occurred while loading resource nbs " + id.toString(), e);
+					SkylandsMod.LOGGER.error("Error occurred while loading resource nbs " + id.toString(), e);
 				}
 			}
 		}

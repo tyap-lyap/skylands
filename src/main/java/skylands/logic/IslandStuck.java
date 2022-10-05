@@ -19,6 +19,22 @@ public class IslandStuck {
 		return island;
 	}
 
+	public void delete(PlayerEntity player) {
+		this.get(player).ifPresent(island -> {
+			island.getNetherHandler().delete();
+			island.getHandler().delete();
+		});
+		stuck.removeIf(island -> island.owner.uuid.equals(player.getUuid()));
+	}
+
+	public void delete(String playerName) {
+		this.get(playerName).ifPresent(island -> {
+			island.getNetherHandler().delete();
+			island.getHandler().delete();
+		});
+		stuck.removeIf(island -> island.owner.name.equals(playerName));
+	}
+
 	public Optional<Island> get(PlayerEntity player) {
 		for(var island : this.stuck) {
 			if(island.owner.uuid.equals(player.getUuid())) return Optional.of(island);
@@ -26,16 +42,16 @@ public class IslandStuck {
 		return Optional.empty();
 	}
 
-	public Optional<Island> get(String player) {
+	public Optional<Island> get(String playerName) {
 		for(var island : this.stuck) {
-			if(island.owner.name.equals(player)) return Optional.of(island);
+			if(island.owner.name.equals(playerName)) return Optional.of(island);
 		}
 		return Optional.empty();
 	}
 
-	public Optional<Island> get(UUID uuid) {
+	public Optional<Island> get(UUID playerUuid) {
 		for(var island : this.stuck) {
-			if(island.owner.uuid.equals(uuid)) return Optional.of(island);
+			if(island.owner.uuid.equals(playerUuid)) return Optional.of(island);
 		}
 		return Optional.empty();
 	}

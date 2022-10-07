@@ -7,9 +7,9 @@ import net.minecraft.text.Style;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
 
-public class InviteCommands {
+public class MemberCommands {
 
-	static void add(ServerPlayerEntity inviter, ServerPlayerEntity newcomer) {
+	static void invite(ServerPlayerEntity inviter, ServerPlayerEntity newcomer) {
 		Skylands.instance.islands.get(inviter).ifPresentOrElse(island -> {
 			if(island.isMember(newcomer)) {
 				inviter.sendMessage(Texts.prefixed("message.skylands.invite_member.already_member"));

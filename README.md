@@ -18,8 +18,8 @@ and modpacks. This mod is not complete and still in active development.
 - **/sl home** -> Teleport to your Island.
 - **/sl visit <player>** -> Visit someone's Island.
 - **/sl home <player>** -> Teleport to an Island you are member of.
-- **/sl add-member <player>** -> Invite player to your Island.
-- **/sl remove-member <player>** -> Remove player from your Island.
+- **/sl members invite <player>** -> Invite player to your Island.
+- **/sl members remove <player>** -> Remove player from your Island.
 - **/sl accept <player>** -> Accept Island join invite request.
 - **/sl kick <player>** -> Kick player from your Island.
 - **/sl ban <player>** -> Ban player from visiting your Island.

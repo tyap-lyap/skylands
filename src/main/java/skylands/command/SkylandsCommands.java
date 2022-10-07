@@ -84,15 +84,15 @@ public class SkylandsCommands {
 			}
 			return 1;
 		}))));
-		dispatcher.register(literal("sl").then(literal("add-member").then(argument("player", player()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("members").then(literal("invite").then(argument("player", player()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var newcomer = EntityArgumentType.getPlayer(context, "player");
 			if(player != null && newcomer != null) {
-				InviteCommands.add(player, newcomer);
+				MemberCommands.invite(player, newcomer);
 			}
 			return 1;
-		}))));
-		dispatcher.register(literal("sl").then(literal("remove-member").then(argument("player", word()).suggests((context, builder) -> {
+		})))));
+		dispatcher.register(literal("sl").then(literal("members").then(literal("remove").then(argument("player", word()).suggests((context, builder) -> {
 			var player = context.getSource().getPlayer();
 
 			if(player != null) {
@@ -115,10 +115,10 @@ public class SkylandsCommands {
 			String memberToRemove = StringArgumentType.getString(context, "player");
 			var player = context.getSource().getPlayer();
 			if(player != null) {
-				InviteCommands.remove(player, memberToRemove);
+				MemberCommands.remove(player, memberToRemove);
 			}
 			return 1;
-		}))));
+		})))));
 		dispatcher.register(literal("sl").then(literal("ban").then(argument("player", player()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var bannedPlayer = EntityArgumentType.getPlayer(context, "player");

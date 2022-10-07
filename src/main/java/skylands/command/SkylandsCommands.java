@@ -224,10 +224,18 @@ public class SkylandsCommands {
 			var player = context.getSource().getPlayer();
 
 			if(player != null) {
-				DeleteCommand.run(player);
+				DeleteCommand.warn(player);
 			}
 			return 1;
-		})));
+		}).then(argument("confirmation", StringArgumentType.word()).executes(context -> {
+			var player = context.getSource().getPlayer();
+			String confirmWord = StringArgumentType.getString(context, "confirmation");
+
+			if(player != null) {
+				DeleteCommand.run(player, confirmWord);
+			}
+			return 1;
+		}))));
 
 //		dispatcher.register(literal("cutscene").then(argument("duration", IntegerArgumentType.integer()).executes(context -> {
 //			var player = context.getSource().getPlayer();

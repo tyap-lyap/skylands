@@ -8,6 +8,7 @@
   "message.skylands.island_delete.fail": "<color:#ff816a>You don't have an Island yet!",
   "message.skylands.island_delete.too_often": "<color:#ff816a>You can't delete Islands that often!",
   "message.skylands.island_delete.success": "Your Island got successfully deleted!",
+  "message.skylands.island_delete.warning": "Are you sure that you want to delete your Island? It can't be rolled back even with all might and determination! Type <color:#3fd9ff>/sl delete CONFIRM <color:#98f9ff>to continue.",
 
   "message.skylands.force_delete.fail": "<color:#ff816a>%player% does not have an Island yet!",
   "message.skylands.force_delete.success": "%player%'s Island got successfully deleted!",

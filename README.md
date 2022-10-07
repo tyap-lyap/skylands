@@ -7,10 +7,8 @@ Skylands is a Minecraft mod/plugin for fabric loader. Simple skyblock islands ge
 server's players create and visit islands. The mod can be used server-side only, however it's compatible with singleplayer
 and modpacks. This mod is not complete and still in active development.
 
-[<img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/social/discord-plural_64h.png" alt="Discord Server" width="210"/>](https://discord.gg/DcemWeskeZ)
-[<img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/available/modrinth_64h.png" alt="Modrinth Page" width="180"/>](https://modrinth.com/mod/skylands)
-[<img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/quilt_64h.png" alt="Supports Quilt" width="180"/>](https://quiltmc.org)
-[<img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/fabric_64h.png" alt="Supports Fabric" width="180"/>](https://fabricmc.net)
+[![Discord Server](https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/social/discord-plural_64h.png)](https://discord.gg/DcemWeskeZ)
+[![Modrinth Page](https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/available/modrinth_64h.png)](https://modrinth.com/mod/skylands)
 
 ### User Commands
 

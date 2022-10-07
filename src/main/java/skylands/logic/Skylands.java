@@ -2,6 +2,7 @@ package skylands.logic;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
+import skylands.api.BalanceHandler;
 import skylands.util.NbtMigrator;
 import xyz.nucleoid.fantasy.Fantasy;
 
@@ -13,6 +14,7 @@ public class Skylands {
 	public IslandStuck islands;
 	public Hub hub;
 	public Invites invites;
+	public BalanceHandler balanceHandler;
 
 	public Skylands(MinecraftServer server) {
 		this.server = server;
@@ -20,6 +22,7 @@ public class Skylands {
 		this.islands = new IslandStuck();
 		this.hub = new Hub();
 		this.invites = new Invites();
+		this.balanceHandler = new SkylandsBalanceHandler();
 	}
 
 	public void readFromNbt(NbtCompound nbt) {

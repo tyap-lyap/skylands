@@ -1,6 +1,9 @@
 package skylands.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
+import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
@@ -8,7 +11,22 @@ import skylands.logic.Skylands;
 import skylands.util.Texts;
 import skylands.util.Worlds;
 
+import static net.minecraft.command.argument.EntityArgumentType.player;
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
+
 public class KickCommand {
+
+	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
+		dispatcher.register(literal("sl").then(literal("kick").then(argument("player", player()).executes(context -> {
+			var player = context.getSource().getPlayer();
+			var kickedPlayer = EntityArgumentType.getPlayer(context, "player");
+			if(player != null && kickedPlayer != null) {
+				KickCommand.run(player, kickedPlayer);
+			}
+			return 1;
+		}))));
+	}
 
 	static void run(ServerPlayerEntity player, ServerPlayerEntity kicked) {
 		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {

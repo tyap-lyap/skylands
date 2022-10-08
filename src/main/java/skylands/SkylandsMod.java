@@ -10,7 +10,7 @@ import skylands.event.SkylandsEvents;
 
 public class SkylandsMod implements ModInitializer {
 	public static final String MOD_ID = "skylands";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger("Skylands");
 
 	@Override
 	public void onInitialize() {

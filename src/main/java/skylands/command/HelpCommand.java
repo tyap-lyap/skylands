@@ -1,10 +1,24 @@
 package skylands.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import eu.pb4.placeholders.api.TextParserUtils;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Language;
 
+import static net.minecraft.server.command.CommandManager.literal;
+
 public class HelpCommand {
+
+	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
+		dispatcher.register(literal("sl").then(literal("help").executes(context -> {
+			ServerPlayerEntity player = context.getSource().getPlayer();
+			if(player != null) {
+				HelpCommand.run(player);
+			}
+			return 1;
+		})));
+	}
 
 	static void run(ServerPlayerEntity player) {
 		Language lang = Language.getInstance();

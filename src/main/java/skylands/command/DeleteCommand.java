@@ -1,5 +1,8 @@
 package skylands.command;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import skylands.logic.IslandStuck;
 import skylands.logic.Skylands;
@@ -8,7 +11,24 @@ import skylands.util.Texts;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+import static com.mojang.brigadier.arguments.StringArgumentType.word;
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
+
 public class DeleteCommand {
+
+	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
+		dispatcher.register(literal("sl").then(literal("delete").executes(context -> {
+			var player = context.getSource().getPlayer();
+			if(player != null) DeleteCommand.warn(player);
+			return 1;
+		}).then(argument("confirmation", word()).executes(context -> {
+			var player = context.getSource().getPlayer();
+			String confirmWord = StringArgumentType.getString(context, "confirmation");
+			if(player != null) DeleteCommand.run(player, confirmWord);
+			return 1;
+		}))));
+	}
 
 	static void run(ServerPlayerEntity player, String confirmWord) {
 

@@ -45,7 +45,9 @@ public class Island {
 	public ArrayList<Member> members = new ArrayList<>();
 	public ArrayList<Member> bans = new ArrayList<>();
 
+	public boolean locked = false;
 	public Vec3d spawnPos = new Vec3d(0.5D, 75D, 0.5D);
+	public Vec3d visitsPos = new Vec3d(0.5D, 75D, 0.5D);
 	public boolean hasNether = false;
 
 	public Instant created = Instant.now();
@@ -66,6 +68,19 @@ public class Island {
 		Island island = new Island(Member.fromNbt(nbt.getCompound("owner")));
 		island.hasNether = nbt.getBoolean("hasNether");
 		island.created = Instant.parse(nbt.getString("created"));
+		island.locked = nbt.getBoolean("locked");
+
+		var spawnPosNbt = nbt.getCompound("spawnPos");
+		double spawnPosX = spawnPosNbt.getDouble("x");
+		double spawnPosY = spawnPosNbt.getDouble("y");
+		double spawnPosZ = spawnPosNbt.getDouble("z");
+		island.spawnPos = new Vec3d(spawnPosX, spawnPosY, spawnPosZ);
+
+		var visitsPosNbt = nbt.getCompound("visitsPos");
+		double visitsPosX = visitsPosNbt.getDouble("x");
+		double visitsPosY = visitsPosNbt.getDouble("y");
+		double visitsPosZ = visitsPosNbt.getDouble("z");
+		island.visitsPos = new Vec3d(visitsPosX, visitsPosY, visitsPosZ);
 
 		NbtCompound membersNbt = nbt.getCompound("members");
 		int membersSize = membersNbt.getInt("size");
@@ -89,6 +104,19 @@ public class Island {
 		nbt.put("owner", this.owner.toNbt());
 		nbt.putBoolean("hasNether", this.hasNether);
 		nbt.putString("created", this.created.toString());
+		nbt.putBoolean("locked", this.locked);
+
+		NbtCompound spawnPosNbt = new NbtCompound();
+		spawnPosNbt.putDouble("x", this.spawnPos.getX());
+		spawnPosNbt.putDouble("y", this.spawnPos.getY());
+		spawnPosNbt.putDouble("z", this.spawnPos.getZ());
+		nbt.put("spawnPos", spawnPosNbt);
+
+		NbtCompound visitsPosNbt = new NbtCompound();
+		visitsPosNbt.putDouble("x", this.visitsPos.getX());
+		visitsPosNbt.putDouble("y", this.visitsPos.getY());
+		visitsPosNbt.putDouble("z", this.visitsPos.getZ());
+		nbt.put("visitsPos", visitsPosNbt);
 
 		NbtCompound membersNbt = new NbtCompound();
 		membersNbt.putInt("size", this.members.size());
@@ -199,9 +227,15 @@ public class Island {
 		return handler.asWorld();
 	}
 
-	public void visit(PlayerEntity player) {
+	public void visitAsMember(PlayerEntity player) {
 		ServerWorld world = this.getWorld();
 		FabricDimensions.teleport(player, world, new TeleportTarget(this.spawnPos, new Vec3d(0, 0, 0), 0, 0));
+	}
+
+	public void visitAsVisitor(PlayerEntity player) {
+		ServerWorld world = this.getWorld();
+		FabricDimensions.teleport(player, world, new TeleportTarget(this.visitsPos, new Vec3d(0, 0, 0), 0, 0));
+
 		Players.get(this.owner.name).ifPresent(owner -> {
 			if(!player.getUuid().equals(owner.getUuid())) {
 				owner.sendMessage(Texts.prefixed("message.skylands.island_visit.visit", map -> map.put("%visitor%", player.getName().getString())));

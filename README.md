@@ -14,7 +14,6 @@ and modpacks. This mod is not complete and still in active development.
 
 - **/sl hub** -> Teleport to the Hub.
 - **/sl create** -> Creates an Island.
-- **/sl delete** -> Deletes your Island.
 - **/sl home** -> Teleport to your Island.
 - **/sl visit <player>** -> Visit someone's Island.
 - **/sl home <player>** -> Teleport to an Island you are member of.
@@ -24,6 +23,10 @@ and modpacks. This mod is not complete and still in active development.
 - **/sl kick <player>** -> Kick player from your Island.
 - **/sl ban <player>** -> Ban player from visiting your Island.
 - **/sl unban <player>** -> Unban player to allow visiting your Island.
+- **/sl delete** -> Deletes your Island.
+- **/sl settings set-spawn-pos** -> Changes home position.
+- **/sl settings set-visits-pos** -> Changes visits position.
+- **/sl settings toggle-visits** -> Enables/disables ability to visit your Island.
 - **/sl help** -> Sends this list.
 
 ### Admin Commands

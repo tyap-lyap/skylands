@@ -14,13 +14,19 @@ public class NbtMigrator {
 			from0to1(nbt);
 			from1to2(nbt);
 			from2to3(nbt);
+			from3to4(nbt);
 		}
 		else if(format == 1) {
 			from1to2(nbt);
 			from2to3(nbt);
+			from3to4(nbt);
 		}
 		else if(format == 2) {
 			from2to3(nbt);
+			from3to4(nbt);
+		}
+		else if(format == 3) {
+			from3to4(nbt);
 		}
 	}
 
@@ -57,6 +63,29 @@ public class NbtMigrator {
 		for(int i = 0; i < size; i++) {
 			NbtCompound islandNbt = islandStuckNbt.getCompound(String.valueOf(i));
 			islandNbt.putString("created", Instant.now().toString());
+		}
+		nbt.put("islandStuck", islandStuckNbt);
+	}
+
+	private static void from3to4(NbtCompound nbt) {
+		nbt.putInt("format", 4);
+		NbtCompound islandStuckNbt = nbt.getCompound("islandStuck");
+		int size = islandStuckNbt.getInt("size");
+		for(int i = 0; i < size; i++) {
+			NbtCompound islandNbt = islandStuckNbt.getCompound(String.valueOf(i));
+			islandNbt.putBoolean("locked", false);
+
+			NbtCompound spawnPosNbt = new NbtCompound();
+			spawnPosNbt.putDouble("x", 0.5D);
+			spawnPosNbt.putDouble("y", 75D);
+			spawnPosNbt.putDouble("z", 0.5D);
+			islandNbt.put("spawnPos", spawnPosNbt);
+
+			NbtCompound visitsPosNbt = new NbtCompound();
+			visitsPosNbt.putDouble("x", 0.5D);
+			visitsPosNbt.putDouble("y", 75D);
+			visitsPosNbt.putDouble("z", 0.5D);
+			islandNbt.put("visitsPos", visitsPosNbt);
 		}
 		nbt.put("islandStuck", islandStuckNbt);
 	}

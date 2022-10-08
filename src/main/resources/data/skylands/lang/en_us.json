@@ -14,11 +14,12 @@
   "message.skylands.force_delete.success": "%player%'s Island got successfully deleted!",
 
   "message.skylands.hub_visit": "Teleporting to the Hub!",
-  "message.skylands.hub_pos_change": "Position of the hub got changed to <color:#3fd9ff>%pos%",
+  "message.skylands.hub_pos_change": "Position of the Hub got changed to <color:#3fd9ff>%pos%",
   "message.skylands.hub_protection.enable": "Hub protection is now enabled.",
   "message.skylands.hub_protection.disable": "Hub protection is now disabled.",
 
   "message.skylands.island_visit.ban": "<color:#ff816a>You are banned from visiting <color:#de4848>%owner%'s <color:#ff816a>Island.",
+  "message.skylands.island_visit.no_visits": "%owner%'s Island is closed for visitors!",
   "message.skylands.island_visit.no_island": "<color:#de4848>%owner% <color:#ff816a>doesn't have an Island yet!",
   "message.skylands.island_visit.fail": "You are already on the <color:#3fd9ff>%owner%'s <color:#98f9ff>Island!",
   "message.skylands.island_visit.success": "Teleporting to the <color:#3fd9ff>%owner%'s <color:#98f9ff>Island!",
@@ -69,6 +70,12 @@
   "message.skylands.home.fail": "You are already on your Island!",
   "message.skylands.home.success": "Teleporting to the Island!",
 
+  "message.skylands.settings.lock": "Your Island is now closed for visitors!",
+  "message.skylands.settings.unlock": "Your Island can now be visited!",
+  "message.skylands.settings.spawn_pos_change": "Spawn position got changed to <color:#3fd9ff>%pos%",
+  "message.skylands.settings.visits_pos_change": "Visits position got changed to <color:#3fd9ff>%pos%",
+  "message.skylands.settings.no_island": "<color:#ff816a>You don't have an Island yet!",
+
   "message.skylands.world_protection.block_break": "You can't break blocks out here!",
   "message.skylands.world_protection.block_place": "You can't place blocks out here!",
   "message.skylands.world_protection.bucket_use": "You can't use bucket out here!",
@@ -105,5 +112,8 @@
   "message.skylands.help.9": "- <color:#98f9ff>/sl ban <player> <r>-> Ban player from visiting your Island.",
   "message.skylands.help.10": "- <color:#98f9ff>/sl unban <player> <r>-> Unban player to allow visiting your Island.",
   "message.skylands.help.11": "- <color:#98f9ff>/sl delete <r>-> Deletes your Island.",
-  "message.skylands.help.12": "- <color:#98f9ff>/sl help <r>-> Sends this list."
+  "message.skylands.help.12": "- <color:#98f9ff>/sl settings set-spawn-pos <r>-> Changes home position.",
+  "message.skylands.help.13": "- <color:#98f9ff>/sl settings set-visits-pos <r>-> Changes visits position.",
+  "message.skylands.help.14": "- <color:#98f9ff>/sl settings toggle-visits <r>-> Enables/disables ability to visit your Island.",
+  "message.skylands.help.15": "- <color:#98f9ff>/sl help <r>-> Sends this list."
 }

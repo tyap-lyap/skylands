@@ -101,6 +101,9 @@
   "message.skylands.world_protection.minecart_open": "You can't interact with entities out here!",
   "message.skylands.world_protection.villager_use": "You can't interact with entities out here!",
   "message.skylands.world_protection.harvest": "You can't harvest crops out here!",
+  "message.skylands.world_protection.redstone": "You can't interact with redstone out here!",
+  "message.skylands.world_protection.boat_open": "You can't interact with entities out here!",
+  "message.skylands.world_protection.armor_stand_use": "You can't interact with entities out here!",
 
   "message.skylands.help.0": "- <color:#98f9ff>/sl hub <r>-> Teleport to the Hub.",
   "message.skylands.help.1": "- <color:#98f9ff>/sl create <r>-> Creates an Island.",

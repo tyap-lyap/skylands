@@ -1,6 +1,7 @@
 package skylands.event;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.CropBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -15,6 +16,11 @@ public class BlockBreakEvent {
 			player.sendMessage(Texts.prefixed("message.skylands.world_protection.block_break"), true);
 			return false;
 		}
+
+		if(state.getBlock() instanceof CropBlock crop && crop.isMature(state)) {
+			player.sendMessage(Texts.prefixed("message.skylands.right_click_harvest.tip"), true);
+		}
+
 		return true;
 	}
 }

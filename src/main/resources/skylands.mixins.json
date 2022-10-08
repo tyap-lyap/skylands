@@ -7,6 +7,7 @@
     "block.FireBlockMixin",
     "entity.PlayerEntityMixin",
     "world.ServerWorldMixin",
+    "world.protection.ArmorStandMixin",
     "world.protection.AxeItemMixin",
     "world.protection.BarrelBlockMixin",
     "world.protection.BlockItemMixin",

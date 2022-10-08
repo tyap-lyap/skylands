@@ -1,6 +1,7 @@
 {
   "message.skylands.prefix": "<color:#3fd9ff>Skylands <color:#98f9ff>> ",
   "message.skylands.now_playing": "Now Playing: %song%",
+  "message.skylands.right_click_harvest.tip": "You can harvest crops faster by right clicking!",
 
   "message.skylands.island_create.fail": "<color:#ff816a>You're already have an Island!",
   "message.skylands.island_create.success": "Your Island got successfully created, you can now visit it with the <color:#3fd9ff>/sl home <color:#98f9ff>command!",
@@ -99,6 +100,7 @@
   "message.skylands.world_protection.shulker_box_open": "You can't open shulker boxes out here!",
   "message.skylands.world_protection.minecart_open": "You can't interact with entities out here!",
   "message.skylands.world_protection.villager_use": "You can't interact with entities out here!",
+  "message.skylands.world_protection.harvest": "You can't harvest crops out here!",
 
   "message.skylands.help.0": "- <color:#98f9ff>/sl hub <r>-> Teleport to the Hub.",
   "message.skylands.help.1": "- <color:#98f9ff>/sl create <r>-> Creates an Island.",

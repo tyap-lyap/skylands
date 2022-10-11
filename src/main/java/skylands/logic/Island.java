@@ -14,12 +14,15 @@ import net.minecraft.util.BlockMirror;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.dimension.DimensionTypes;
+import net.minecraft.world.gen.chunk.*;
 import skylands.SkylandsMod;
 import skylands.util.Players;
 import skylands.util.Texts;
@@ -29,6 +32,7 @@ import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Island {
@@ -179,9 +183,29 @@ public class Island {
 	private RuntimeWorldConfig createIslandConfig() {
 		return new RuntimeWorldConfig()
 				.setDimensionType(DimensionTypes.OVERWORLD)
-				.setGenerator(server.getOverworld().getChunkManager().getChunkGenerator())
+				.setGenerator(this.getChunkGenerator())
 				.setDifficulty(Difficulty.NORMAL)
 				.setShouldTickTime(true);
+	}
+
+	ChunkGenerator generator;
+
+	private ChunkGenerator getChunkGenerator() {
+		if (generator == null) {
+			ChunkGenerator overworldGenerator = server.getOverworld().getChunkManager().getChunkGenerator();
+
+			if(overworldGenerator instanceof NoiseChunkGenerator) {
+				generator = overworldGenerator;
+			}
+			else {
+				FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), BuiltinRegistries.BIOME);
+				flat.setBiome(server.getRegistryManager().get(Registry.BIOME_KEY).getOrCreateEntry(BiomeKeys.PLAINS));
+				generator = new FlatChunkGenerator(EMPTY_STRUCTURE_REGISTRY, flat);
+			}
+
+			return generator;
+		}
+		return generator;
 	}
 
 	public RuntimeWorldHandle getNetherHandler() {

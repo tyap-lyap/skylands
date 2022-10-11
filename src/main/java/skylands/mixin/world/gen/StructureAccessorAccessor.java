@@ -1,4 +1,4 @@
-package skylands.mixin.gen;
+package skylands.mixin.world.gen;
 
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.gen.StructureAccessor;

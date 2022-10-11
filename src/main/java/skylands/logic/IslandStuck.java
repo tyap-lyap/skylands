@@ -2,7 +2,6 @@ package skylands.logic;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import skylands.SkylandsMod;
 
 import java.util.ArrayList;
 import java.util.Optional;

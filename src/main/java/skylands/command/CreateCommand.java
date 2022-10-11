@@ -3,10 +3,14 @@ package skylands.command;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import skylands.SkylandsMod;
 import skylands.logic.Island;
 import skylands.logic.IslandStuck;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -30,8 +34,11 @@ public class CreateCommand {
 			player.sendMessage(Texts.prefixed("message.skylands.island_create.fail"));
 		}
 		else {
+			SkylandsMod.LOGGER.info("Creating a new Island for " + player.getName().getString() + "...");
+			Instant inst = Instant.now();
 			Island island = islands.create(player);
 			island.onFirstLoad();
+			SkylandsMod.LOGGER.info("Island got successfully created in " + ChronoUnit.MILLIS.between(inst, Instant.now()) + " ms");
 			player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
 		}
 	}

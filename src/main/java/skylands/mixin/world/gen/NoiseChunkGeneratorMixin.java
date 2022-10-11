@@ -1,4 +1,4 @@
-package skylands.mixin.gen;
+package skylands.mixin.world.gen;
 
 import net.minecraft.structure.StructureSet;
 import net.minecraft.util.registry.Registry;
@@ -34,10 +34,6 @@ public abstract class NoiseChunkGeneratorMixin extends ChunkGenerator {
 
 	public NoiseChunkGeneratorMixin(Registry<StructureSet> structureSetRegistry, Optional<RegistryEntryList<StructureSet>> structureOverrides, BiomeSource biomeSource) {
 		super(structureSetRegistry, structureOverrides, biomeSource);
-	}
-
-	public NoiseChunkGeneratorMixin(Registry<StructureSet> structureSetRegistry, Optional<RegistryEntryList<StructureSet>> structureOverrides, BiomeSource biomeSource, Function<RegistryEntry<Biome>, GenerationSettings> generationSettingsGetter) {
-		super(structureSetRegistry, structureOverrides, biomeSource, generationSettingsGetter);
 	}
 
 	@Override

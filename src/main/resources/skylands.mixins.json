@@ -6,6 +6,8 @@
   "mixins": [
     "block.FireBlockMixin",
     "entity.PlayerEntityMixin",
+    "gen.NoiseChunkGeneratorMixin",
+    "gen.StructureAccessorAccessor",
     "world.ServerWorldMixin",
     "world.protection.ArmorStandMixin",
     "world.protection.AxeItemMixin",

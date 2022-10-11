@@ -40,6 +40,7 @@ public class SkylandsEvents {
 			}
 		});
 		ServerLifecycleEvents.SERVER_STARTING.register(ServerStartEvent::onStart);
+		ServerLifecycleEvents.SERVER_STARTED.register(ServerStartedEvent::onStarted);
 		ServerTickEvents.END_SERVER_TICK.register(ServerTickEvent::onTick);
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> PlayerConnectEvent.onJoin(server, handler.player));
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> PlayerConnectEvent.onLeave(server, handler.player));

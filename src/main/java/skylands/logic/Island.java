@@ -14,15 +14,12 @@ import net.minecraft.util.BlockMirror;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.TeleportTarget;
-import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionTypes;
-import net.minecraft.world.gen.chunk.FlatChunkGenerator;
-import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
 import skylands.SkylandsMod;
 import skylands.util.Players;
 import skylands.util.Texts;
@@ -32,7 +29,6 @@ import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
 
 public class Island {
@@ -84,14 +80,14 @@ public class Island {
 
 		NbtCompound membersNbt = nbt.getCompound("members");
 		int membersSize = membersNbt.getInt("size");
-		for(int i = 0; i < membersSize; i++) {
+		for (int i = 0; i < membersSize; i++) {
 			NbtCompound member = membersNbt.getCompound(String.valueOf(i));
 			island.members.add(Member.fromNbt(member));
 		}
 
 		NbtCompound bansNbt = nbt.getCompound("bans");
 		int bansSize = bansNbt.getInt("size");
-		for(int i = 0; i < bansSize; i++) {
+		for (int i = 0; i < bansSize; i++) {
 			NbtCompound member = bansNbt.getCompound(String.valueOf(i));
 			island.bans.add(Member.fromNbt(member));
 		}
@@ -120,7 +116,7 @@ public class Island {
 
 		NbtCompound membersNbt = new NbtCompound();
 		membersNbt.putInt("size", this.members.size());
-		for(int i = 0; i < this.members.size(); i++) {
+		for (int i = 0; i < this.members.size(); i++) {
 			Member member = this.members.get(i);
 			NbtCompound memberNbt = member.toNbt();
 			membersNbt.put(Integer.toString(i), memberNbt);
@@ -129,7 +125,7 @@ public class Island {
 
 		NbtCompound bansNbt = new NbtCompound();
 		bansNbt.putInt("size", this.bans.size());
-		for(int i = 0; i < this.bans.size(); i++) {
+		for (int i = 0; i < this.bans.size(); i++) {
 			Member bannedMember = this.bans.get(i);
 			NbtCompound bannedNbt = bannedMember.toNbt();
 			bansNbt.put(Integer.toString(i), bannedNbt);
@@ -140,84 +136,76 @@ public class Island {
 	}
 
 	public boolean isMember(PlayerEntity player) {
-		if(this.owner.uuid.equals(player.getUuid())) {
+		if (this.owner.uuid.equals(player.getUuid())) {
 			return true;
 		}
-		for(var member : this.members) {
-			if(member.uuid.equals(player.getUuid())) return true;
+		for (var member : this.members) {
+			if (member.uuid.equals(player.getUuid())) return true;
 		}
 		return false;
 	}
 
 	public boolean isMember(String name) {
-		if(this.owner.name.equals(name)) {
+		if (this.owner.name.equals(name)) {
 			return true;
 		}
-		for(var member : this.members) {
-			if(member.name.equals(name)) return true;
+		for (var member : this.members) {
+			if (member.name.equals(name)) return true;
 		}
 		return false;
 	}
 
 	public boolean isBanned(PlayerEntity player) {
-		for(var bannedMember : this.bans) {
-			if(bannedMember.uuid.equals(player.getUuid())) return true;
+		for (var bannedMember : this.bans) {
+			if (bannedMember.uuid.equals(player.getUuid())) return true;
 		}
 		return false;
 	}
 
 	public boolean isBanned(String player) {
-		for(var bannedMember : this.bans) {
-			if(bannedMember.name.equals(player)) return true;
+		for (var bannedMember : this.bans) {
+			if (bannedMember.name.equals(player)) return true;
 		}
 		return false;
 	}
 
 	public RuntimeWorldHandle getHandler() {
-		if(this.islandConfig == null) {
+		if (this.islandConfig == null) {
 			this.islandConfig = createIslandConfig();
 		}
 		return this.fantasy.getOrOpenPersistentWorld(SkylandsMod.id(this.owner.uuid.toString()), this.islandConfig);
 	}
 
 	private RuntimeWorldConfig createIslandConfig() {
-		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), BuiltinRegistries.BIOME);
-		flat.setBiome(this.server.getRegistryManager().get(Registry.BIOME_KEY).getOrCreateEntry(BiomeKeys.PLAINS));
-		FlatChunkGenerator generator = new FlatChunkGenerator(EMPTY_STRUCTURE_REGISTRY, flat);
-
 		return new RuntimeWorldConfig()
 				.setDimensionType(DimensionTypes.OVERWORLD)
-				.setGenerator(generator)
+				.setGenerator(server.getOverworld().getChunkManager().getChunkGenerator())
 				.setDifficulty(Difficulty.NORMAL)
-				.setShouldTickTime(true)
-				.setSeed(123L);
+				.setShouldTickTime(true);
 	}
 
 	public RuntimeWorldHandle getNetherHandler() {
-		if(this.netherConfig == null) {
+		if (this.netherConfig == null) {
 			this.netherConfig = createNetherConfig();
 		}
 		return this.fantasy.getOrOpenPersistentWorld(new Identifier("nether", this.owner.uuid.toString()), this.netherConfig);
 	}
 
 	private RuntimeWorldConfig createNetherConfig() {
-		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), BuiltinRegistries.BIOME);
-		flat.setBiome(this.server.getRegistryManager().get(Registry.BIOME_KEY).getOrCreateEntry(BiomeKeys.NETHER_WASTES));
-		FlatChunkGenerator generator = new FlatChunkGenerator(EMPTY_STRUCTURE_REGISTRY, flat);
-
+		ServerWorld nether = server.getWorld(World.NETHER);
+		assert nether != null;
 		return new RuntimeWorldConfig()
 				.setDimensionType(DimensionTypes.THE_NETHER)
-				.setGenerator(generator)
+				.setGenerator(nether.getChunkManager().getChunkGenerator())
 				.setDifficulty(Difficulty.NORMAL)
-				.setShouldTickTime(true)
-				.setSeed(123L);
+				.setShouldTickTime(true);
 	}
 
 	public ServerWorld getNether() {
 		RuntimeWorldHandle handler = this.getNetherHandler();
 		handler.setTickWhenEmpty(false);
 		ServerWorld world = handler.asWorld();
-		if(!this.hasNether) this.onFirstNetherLoad(world);
+		if (!this.hasNether) this.onFirstNetherLoad(world);
 		return world;
 	}
 
@@ -237,7 +225,7 @@ public class Island {
 		FabricDimensions.teleport(player, world, new TeleportTarget(this.visitsPos, new Vec3d(0, 0, 0), 0, 0));
 
 		Players.get(this.owner.name).ifPresent(owner -> {
-			if(!player.getUuid().equals(owner.getUuid())) {
+			if (!player.getUuid().equals(owner.getUuid())) {
 				owner.sendMessage(Texts.prefixed("message.skylands.island_visit.visit", map -> map.put("%visitor%", player.getName().getString())));
 			}
 		});
@@ -251,7 +239,7 @@ public class Island {
 	}
 
 	void onFirstNetherLoad(ServerWorld world) {
-		if(this.hasNether) return;
+		if (this.hasNether) return;
 
 		MinecraftServer server = world.getServer();
 

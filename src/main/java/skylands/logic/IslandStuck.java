@@ -72,12 +72,6 @@ public class IslandStuck {
 			Island island = Island.fromNbt(islandNbt);
 			if(!this.hasIsland(island.owner.uuid)) {
 				this.stuck.add(island);
-				SkylandsMod.LOGGER.info("Loading " + island.owner.name + "'s Island...");
-				island.getWorld();
-				if(island.hasNether) {
-					SkylandsMod.LOGGER.info("Loading " + island.owner.name + "'s Nether...");
-					island.getNether();
-				}
 			}
 		}
 	}

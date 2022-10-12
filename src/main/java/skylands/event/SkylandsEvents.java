@@ -7,22 +7,14 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropBlock;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.BlockPos;
 import nota.Nota;
 import nota.event.SongStartEvent;
 import nota.player.PositionSongPlayer;
 import skylands.util.Texts;
-import skylands.util.WorldProtection;
 
 import java.util.UUID;
 
@@ -64,34 +56,7 @@ public class SkylandsEvents {
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			if(!world.isClient) {
-				if(!WorldProtection.canModify(world, player)) {
-					player.sendMessage(Texts.prefixed("message.skylands.world_protection.harvest"), true);
-					return ActionResult.PASS;
-				}
-
-				BlockPos pos = hitResult.getBlockPos();
-				BlockState state = world.getBlockState(pos);
-				ItemStack toolStack = player.getStackInHand(hand);
-
-				if(state.getBlock() instanceof CropBlock crop && crop.isMature(state)) {
-					Item replant = state.getBlock().getPickStack(world, pos, state).getItem();
-					final boolean[] removedReplant = {false};
-
-					Block.getDroppedStacks(state, (ServerWorld)world, pos, null, player, toolStack).forEach(stack -> {
-						if (!removedReplant[0] && stack.getItem() == replant) {
-							stack.setCount(stack.getCount() - 1);
-							removedReplant[0] = true;
-						}
-
-						Block.dropStack(world, pos, stack);
-					});
-
-					state.onStacksDropped((ServerWorld)world, pos, toolStack, true);
-					world.setBlockState(pos, crop.withAge(0));
-
-					return ActionResult.SUCCESS;
-				}
-
+				return UseBlockEvent.onBlockUse(player, world, hand, hitResult);
 			}
 			return ActionResult.PASS;
 		});

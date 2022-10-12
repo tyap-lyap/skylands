@@ -3,9 +3,12 @@
   "id": "skylands",
   "version": "${version}",
   "name": "Skylands",
-  "description": "Simple skyblock islands generator and manager.",
+  "description": "Simple Skyblock Islands generator and manager.",
   "authors": [
     "PinkGoosik"
+  ],
+  "contributors": [
+    "KujouMolean"
   ],
   "contact": {
     "homepage": "https://modrinth.com/mod/skylands",

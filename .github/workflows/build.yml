@@ -22,13 +22,6 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
-      - name: Upload to modrinth
-        run: ./gradlew modrinth
-        if: github.ref == 'refs/heads/1.19'
-        env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-          GITHUB_EVENT_RAW_PATH: ${{ github.event_path }}
-        continue-on-error: true
       - name: Capture build artifacts
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
         uses: actions/upload-artifact@v2

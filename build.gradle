@@ -2,11 +2,10 @@ plugins {
 	id "fabric-loom" version "1.0-SNAPSHOT"
 	id "io.github.juuxel.loom-quiltflower" version "1.7.4"
 	id "io.github.p03w.machete" version "1.2.0"
-	id "com.modrinth.minotaur" version "2.4.3"
 }
 
 archivesBaseName = project.archives_base_name
-version = System.getenv("GITHUB_RUN_NUMBER")
+version = project.mod_version
 group = project.maven_group
 
 repositories {
@@ -65,25 +64,5 @@ java {
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}" }
-	}
-}
-
-import buildscript.ParseGitHubActionChangelog
-tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
-
-modrinth {
-	token = System.getenv("MODRINTH_TOKEN")
-	syncBodyFrom = rootProject.file("README.md").text
-	projectId = "skylands"
-	versionNumber = version
-	versionName = "Skylands Build " + version
-	versionType = "alpha"
-	uploadFile = remapJar
-	additionalFiles = [remapSourcesJar]
-	gameVersions = ["1.19", "1.19.1", "1.19.2"]
-	loaders = ["fabric", "quilt"]
-	changelog = ParseGitHubActionChangelog.getChangelog()
-	dependencies {
-		required.project "fabric-api"
 	}
 }

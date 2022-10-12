@@ -213,6 +213,12 @@ public class Island {
 				.setSeed(123L);
 	}
 
+	public ServerWorld getEnd() {
+		// todo
+		// may coming soon?
+		return null;
+	}
+
 	public ServerWorld getNether() {
 		RuntimeWorldHandle handler = this.getNetherHandler();
 		handler.setTickWhenEmpty(false);

@@ -37,9 +37,12 @@ public class CreateCommand {
 			SkylandsMod.LOGGER.info("Creating a new Island for " + player.getName().getString() + "...");
 			Instant inst = Instant.now();
 			Island island = islands.create(player);
-			island.onFirstLoad();
-			SkylandsMod.LOGGER.info("Island got successfully created in " + ChronoUnit.MILLIS.between(inst, Instant.now()) + " ms");
-			player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
+
+			// todo: User progress notifier
+			island.onFirstLoadAsync().thenRun(() -> {
+				SkylandsMod.LOGGER.info("Island got successfully created in " + ChronoUnit.MILLIS.between(inst, Instant.now()) + " ms");
+				player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
+			});
 		}
 	}
 }

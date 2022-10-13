@@ -6,6 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ChunkTicketType;
+import net.minecraft.server.world.ServerChunkManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureSet;
@@ -13,6 +15,7 @@ import net.minecraft.structure.StructureTemplate;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -23,7 +26,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.gen.chunk.*;
+import org.jetbrains.annotations.Nullable;
 import skylands.SkylandsMod;
+import skylands.task.Tasks;
 import skylands.util.Players;
 import skylands.util.Texts;
 import xyz.nucleoid.fantasy.Fantasy;
@@ -31,9 +36,8 @@ import xyz.nucleoid.fantasy.RuntimeWorldConfig;
 import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class Island {
 	private static final Registry<StructureSet> EMPTY_STRUCTURE_REGISTRY = new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), (x) -> null).freeze();
@@ -255,11 +259,44 @@ public class Island {
 		});
 	}
 
+	private CompletableFuture<Void> smoothChunkLoad(ServerWorld world, int x, int z, int r) {
+		Deque<ChunkPos> deque = new ArrayDeque<>();
+		for (int i = x - r; i < x + r; i++) {
+			for (int j = z - r; j < z + r; j++) {
+				deque.add(new ChunkPos(i, j));
+			}
+		}
+
+		// May configurable?
+		int chunksPerTick = Math.max(r * r / 40, 15); // complete in 40 ticks
+
+		return CompletableFuture.runAsync(() -> {
+			while (!deque.isEmpty()) {
+				Tasks.INSTANCE.nextTick().thenRun(() -> {
+					ServerChunkManager chunkManager = world.getChunkManager();
+					for (int i = 0; i < chunksPerTick && !deque.isEmpty(); i++) {
+						ChunkPos chunkPos = deque.pop();
+						chunkManager.addTicket(ChunkTicketType.create(SkylandsMod.MOD_ID, (o1, o2) -> 0, deque.size() / chunksPerTick + 5), chunkPos, 1, chunkPos);
+					}
+					world.getChunkManager().tick(() -> false, true);
+				}).join();
+			}
+		});
+	}
+
 	public void onFirstLoad() {
 		ServerWorld world = this.getWorld();
 		StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(SkylandsMod.id("start_island"));
 		StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
 		structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, world.getRandom(), Block.NOTIFY_ALL);
+	}
+
+	public CompletableFuture<Void> onFirstLoadAsync() {
+		ServerWorld world = getWorld();
+		return CompletableFuture.runAsync(() -> {
+			smoothChunkLoad(world, 0, 0, server.getPlayerManager().getSimulationDistance()).join();
+			Tasks.INSTANCE.runNextTick(this::onFirstLoad).join();
+		});
 	}
 
 	void onFirstNetherLoad(ServerWorld world) {

@@ -7,6 +7,7 @@ import skylands.SkylandsMod;
 import skylands.logic.Island;
 import skylands.logic.IslandStuck;
 import skylands.logic.Skylands;
+import skylands.task.Tasks;
 import skylands.util.Texts;
 
 import java.time.Instant;
@@ -42,6 +43,9 @@ public class CreateCommand {
 			island.onFirstLoadAsync().thenRun(() -> {
 				SkylandsMod.LOGGER.info("Island got successfully created in " + ChronoUnit.MILLIS.between(inst, Instant.now()) + " ms");
 				player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
+				Tasks.INSTANCE.nextTick().thenRun(() -> {
+					island.visitAsMember(player);
+				});
 			});
 		}
 	}

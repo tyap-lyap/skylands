@@ -19,17 +19,15 @@ public enum Tasks {
 	private final PriorityQueue<Task<?>> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o.arrivalTick));
 
 	public void tickTasks() {
-		if (queue.isEmpty()) {
-			return;
-		}
-		while (queue.peek() != null && queue.peek().arrivalTick <= currentTick) {
-			Task poll = queue.poll();
-			try {
-				poll.future.complete(poll.task.get());
-			} catch (Throwable throwable) {
-				poll.future.completeExceptionally(throwable);
+		if (!queue.isEmpty()) {
+			while (queue.peek() != null && queue.peek().arrivalTick <= currentTick) {
+				Task poll = queue.poll();
+				try {
+					poll.future.complete(poll.task.get());
+				} catch (Throwable throwable) {
+					poll.future.completeExceptionally(throwable);
+				}
 			}
-
 		}
 		currentTick++;
 	}
@@ -49,8 +47,8 @@ public enum Tasks {
 		return supplyNextTick(() -> null);
 	}
 
-	public CompletableFuture<Void> nextNTick() {
-		return schedule(currentTick, () -> null);
+	public CompletableFuture<Void> nextNTick(int nTicks) {
+		return schedule(currentTick + nTicks, () -> null);
 	}
 
 	public <T> CompletableFuture<T> schedule(int delayInTicks, Supplier<T> supplier) {

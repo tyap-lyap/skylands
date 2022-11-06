@@ -5,9 +5,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.Style;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
 
@@ -68,14 +65,9 @@ public class MemberCommands {
 				else {
 					inviter.sendMessage(Texts.prefixed("message.skylands.invite_member.success", (map) -> map.put("%newcomer%", newcomer.getName().getString())));
 
-					var hoverText = Texts.prefixed("hover_event.skylands.invite_member.accept", (map) -> map.put("%inviter%", inviter.getName().getString()));
-					Style style = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sl accept " + inviter.getName().getString()));
-					style = style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
+					newcomer.sendMessage(Texts.prefixed("message.skylands.invite_member.invite.0", (map) -> map.put("%inviter%", inviter.getName().getString())));
+					newcomer.sendMessage(Texts.prefixed("message.skylands.invite_member.invite.1", (map) -> map.put("%inviter%", inviter.getName().getString())));
 
-					var inviteText = Texts.prefixed("message.skylands.invite_member.invite", (map) -> map.put("%inviter%", inviter.getName().getString()));
-
-					newcomer.sendMessage(inviteText.getWithStyle(style).get(0));
-					newcomer.sendMessage(Texts.prefixed("message.skylands.invite_member.accept").getWithStyle(style).get(0));
 					Skylands.instance.invites.create(island, newcomer);
 				}
 			}

@@ -1,7 +1,7 @@
 {
   "message.skylands.prefix": "<color:#3fd9ff>Skylands <color:#98f9ff>> ",
   "message.skylands.now_playing": "Now Playing: %song%",
-  "message.skylands.right_click_harvest.tip": "You can harvest crops faster by right clicking!",
+  "message.skylands.right_click_harvest.tip": "Harvest crops faster by right clicking!",
   "message.skylands.new_update": "<url:'https://modrinth.com/mod/skylands'>New update available! <color:#3fd9ff>%local_version% <color:#98f9ff>-> <color:#3fd9ff>%remote_version%",
 
   "message.skylands.island_create.fail": "<color:#ff816a>You're already have an Island!",
@@ -20,25 +20,24 @@
   "message.skylands.hub_protection.enable": "Hub protection is now enabled.",
   "message.skylands.hub_protection.disable": "Hub protection is now disabled.",
 
-  "message.skylands.island_visit.ban": "<color:#ff816a>You are banned from visiting <color:#de4848>%owner%'s <color:#ff816a>Island.",
+  "message.skylands.island_visit.ban": "<color:#ff816a>You are banned from visiting <color:#de4848>%owner%<color:#ff816a>'s Island.",
   "message.skylands.island_visit.no_visits": "%owner%'s Island is closed for visitors!",
   "message.skylands.island_visit.no_island": "<color:#de4848>%owner% <color:#ff816a>doesn't have an Island yet!",
-  "message.skylands.island_visit.fail": "You are already on the <color:#3fd9ff>%owner%'s <color:#98f9ff>Island!",
-  "message.skylands.island_visit.success": "Teleporting to the <color:#3fd9ff>%owner%'s <color:#98f9ff>Island!",
+  "message.skylands.island_visit.fail": "You are already on the <color:#3fd9ff>%owner%<color:#98f9ff>'s Island!",
+  "message.skylands.island_visit.success": "Teleporting to the <color:#3fd9ff>%owner%<color:#98f9ff>'s Island!",
   "message.skylands.island_visit.visit": "<color:#3fd9ff>%visitor% <color:#98f9ff>visited your Island!",
 
   "message.skylands.invite_member.already_member": "This player is already member of your Island!",
   "message.skylands.invite_member.already_invited": "You have already invited this player!",
   "message.skylands.invite_member.no_island": "<color:#ff816a>You don't have an Island yet!",
   "message.skylands.invite_member.success": "<color:#3fd9ff>%newcomer% <color:#98f9ff>got successfully invited! They got 5 minutes to accept your invite.",
-  "message.skylands.invite_member.invite": "<color:#3fd9ff>%inviter% <color:#98f9ff>wants you to join their Island!",
-  "message.skylands.invite_member.accept": "<underline>Click here to accept this invite.",
-  "hover_event.skylands.invite_member.accept": "Click here to accept this invite or type <color:#98f9ff>/sl accept %inviter% <r>command.",
+  "message.skylands.invite_member.invite.0": "<color:#3fd9ff>%inviter% <color:#98f9ff>wants you to join their Island!",
+  "message.skylands.invite_member.invite.1": "<run_cmd:'sl accept %inviter%'><hover:'Click here to accept this invite or type <color:#98f9ff>/sl accept %inviter% <r>command.'><underline>Click here to accept this invite.",
 
   "message.skylands.accept.no_island": "This player does not have an Island yet.",
   "message.skylands.accept.no_player": "<color:#ff816a>Such player does not exist!",
   "message.skylands.accept.fail": "This player did not invite you.",
-  "message.skylands.accept.success": "You successfully accepted <color:#3fd9ff>%owner%'s <color:#98f9ff>invite! You can now visit the Island with <color:#3fd9ff>/sl home %owner% <color:#98f9ff>command.",
+  "message.skylands.accept.success": "You successfully accepted <color:#3fd9ff>%owner%<color:#98f9ff>'s invite! You can now visit the Island with <color:#3fd9ff>/sl home %owner% <color:#98f9ff>command.",
 
   "message.skylands.remove_member.yourself": "You can't remove yourself.",
   "message.skylands.remove_member.not_member": "This player is not member of your Island.",
@@ -57,7 +56,7 @@
   "message.skylands.ban_player.no_island": "<color:#ff816a>You don't have an Island yet!",
   "message.skylands.ban_player.fail": "This player is already banned.",
   "message.skylands.ban_player.success": "<color:#3fd9ff>%player% <color:#98f9ff>got successfully banned.",
-  "message.skylands.ban_player.ban": "<color:#ff816a>You have been banned from visiting <color:#de4848>%owner%'s <color:#ff816a>Island!",
+  "message.skylands.ban_player.ban": "<color:#ff816a>You have been banned from visiting <color:#de4848>%owner%<color:#ff816a>'s Island!",
 
   "message.skylands.unban_player.no_island": "<color:#ff816a>You don't have an Island yet!",
   "message.skylands.unban_player.fail": "This player is not banned.",
@@ -65,8 +64,8 @@
 
   "message.skylands.visit_home.not_member": "You are not member of this Island.",
   "message.skylands.visit_home.no_island": "<color:#ff816a>This player doesn't have an Island yet!",
-  "message.skylands.visit_home.fail": "You are already on the <color:#3fd9ff>%owner%'s <color:#98f9ff>Island!",
-  "message.skylands.visit_home.success": "Teleporting to the <color:#3fd9ff>%owner%'s <color:#98f9ff>Island!",
+  "message.skylands.visit_home.fail": "You are already on the <color:#3fd9ff>%owner%<color:#98f9ff>'s Island!",
+  "message.skylands.visit_home.success": "Teleporting to the <color:#3fd9ff>%owner%<color:#98f9ff>'s Island!",
 
   "message.skylands.home.no_island": "<color:#ff816a>You don't have an Island yet!",
   "message.skylands.home.fail": "You are already on your Island!",

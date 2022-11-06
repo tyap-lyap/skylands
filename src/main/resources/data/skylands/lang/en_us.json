@@ -32,7 +32,7 @@
   "message.skylands.invite_member.no_island": "<color:#ff816a>You don't have an Island yet!",
   "message.skylands.invite_member.success": "<color:#3fd9ff>%newcomer% <color:#98f9ff>got successfully invited! They got 5 minutes to accept your invite.",
   "message.skylands.invite_member.invite.0": "<color:#3fd9ff>%inviter% <color:#98f9ff>wants you to join their Island!",
-  "message.skylands.invite_member.invite.1": "<run_cmd:'sl accept %inviter%'><hover:'Click here to accept this invite or type <color:#98f9ff>/sl accept %inviter% <r>command.'><underline>Click here to accept this invite.",
+  "message.skylands.invite_member.invite.1": "<run_cmd:'/sl accept %inviter%'><hover:'Click here to accept this invite or type <color:#98f9ff>/sl accept %inviter% <r>command.'><underline>Click here to accept this invite.",
 
   "message.skylands.accept.no_island": "This player does not have an Island yet.",
   "message.skylands.accept.no_player": "<color:#ff816a>Such player does not exist!",

@@ -2,6 +2,7 @@
   "message.skylands.prefix": "<color:#3fd9ff>Skylands <color:#98f9ff>> ",
   "message.skylands.now_playing": "Now Playing: %song%",
   "message.skylands.right_click_harvest.tip": "You can harvest crops faster by right clicking!",
+  "message.skylands.new_update": "<url:'https://modrinth.com/mod/skylands'>New update available! <color:#3fd9ff>%local_version% <color:#98f9ff>-> <color:#3fd9ff>%remote_version%",
 
   "message.skylands.island_create.fail": "<color:#ff816a>You're already have an Island!",
   "message.skylands.island_create.success": "Your Island got successfully created, you can now visit it with the <color:#3fd9ff>/sl home <color:#98f9ff>command!",

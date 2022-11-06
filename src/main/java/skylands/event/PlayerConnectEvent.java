@@ -9,6 +9,7 @@ import nota.player.SongPlayer;
 import skylands.logic.Member;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
+import skylands.util.UpdateChecker;
 import skylands.util.Worlds;
 
 @SuppressWarnings("unused")
@@ -43,6 +44,8 @@ public class PlayerConnectEvent {
 				FabricDimensions.teleport(player, server.getOverworld(), new TeleportTarget(Skylands.instance.hub.pos, new Vec3d(0, 0, 0), 0, 0));
 			}
 		});
+
+		UpdateChecker.onPlayerJoin(player);
 	}
 
 	public static void onLeave(MinecraftServer server, ServerPlayerEntity player) {

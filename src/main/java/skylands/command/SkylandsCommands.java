@@ -3,9 +3,7 @@ package skylands.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
-import nota.player.SongPlayer;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
 
@@ -49,20 +47,5 @@ public class SkylandsCommands {
 
 			return 1;
 		}))));
-
-		dispatcher.register(literal("force-sl").requires(source -> source.hasPermissionLevel(4)).then(literal("toggle-hub-music").executes(context -> {
-			MinecraftServer server = context.getSource().getServer();
-			Skylands skylands = Skylands.instance;
-			SongPlayer sp = skylands.hub.songPlayer;
-			if(sp != null) {
-				sp.setPlaying(!sp.playing);
-			}
-			else {
-				skylands.hub.initSongPlayer(server);
-				server.getPlayerManager().getPlayerList().forEach(player -> skylands.hub.songPlayer.addPlayer(player));
-				skylands.hub.songPlayer.setPlaying(true);
-			}
-			return 1;
-		})));
 	}
 }

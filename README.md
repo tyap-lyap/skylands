@@ -34,5 +34,3 @@ and modpacks. This mod is not complete and still in active development.
 - **/force-sl set-hub-pos** Changes position of the hub.
 - **/force-sl delete-island <player>** Deletes player's Island.
 - **/force-sl toggle-hub-protection** Enables/disables hub protection.
-- **/force-sl toggle-hub-music** Enables/disables hub background music.
-

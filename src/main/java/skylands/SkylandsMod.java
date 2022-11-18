@@ -5,7 +5,6 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skylands.command.SkylandsCommands;
-import skylands.data.reloadable.SongsData;
 import skylands.event.SkylandsEvents;
 
 public class SkylandsMod implements ModInitializer {
@@ -16,7 +15,6 @@ public class SkylandsMod implements ModInitializer {
 	public void onInitialize() {
 		SkylandsEvents.init();
 		SkylandsCommands.init();
-		SongsData.init();
 	}
 
 	public static Identifier id(String path) {

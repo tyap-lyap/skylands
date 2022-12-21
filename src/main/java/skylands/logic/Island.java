@@ -38,6 +38,7 @@ import java.util.UUID;
 public class Island {
 	private static final Registry<StructureSet> EMPTY_STRUCTURE_REGISTRY = new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), (x) -> null).freeze();
 	MinecraftServer server = Skylands.instance.server;
+	Skylands skylands = Skylands.instance;
 	Fantasy fantasy = Skylands.instance.fantasy;
 	RuntimeWorldConfig islandConfig = null;
 	RuntimeWorldConfig netherConfig = null;
@@ -46,8 +47,8 @@ public class Island {
 	public ArrayList<Member> bans = new ArrayList<>();
 
 	public boolean locked = false;
-	public Vec3d spawnPos = new Vec3d(0.5D, 75D, 0.5D);
-	public Vec3d visitsPos = new Vec3d(0.5D, 75D, 0.5D);
+	public Vec3d spawnPos = skylands.config.defaultSpawnPos;
+	public Vec3d visitsPos = skylands.config.defaultVisitsPos;
 	public boolean hasNether = false;
 
 	public Instant created = Instant.now();

@@ -26,21 +26,18 @@ public class MemberCommands {
 		})))));
 		dispatcher.register(literal("sl").then(literal("members").then(literal("remove").then(argument("player", word()).suggests((context, builder) -> {
 			var player = context.getSource().getPlayer();
+			var island = Skylands.instance.islands.get(player);
 
-			if(player != null) {
-				var island = Skylands.instance.islands.get(player);
-				if(island.isPresent()) {
-					var members = island.get().members;
+			if(player != null && island.isPresent()) {
+				var members = island.get().members;
+				String remains = builder.getRemaining();
 
-					String remains = builder.getRemaining();
-
-					for(var member : members) {
-						if(member.name.contains(remains)) {
-							builder.suggest(member.name);
-						}
+				for(var member : members) {
+					if(member.name.contains(remains)) {
+						builder.suggest(member.name);
 					}
-					return builder.buildFuture();
 				}
+				return builder.buildFuture();
 			}
 			return builder.buildFuture();
 		}).executes(context -> {

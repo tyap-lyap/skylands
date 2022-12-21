@@ -12,6 +12,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import skylands.logic.Skylands;
 import skylands.util.Texts;
 import skylands.util.WorldProtection;
 
@@ -23,6 +24,8 @@ public class UseBlockEvent {
 		ItemStack toolStack = player.getStackInHand(hand);
 
 		if(state.getBlock() instanceof CropBlock crop && crop.isMature(state)) {
+			if(!Skylands.instance.config.rightClickHarvestEnabled) return ActionResult.PASS;
+
 			if(WorldProtection.canModify(world, player)) {
 				Item replant = state.getBlock().getPickStack(world, pos, state).getItem();
 				final boolean[] removedReplant = {false};

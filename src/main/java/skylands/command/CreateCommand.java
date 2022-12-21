@@ -32,6 +32,9 @@ public class CreateCommand {
 		else {
 			Island island = islands.create(player);
 			island.onFirstLoad();
+			if(Skylands.instance.config.teleportAfterIslandCreation) {
+				island.visitAsMember(player);
+			}
 			player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
 		}
 	}

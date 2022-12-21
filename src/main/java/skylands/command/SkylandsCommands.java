@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
+import skylands.config.SkylandsConfigCommands;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
 
@@ -39,13 +40,14 @@ public class SkylandsCommands {
 
 			if(island.isPresent()) {
 				Skylands.instance.islands.delete(playerName);
-				context.getSource().sendFeedback(Texts.of("message.skylands.force_delete.success", map -> map.put("%player%", playerName)), true);
+				context.getSource().sendFeedback(Texts.prefixed("message.skylands.force_delete.success", map -> map.put("%player%", playerName)), true);
 			}
 			else {
-				context.getSource().sendFeedback(Texts.of("message.skylands.force_delete.fail", map -> map.put("%player%", playerName)), true);
+				context.getSource().sendFeedback(Texts.prefixed("message.skylands.force_delete.fail", map -> map.put("%player%", playerName)), true);
 			}
 
 			return 1;
 		}))));
+		SkylandsConfigCommands.init(dispatcher);
 	}
 }

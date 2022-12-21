@@ -2,6 +2,7 @@ package skylands.logic;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import org.jetbrains.annotations.Nullable;
 import skylands.SkylandsMod;
 
 import java.util.ArrayList;
@@ -36,7 +37,8 @@ public class IslandStuck {
 		stuck.removeIf(island -> island.owner.name.equals(playerName));
 	}
 
-	public Optional<Island> get(PlayerEntity player) {
+	public Optional<Island> get(@Nullable PlayerEntity player) {
+		if(player == null) return Optional.empty();
 		for(var island : this.stuck) {
 			if(island.owner.uuid.equals(player.getUuid())) return Optional.of(island);
 		}
@@ -50,16 +52,18 @@ public class IslandStuck {
 		return Optional.empty();
 	}
 
-	public Optional<Island> get(UUID playerUuid) {
+	public Optional<Island> get(@Nullable UUID playerUuid) {
+		if(playerUuid == null) return Optional.empty();
 		for(var island : this.stuck) {
 			if(island.owner.uuid.equals(playerUuid)) return Optional.of(island);
 		}
 		return Optional.empty();
 	}
 
-	public boolean hasIsland(UUID uuid) {
+	public boolean hasIsland(@Nullable UUID playerUuid) {
+		if(playerUuid == null) return false;
 		for(var island : this.stuck) {
-			if(island.owner.uuid.equals(uuid)) return true;
+			if(island.owner.uuid.equals(playerUuid)) return true;
 		}
 		return false;
 	}

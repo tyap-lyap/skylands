@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.SharedConstants;
 import net.minecraft.server.network.ServerPlayerEntity;
 import skylands.SkylandsMod;
 
@@ -83,7 +84,14 @@ public class UpdateChecker {
 			HttpResponse<InputStream> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofInputStream());
 			InputStreamReader reader = new InputStreamReader(response.body());
 			ProjectVersion[] versions = GSON.fromJson(reader, ProjectVersion[].class);
-			return Optional.of(new ArrayList<>(Arrays.asList(versions)));
+
+			var array = new ArrayList<ProjectVersion>();
+
+			Arrays.asList(versions).forEach(version -> {
+				if(version.gameVersions.contains(SharedConstants.getGameVersion().getName())) array.add(version);
+			});
+
+			return Optional.of(array);
 		}
 		catch(FileNotFoundException e) {
 			return Optional.empty();

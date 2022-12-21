@@ -28,7 +28,4 @@ public class SkylandsAPI {
 		return Worlds.getIsland(world);
 	}
 
-	public static void setBalanceHandler(BalanceHandler handler) {
-		skylands.balanceHandler = handler;
-	}
 }

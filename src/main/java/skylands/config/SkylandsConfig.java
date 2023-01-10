@@ -1,9 +1,22 @@
 package skylands.config;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
+import skylands.SkylandsMod;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 public class SkylandsConfig {
+	public static final Gson GSON = new GsonBuilder().setLenient().setPrettyPrinting().create();
+	@SuppressWarnings("unused")
+	public String readDocs = "https://github.com/tyap-lyap/skylands/wiki";
+	public String configFormat = "json";
 	public Vec3d defaultSpawnPos = new Vec3d(0.5D, 75D, 0.5D);
 	public Vec3d defaultVisitsPos = new Vec3d(0.5D, 75D, 0.5D);
 
@@ -56,4 +69,40 @@ public class SkylandsConfig {
 
 		nbt.put("config", configNbt);
 	}
+
+	public static SkylandsConfig read() {
+//		String filePath = path.isBlank() ? this.file : this.path + "/" + this.file;
+
+		String filePath = FabricLoader.getInstance().getConfigDir().resolve("skylands.json").toString();
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(filePath));
+			return GSON.fromJson(reader, SkylandsConfig.class);
+		}
+		catch(FileNotFoundException e) {
+			SkylandsMod.LOGGER.info("File " + filePath + " is not found! Setting to default.");
+			var conf = new SkylandsConfig();
+			conf.save();
+			return conf;
+		}
+		catch(Exception e) {
+			SkylandsMod.LOGGER.info("Failed to read skylands config due to an exception. " +
+					"Please delete skylands.json to regenerate config or fix the issue:\n" + e);
+			e.printStackTrace();
+			System.exit(0);
+			return new SkylandsConfig();
+		}
+	}
+
+	public void save() {
+		try {
+			String filePath = FabricLoader.getInstance().getConfigDir().resolve("skylands.json").toString();
+			try(FileWriter writer = new FileWriter(filePath)) {
+				writer.write(GSON.toJson(this));
+			}
+		}
+		catch(Exception e) {
+			SkylandsMod.LOGGER.info("Failed to save skylands config due to an exception:\n" + e);
+		}
+	}
+
 }

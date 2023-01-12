@@ -1,6 +1,6 @@
 package skylands.util;
 
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 import skylands.SkylandsMod;
 import skylands.logic.Island;

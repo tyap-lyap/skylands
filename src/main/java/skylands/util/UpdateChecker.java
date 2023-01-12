@@ -54,7 +54,7 @@ public class UpdateChecker {
 		if(ChronoUnit.HOURS.between(lastCheck, Instant.now()) >= 4) {
 			String remote = "0";
 			var versions = getModrinthVersions();
-			if(versions.isPresent()) {
+			if(versions.isPresent() && !versions.get().isEmpty()) {
 				remote = versions.get().get(0).versionNumber;
 			}
 			cachedLatest = remote;

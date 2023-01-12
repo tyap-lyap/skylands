@@ -1,22 +1,19 @@
 package skylands.logic;
 
-import com.mojang.serialization.Lifecycle;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructurePlacementData;
-import net.minecraft.structure.StructureSet;
 import net.minecraft.structure.StructureTemplate;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.SimpleRegistry;
+import net.minecraft.util.math.random.RandomSeed;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.biome.BiomeKeys;
@@ -32,11 +29,11 @@ import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class Island {
-	private static final Registry<StructureSet> EMPTY_STRUCTURE_REGISTRY = new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), (x) -> null).freeze();
 	MinecraftServer server = Skylands.instance.server;
 	Skylands skylands = Skylands.instance;
 	Fantasy fantasy = Skylands.instance.fantasy;
@@ -182,16 +179,16 @@ public class Island {
 	}
 
 	private RuntimeWorldConfig createIslandConfig() {
-		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), BuiltinRegistries.BIOME);
-		flat.setBiome(this.server.getRegistryManager().get(Registry.BIOME_KEY).getOrCreateEntry(BiomeKeys.PLAINS));
-		FlatChunkGenerator generator = new FlatChunkGenerator(EMPTY_STRUCTURE_REGISTRY, flat);
+		var biome = this.server.getRegistryManager().get(RegistryKeys.BIOME).getEntry(this.server.getRegistryManager().get(RegistryKeys.BIOME).getOrThrow(BiomeKeys.PLAINS));
+		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), biome, List.of());
+		FlatChunkGenerator generator = new FlatChunkGenerator(flat);
 
 		return new RuntimeWorldConfig()
 				.setDimensionType(DimensionTypes.OVERWORLD)
 				.setGenerator(generator)
 				.setDifficulty(Difficulty.NORMAL)
 				.setShouldTickTime(true)
-				.setSeed(123L);
+				.setSeed(RandomSeed.getSeed());
 	}
 
 	public RuntimeWorldHandle getNetherHandler() {
@@ -202,16 +199,16 @@ public class Island {
 	}
 
 	private RuntimeWorldConfig createNetherConfig() {
-		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), BuiltinRegistries.BIOME);
-		flat.setBiome(this.server.getRegistryManager().get(Registry.BIOME_KEY).getOrCreateEntry(BiomeKeys.NETHER_WASTES));
-		FlatChunkGenerator generator = new FlatChunkGenerator(EMPTY_STRUCTURE_REGISTRY, flat);
+		var biome = this.server.getRegistryManager().get(RegistryKeys.BIOME).getEntry(this.server.getRegistryManager().get(RegistryKeys.BIOME).getOrThrow(BiomeKeys.NETHER_WASTES));
+		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), biome, List.of());
+		FlatChunkGenerator generator = new FlatChunkGenerator(flat);
 
 		return new RuntimeWorldConfig()
 				.setDimensionType(DimensionTypes.THE_NETHER)
 				.setGenerator(generator)
 				.setDifficulty(Difficulty.NORMAL)
 				.setShouldTickTime(true)
-				.setSeed(123L);
+				.setSeed(RandomSeed.getSeed());
 	}
 
 	public ServerWorld getEnd() {

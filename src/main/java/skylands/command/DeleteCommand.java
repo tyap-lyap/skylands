@@ -2,6 +2,7 @@ package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import skylands.logic.IslandStuck;
@@ -18,7 +19,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class DeleteCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("delete").executes(context -> {
+		dispatcher.register(literal("sl").then(literal("delete").requires(Permissions.require("skylands.delete", true)).executes(context -> {
 			var player = context.getSource().getPlayer();
 			if(player != null) DeleteCommand.warn(player);
 			return 1;
@@ -38,9 +39,9 @@ public class DeleteCommand {
 			islands.get(player).ifPresentOrElse(island -> {
 				var created = island.created;
 				var now = Instant.now();
-				var hours = ChronoUnit.HOURS.between(created, now);
+				var seconds = ChronoUnit.SECONDS.between(created, now);
 
-				if(hours >= 24) {
+				if(seconds >= Skylands.config.islandDeletionCooldown) {
 					islands.delete(player);
 					player.sendMessage(Texts.prefixed("message.skylands.island_delete.success"));
 				}

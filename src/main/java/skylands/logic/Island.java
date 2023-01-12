@@ -47,8 +47,8 @@ public class Island {
 	public ArrayList<Member> bans = new ArrayList<>();
 
 	public boolean locked = false;
-	public Vec3d spawnPos = skylands.config.defaultSpawnPos;
-	public Vec3d visitsPos = skylands.config.defaultVisitsPos;
+	public Vec3d spawnPos = Skylands.config.defaultSpawnPos;
+	public Vec3d visitsPos = Skylands.config.defaultVisitsPos;
 	public boolean hasNether = false;
 
 	public Instant created = Instant.now();

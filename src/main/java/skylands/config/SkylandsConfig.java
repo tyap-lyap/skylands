@@ -17,8 +17,11 @@ public class SkylandsConfig {
 	@SuppressWarnings("unused")
 	public String readDocs = "https://github.com/tyap-lyap/skylands/wiki";
 	public String configFormat = "json";
-	public Vec3d defaultSpawnPos = new Vec3d(0.5D, 75D, 0.5D);
-	public Vec3d defaultVisitsPos = new Vec3d(0.5D, 75D, 0.5D);
+	public Vec3d defaultSpawnPos = new Vec3d(0.5D, 75.0D, 0.5D);
+	public Vec3d defaultVisitsPos = new Vec3d(0.5D, 75.0D, 0.5D);
+	public Vec3d defaultHubPos = new Vec3d(0.5D, 80.0D, 0.5D);
+	public boolean hubProtectedByDefault = false;
+	public int islandDeletionCooldown = (24 * 60) * 60;
 
 	public boolean updateCheckerEnabled = true;
 	public boolean teleportAfterIslandCreation = false;
@@ -71,8 +74,6 @@ public class SkylandsConfig {
 	}
 
 	public static SkylandsConfig read() {
-//		String filePath = path.isBlank() ? this.file : this.path + "/" + this.file;
-
 		String filePath = FabricLoader.getInstance().getConfigDir().resolve("skylands.json").toString();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(filePath));

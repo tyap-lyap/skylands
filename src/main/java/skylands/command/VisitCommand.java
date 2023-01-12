@@ -1,6 +1,7 @@
 package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -15,7 +16,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class VisitCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("visit").then(argument("player", player()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("visit").requires(Permissions.require("skylands.visit", true)).then(argument("player", player()).executes(context -> {
 			var visitor = context.getSource().getPlayer();
 			var owner = EntityArgumentType.getPlayer(context, "player");
 			if(visitor != null && owner != null) {

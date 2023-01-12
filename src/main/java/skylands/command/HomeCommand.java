@@ -2,6 +2,7 @@ package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import skylands.SkylandsMod;
@@ -16,14 +17,14 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class HomeCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("home").executes(context -> {
+		dispatcher.register(literal("sl").then(literal("home").requires(Permissions.require("skylands.home", true)).executes(context -> {
 			var player = context.getSource().getPlayer();
 			if(player != null) {
 				HomeCommand.run(player);
 			}
 			return 1;
 		})));
-		dispatcher.register(literal("sl").then(literal("home").then(argument("player", word()).suggests((context, builder) -> {
+		dispatcher.register(literal("sl").then(literal("home").requires(Permissions.require("skylands.home", true)).then(argument("player", word()).suggests((context, builder) -> {
 			var player = context.getSource().getPlayer();
 
 			if(player != null) {

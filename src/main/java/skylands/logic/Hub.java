@@ -4,8 +4,11 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
 
 public class Hub {
-	public Vec3d pos = new Vec3d(0, 80, 0);
-	public boolean hasProtection = false;
+	public Vec3d pos = Skylands.config.defaultHubPos;
+	public boolean hasProtection = Skylands.config.hubProtectedByDefault;
+
+	public Hub() {
+	}
 
 	public void readFromNbt(NbtCompound nbt) {
 		NbtCompound hubNbt = nbt.getCompound("hub");

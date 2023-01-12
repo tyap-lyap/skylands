@@ -2,6 +2,7 @@ package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,7 +17,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class MemberCommands {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("members").then(literal("invite").then(argument("player", player()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("members").then(literal("invite").requires(Permissions.require("skylands.members.invite", true)).then(argument("player", player()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var newcomer = EntityArgumentType.getPlayer(context, "player");
 			if(player != null && newcomer != null) {
@@ -24,7 +25,7 @@ public class MemberCommands {
 			}
 			return 1;
 		})))));
-		dispatcher.register(literal("sl").then(literal("members").then(literal("remove").then(argument("player", word()).suggests((context, builder) -> {
+		dispatcher.register(literal("sl").then(literal("members").then(literal("remove").requires(Permissions.require("skylands.members.remove", true)).then(argument("player", word()).suggests((context, builder) -> {
 			var player = context.getSource().getPlayer();
 			var island = Skylands.instance.islands.get(player);
 

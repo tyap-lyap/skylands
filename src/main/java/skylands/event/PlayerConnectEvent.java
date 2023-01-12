@@ -20,12 +20,13 @@ public class PlayerConnectEvent {
 		Skylands skylands = Skylands.instance;
 
 		if(player.getStatHandler().getStat(Stats.CUSTOM.getOrCreateStat(Stats.LEAVE_GAME)) == 0) {
-			if(skylands.config.createIslandOnPlayerJoin) {
-				Island island = skylands.islands.create(player);
-				island.onFirstLoad();
-				island.visitAsMember(player);
-				player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
-			}
+			// TODO: this is extremely broken and unsafe, needs different implementation
+//			if(skylands.config.createIslandOnPlayerJoin) {
+//				Island island = skylands.islands.create(player);
+//				island.onFirstLoad();
+//				island.visitAsMember(player);
+//				player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
+//			}
 		}
 
 		skylands.islands.get(player).ifPresent(island -> {
@@ -52,7 +53,7 @@ public class PlayerConnectEvent {
 			}
 		});
 
-		if(skylands.config.updateCheckerEnabled) {
+		if(Skylands.config.updateCheckerEnabled) {
 			UpdateChecker.onPlayerJoin(player);
 		}
 	}

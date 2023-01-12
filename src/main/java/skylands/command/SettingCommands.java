@@ -1,6 +1,7 @@
 package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,20 +17,20 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class SettingCommands {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("settings").then(literal("toggle-visits").executes(context -> {
+		dispatcher.register(literal("sl").then(literal("settings").then(literal("toggle-visits").requires(Permissions.require("skylands.settings.lock", true)).executes(context -> {
 			var player = context.getSource().getPlayer();
 			if(player != null) {
 				SettingCommands.toggleVisits(player);
 			}
 			return 1;
-		})).then(literal("set-spawn-pos").then(argument("position", blockPos()).executes(context -> {
+		})).then(literal("set-spawn-pos").requires(Permissions.require("skylands.settings.spawn.position", true)).then(argument("position", blockPos()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
 			if(player != null) {
 				SettingCommands.setSpawnPos(player, pos);
 			}
 			return 1;
-		}))).then(literal("set-visits-pos").then(argument("position", blockPos()).executes(context -> {
+		}))).then(literal("set-visits-pos").requires(Permissions.require("skylands.settings.visits.position", true)).then(argument("position", blockPos()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
 			if(player != null) {

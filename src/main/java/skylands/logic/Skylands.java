@@ -14,7 +14,8 @@ public class Skylands {
 	public IslandStuck islands;
 	public Hub hub;
 	public Invites invites;
-	public SkylandsConfig config;
+
+	public static SkylandsConfig config;
 
 	public Skylands(MinecraftServer server) {
 		this.server = server;
@@ -22,7 +23,6 @@ public class Skylands {
 		this.islands = new IslandStuck();
 		this.hub = new Hub();
 		this.invites = new Invites();
-		this.config = SkylandsConfig.read();
 	}
 
 	public void readFromNbt(NbtCompound nbt) {

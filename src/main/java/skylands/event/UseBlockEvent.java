@@ -24,7 +24,7 @@ public class UseBlockEvent {
 		ItemStack toolStack = player.getStackInHand(hand);
 
 		if(state.getBlock() instanceof CropBlock crop && crop.isMature(state)) {
-			if(!Skylands.instance.config.rightClickHarvestEnabled) return ActionResult.PASS;
+			if(!Skylands.config.rightClickHarvestEnabled) return ActionResult.PASS;
 
 			if(WorldProtection.canModify(world, player)) {
 				Item replant = state.getBlock().getPickStack(world, pos, state).getItem();

@@ -2,6 +2,7 @@ package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
@@ -21,7 +22,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class BanCommands {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("ban").then(argument("player", player()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("ban").requires(Permissions.require("skylands.ban", true)).then(argument("player", player()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var bannedPlayer = EntityArgumentType.getPlayer(context, "player");
 			if(player != null && bannedPlayer != null) {

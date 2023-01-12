@@ -2,6 +2,7 @@ package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
 import skylands.config.SkylandsConfigCommands;
@@ -34,7 +35,7 @@ public class SkylandsCommands {
 		DeleteCommand.init(dispatcher);
 		SettingCommands.init(dispatcher);
 
-		dispatcher.register(literal("force-sl").requires(source -> source.hasPermissionLevel(4)).then(literal("delete-island").then(argument("player", word()).executes(context -> {
+		dispatcher.register(literal("force-sl").then(literal("delete-island").requires(Permissions.require("skylands.force.delete", 4)).then(argument("player", word()).executes(context -> {
 			var playerName = StringArgumentType.getString(context, "player");
 			var island = Skylands.instance.islands.get(playerName);
 

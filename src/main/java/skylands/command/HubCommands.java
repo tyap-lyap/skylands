@@ -1,6 +1,7 @@
 package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.MinecraftServer;
@@ -19,7 +20,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class HubCommands {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("hub").executes(context -> {
+		dispatcher.register(literal("sl").then(literal("hub").requires(Permissions.require("skylands.hub", true)).executes(context -> {
 			var source = context.getSource();
 			var player = source.getPlayer();
 			MinecraftServer server = source.getServer();
@@ -29,12 +30,12 @@ public class HubCommands {
 			return 1;
 		})));
 
-		dispatcher.register(literal("force-sl").requires(source -> source.hasPermissionLevel(4)).then(literal("set-hub-pos").then(argument("position", blockPos()).executes(context -> {
+		dispatcher.register(literal("force-sl").then(literal("set-hub-pos").requires(Permissions.require("skylands.force.hub.position", 4)).then(argument("position", blockPos()).executes(context -> {
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
 			var source = context.getSource();
 			HubCommands.setPos(pos, source);
 			return 1;
-		}))).then(literal("toggle-hub-protection").executes(context -> {
+		}))).then(literal("toggle-hub-protection").requires(Permissions.require("skylands.force.hub.protection", 4)).executes(context -> {
 			HubCommands.toggleProtection(context.getSource());
 			return 1;
 		})));

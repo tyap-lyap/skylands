@@ -1,6 +1,7 @@
 package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
@@ -18,7 +19,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class KickCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("kick").then(argument("player", player()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("kick").requires(Permissions.require("skylands.kick", true)).then(argument("player", player()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var kickedPlayer = EntityArgumentType.getPlayer(context, "player");
 			if(player != null && kickedPlayer != null) {

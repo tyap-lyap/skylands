@@ -2,6 +2,7 @@ package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import skylands.data.Components;
@@ -16,7 +17,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class AcceptCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("accept").then(argument("player", word()).executes(context -> {
+		dispatcher.register(literal("sl").then(literal("accept").requires(Permissions.require("skylands.accept", true)).then(argument("player", word()).executes(context -> {
 			String inviter = StringArgumentType.getString(context, "player");
 			var player = context.getSource().getPlayer();
 

@@ -3,6 +3,7 @@ package skylands.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -28,7 +29,7 @@ public class UpdateChecker {
 	private static String cachedLatest = "0";
 
 	public static void onPlayerJoin(ServerPlayerEntity player) {
-		if(player.hasPermissionLevel(4)) {
+		if(Permissions.check(player, "skylands.update.checker.notify", 4)) {
 			check(player);
 		}
 	}

@@ -32,7 +32,7 @@ public abstract class LivingEntityMixin extends Entity {
 			if(self instanceof PlayerEntity player) {
 				if(!WorldProtection.canModify(world, player)) {
 					player.sendMessage(Texts.prefixed("message.skylands.world_protection.damage_take"), true);
-					if(source.equals(DamageSource.OUT_OF_WORLD)) {
+					if(source.equals(world.getDamageSources().outOfWorld())) {
 						player.sendMessage(Texts.prefixed("message.skylands.hub_visit"));
 						FabricDimensions.teleport(player, world.getServer().getOverworld(), new TeleportTarget(Skylands.instance.hub.pos, new Vec3d(0, 0, 0), 0, 0));
 //						var pos = island.get().spawnPos;

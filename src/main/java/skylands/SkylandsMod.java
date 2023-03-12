@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import skylands.command.SkylandsCommands;
 import skylands.config.SkylandsConfig;
 import skylands.event.SkylandsEvents;
-import skylands.logic.Skylands;
 
 public class SkylandsMod implements ModInitializer {
 	public static final String MOD_ID = "skylands";
@@ -15,7 +14,7 @@ public class SkylandsMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		Skylands.config = SkylandsConfig.read();
+		SkylandsConfig.init();
 		SkylandsEvents.init();
 		SkylandsCommands.init();
 	}

@@ -10,13 +10,12 @@ public class ServerStartEvent {
 	public static void onStart(MinecraftServer server) {
 		Skylands.instance = new Skylands(server);
 
-		var serverMeta = server.getServerMetadata();
-		var motd = serverMeta.getDescription();
+		var motd = server.getServerMotd();
 
-		if(motd == null || motd.getString().equals("A Minecraft Server")) {
+		if(motd == null || motd.equals("A Minecraft Server")) {
 			FabricLoader.getInstance().getModContainer("skylands").ifPresent(mod -> {
 				var modMeta = mod.getMetadata();
-				serverMeta.setDescription(Text.of("Skylands Alpha Build " + modMeta.getVersion().getFriendlyString()));
+				server.setMotd("Skylands Beta v" + modMeta.getVersion().getFriendlyString());
 			});
 		}
 	}

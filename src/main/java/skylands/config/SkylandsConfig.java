@@ -6,6 +6,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
 import skylands.SkylandsMod;
+import skylands.logic.Skylands;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -27,6 +28,10 @@ public class SkylandsConfig {
 	public boolean teleportAfterIslandCreation = false;
 	public boolean createIslandOnPlayerJoin = false;
 	public boolean rightClickHarvestEnabled = true;
+
+	public static void init() {
+		Skylands.config = SkylandsConfig.read();
+	}
 
 	public void readFromNbt(NbtCompound nbt) {
 		NbtCompound configNbt = nbt.getCompound("config");

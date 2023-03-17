@@ -24,14 +24,14 @@ dependencies {
 
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:5.1.0"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.1.0"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.1.0"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.1.0"
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:${project.cca}"
+	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca}"
+	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:${project.cca}"
+	include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca}"
 
-	modImplementation include("xyz.nucleoid:fantasy:0.4.9+1.19.4-rc2") // https://github.com/NucleoidMC/fantasy/releases
-	modImplementation include("eu.pb4:placeholder-api:2.0.0-rc.1+1.19.3") // https://github.com/Patbox/TextPlaceholderAPI/releases
-	modImplementation include("xyz.nucleoid:server-translations-api:2.0.0-beta.2+1.19.4-pre2") // https://github.com/NucleoidMC/Server-Translations/releases
+	modImplementation include("xyz.nucleoid:fantasy:${project.fantasy}")
+	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api}")
+	modImplementation include("xyz.nucleoid:server-translations-api:${project.server_translations_api}")
 	modImplementation include("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
 }
 

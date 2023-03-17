@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructurePlacementData;
@@ -47,6 +48,7 @@ public class Island {
 	public Vec3d spawnPos = Skylands.config.defaultSpawnPos;
 	public Vec3d visitsPos = Skylands.config.defaultVisitsPos;
 	public boolean hasNether = false;
+	public long seed = 0L;
 
 	public Instant created = Instant.now();
 
@@ -67,6 +69,7 @@ public class Island {
 		island.hasNether = nbt.getBoolean("hasNether");
 		island.created = Instant.parse(nbt.getString("created"));
 		island.locked = nbt.getBoolean("locked");
+		island.seed = nbt.getLong("seed");
 
 		var spawnPosNbt = nbt.getCompound("spawnPos");
 		double spawnPosX = spawnPosNbt.getDouble("x");
@@ -103,6 +106,7 @@ public class Island {
 		nbt.putBoolean("hasNether", this.hasNether);
 		nbt.putString("created", this.created.toString());
 		nbt.putBoolean("locked", this.locked);
+		nbt.putLong("seed", this.seed);
 
 		NbtCompound spawnPosNbt = new NbtCompound();
 		spawnPosNbt.putDouble("x", this.spawnPos.getX());
@@ -171,6 +175,11 @@ public class Island {
 		return false;
 	}
 
+	public long getSeed() {
+		if (this.seed == 0) this.seed = RandomSeed.getSeed();
+		return this.seed;
+	}
+
 	public RuntimeWorldHandle getHandler() {
 		if(this.islandConfig == null) {
 			this.islandConfig = createIslandConfig();
@@ -180,7 +189,7 @@ public class Island {
 
 	private RuntimeWorldConfig createIslandConfig() {
 		var biome = this.server.getRegistryManager().get(RegistryKeys.BIOME).getEntry(this.server.getRegistryManager().get(RegistryKeys.BIOME).getOrThrow(BiomeKeys.PLAINS));
-		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), biome, List.of());
+		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.of(RegistryEntryList.of()), biome, List.of());
 		FlatChunkGenerator generator = new FlatChunkGenerator(flat);
 
 		return new RuntimeWorldConfig()
@@ -188,7 +197,7 @@ public class Island {
 				.setGenerator(generator)
 				.setDifficulty(Difficulty.NORMAL)
 				.setShouldTickTime(true)
-				.setSeed(RandomSeed.getSeed());
+				.setSeed(this.getSeed());
 	}
 
 	public RuntimeWorldHandle getNetherHandler() {
@@ -200,7 +209,7 @@ public class Island {
 
 	private RuntimeWorldConfig createNetherConfig() {
 		var biome = this.server.getRegistryManager().get(RegistryKeys.BIOME).getEntry(this.server.getRegistryManager().get(RegistryKeys.BIOME).getOrThrow(BiomeKeys.NETHER_WASTES));
-		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), biome, List.of());
+		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.of(RegistryEntryList.of()), biome, List.of());
 		FlatChunkGenerator generator = new FlatChunkGenerator(flat);
 
 		return new RuntimeWorldConfig()
@@ -208,7 +217,7 @@ public class Island {
 				.setGenerator(generator)
 				.setDifficulty(Difficulty.NORMAL)
 				.setShouldTickTime(true)
-				.setSeed(RandomSeed.getSeed());
+				.setSeed(this.getSeed());
 	}
 
 	public ServerWorld getEnd() {

@@ -55,7 +55,7 @@ public class UpdateChecker {
 			String remote = "0";
 			var versions = getModrinthVersions();
 			if(versions.isPresent() && !versions.get().isEmpty()) {
-				remote = versions.get().get(0).versionNumber;
+				remote = versions.get().get(0).versionNumber.split("\\+")[0];
 			}
 			cachedLatest = remote;
 			lastCheck = Instant.now();
@@ -68,7 +68,7 @@ public class UpdateChecker {
 		var mod = FabricLoader.getInstance().getModContainer("skylands");
 
 		if(mod.isPresent()) {
-			version = mod.get().getMetadata().getVersion().getFriendlyString();
+			version = mod.get().getMetadata().getVersion().getFriendlyString().split("\\+")[0];
 		}
 
 		return version;

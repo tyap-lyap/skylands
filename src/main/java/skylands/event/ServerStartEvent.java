@@ -16,7 +16,7 @@ public class ServerStartEvent {
 		if(motd == null || motd.getString().equals("A Minecraft Server")) {
 			FabricLoader.getInstance().getModContainer("skylands").ifPresent(mod -> {
 				var modMeta = mod.getMetadata();
-				serverMeta.setDescription(Text.of("Skylands Alpha Build " + modMeta.getVersion().getFriendlyString()));
+				serverMeta.setDescription(Text.of("Skylands Beta v" + modMeta.getVersion().getFriendlyString()));
 			});
 		}
 	}

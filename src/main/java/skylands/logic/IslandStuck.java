@@ -3,10 +3,7 @@ package skylands.logic;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
-import skylands.SkylandsMod;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -74,25 +71,14 @@ public class IslandStuck {
 	public void readFromNbt(NbtCompound nbt) {
 		NbtCompound islandStuckNbt = nbt.getCompound("islandStuck");
 		int size = islandStuckNbt.getInt("size");
-		Instant inst = Instant.now();
+
 		for(int i = 0; i < size; i++) {
 			NbtCompound islandNbt = islandStuckNbt.getCompound(String.valueOf(i));
 			Island island = Island.fromNbt(islandNbt);
 			if(!this.hasIsland(island.owner.uuid)) {
 				this.stuck.add(island);
-				SkylandsMod.LOGGER.info("Loading " + island.owner.name + "'s Island...");
-				island.getWorld();
-
-				if(island.hasNether) {
-					SkylandsMod.LOGGER.info("Loading " + island.owner.name + "'s Nether...");
-					island.getNether();
-				}
 			}
 		}
-		if (stuck.size() > 0) {
-			SkylandsMod.LOGGER.info("All Islands got successfully loaded in " + ChronoUnit.MILLIS.between(inst, Instant.now()) + " ms!");
-		}
-
 	}
 
 	public void writeToNbt(NbtCompound nbt) {

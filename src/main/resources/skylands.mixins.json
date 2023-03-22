@@ -4,11 +4,12 @@
   "package": "skylands.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "entity.ServerPlayerEntityMixin",
     "block.EndPortalBlockMixin",
     "block.FireBlockMixin",
     "block.entity.EndGatewayBlockEntityMixin",
     "entity.EntityMixin",
+    "entity.ServerPlayerEntityMixin",
+    "server.PlayerManagerMixin",
     "world.ServerWorldMixin",
     "world.protection.ArmorStandMixin",
     "world.protection.AxeItemMixin",

@@ -1,0 +1,30 @@
+package skylands.mixin.server;
+
+import net.minecraft.network.ClientConnection;
+import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.stat.Stats;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import skylands.logic.Island;
+import skylands.logic.Skylands;
+import skylands.util.Texts;
+
+@Mixin(PlayerManager.class)
+public class PlayerManagerMixin {
+
+	@Inject(method = "onPlayerConnect", at = @At("TAIL"))
+	void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
+		if(player.getStatHandler().getStat(Stats.CUSTOM.getOrCreateStat(Stats.LEAVE_GAME)) == 0) {
+			if(Skylands.config.createIslandOnPlayerJoin) {
+				Island island = Skylands.instance.islands.create(player);
+				if(Skylands.config.teleportAfterIslandCreation) {
+					island.visitAsMember(player);
+				}
+				player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
+			}
+		}
+	}
+}

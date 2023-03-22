@@ -2,7 +2,6 @@ package skylands.event;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.Stats;
 import skylands.logic.Member;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
@@ -16,16 +15,6 @@ public class PlayerConnectEvent {
 
 	public static void onJoin(MinecraftServer server, ServerPlayerEntity player) {
 		Skylands skylands = Skylands.instance;
-
-		if(player.getStatHandler().getStat(Stats.CUSTOM.getOrCreateStat(Stats.LEAVE_GAME)) == 0) {
-			// TODO: this is extremely broken and unsafe, needs different implementation
-//			if(skylands.config.createIslandOnPlayerJoin) {
-//				Island island = skylands.islands.create(player);
-//				island.onFirstLoad();
-//				island.visitAsMember(player);
-//				player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
-//			}
-		}
 
 		skylands.islands.get(player).ifPresent(island -> {
 			island.owner.name = player.getName().getString();

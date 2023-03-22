@@ -13,7 +13,7 @@ import net.minecraft.util.TypedActionResult;
 public class SkylandsEvents {
 
 	public static void init() {
-		ServerLifecycleEvents.SERVER_STARTING.register(ServerStartEvent::onStart);
+		ServerLifecycleEvents.SERVER_STARTING.register(ServerStartEvent::onStarting);
 		ServerTickEvents.END_SERVER_TICK.register(ServerTickEvent::onTick);
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> PlayerConnectEvent.onJoin(server, handler.player));
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> PlayerConnectEvent.onLeave(server, handler.player));

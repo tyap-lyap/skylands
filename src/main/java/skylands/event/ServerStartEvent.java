@@ -2,7 +2,6 @@ package skylands.event;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.text.Text;
 import skylands.logic.Skylands;
 
 public class ServerStartEvent {

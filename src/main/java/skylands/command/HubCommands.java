@@ -2,14 +2,12 @@ package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import me.lucko.fabric.api.permissions.v0.Permissions;
-import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.TeleportTarget;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
 
@@ -43,7 +41,7 @@ public class HubCommands {
 
 	static void visit(ServerPlayerEntity player, MinecraftServer server) {
 		player.sendMessage(Texts.prefixed("message.skylands.hub_visit"));
-		FabricDimensions.teleport(player, server.getOverworld(), new TeleportTarget(Skylands.instance.hub.pos, new Vec3d(0, 0, 0), 0, 0));
+		Skylands.instance.hub.visit(player);
 	}
 
 	static void setPos(BlockPos pos, ServerCommandSource source) {

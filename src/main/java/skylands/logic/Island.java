@@ -1,6 +1,5 @@
 package skylands.logic;
 
-import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -16,7 +15,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.RandomSeed;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.gen.chunk.FlatChunkGenerator;
@@ -29,10 +27,7 @@ import xyz.nucleoid.fantasy.RuntimeWorldConfig;
 import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class Island {
 	MinecraftServer server = Skylands.instance.server;
@@ -49,7 +44,10 @@ public class Island {
 	public Vec3d visitsPos = Skylands.config.defaultVisitsPos;
 	public boolean hasNether = false;
 	public long seed = 0L;
-
+	/**
+	 * Mark indicates that this island was just created and wasn't visited yet
+	 */
+	boolean freshCreated = false;
 	public Instant created = Instant.now();
 
 	public Island(UUID uuid, String name) {
@@ -70,6 +68,7 @@ public class Island {
 		island.created = Instant.parse(nbt.getString("created"));
 		island.locked = nbt.getBoolean("locked");
 		island.seed = nbt.getLong("seed");
+		island.freshCreated = nbt.getBoolean("freshCreated");
 
 		var spawnPosNbt = nbt.getCompound("spawnPos");
 		double spawnPosX = spawnPosNbt.getDouble("x");
@@ -107,6 +106,7 @@ public class Island {
 		nbt.putString("created", this.created.toString());
 		nbt.putBoolean("locked", this.locked);
 		nbt.putLong("seed", this.seed);
+		nbt.putBoolean("freshCreated", this.freshCreated);
 
 		NbtCompound spawnPosNbt = new NbtCompound();
 		spawnPosNbt.putDouble("x", this.spawnPos.getX());
@@ -242,13 +242,20 @@ public class Island {
 
 	public void visitAsMember(PlayerEntity player) {
 		ServerWorld world = this.getWorld();
-		FabricDimensions.teleport(player, world, new TeleportTarget(this.spawnPos, new Vec3d(0, 0, 0), 0, 0));
+		player.teleport(world, this.spawnPos.getX(), this.spawnPos.getY(), this.spawnPos.getZ(), Set.of(), 0, 0);
+		if (this.freshCreated) {
+			this.onFirstLoad();
+			this.freshCreated = false;
+		}
 	}
 
 	public void visitAsVisitor(PlayerEntity player) {
 		ServerWorld world = this.getWorld();
-		FabricDimensions.teleport(player, world, new TeleportTarget(this.visitsPos, new Vec3d(0, 0, 0), 0, 0));
-
+		player.teleport(world, this.visitsPos.getX(), this.visitsPos.getY(), this.visitsPos.getZ(), Set.of(), 0, 0);
+		if (this.freshCreated) {
+			this.onFirstLoad();
+			this.freshCreated = false;
+		}
 		Players.get(this.owner.name).ifPresent(owner -> {
 			if(!player.getUuid().equals(owner.getUuid())) {
 				owner.sendMessage(Texts.prefixed("message.skylands.island_visit.visit", map -> map.put("%visitor%", player.getName().getString())));

@@ -1,17 +1,15 @@
 package skylands.event;
 
-import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.TeleportTarget;
-import skylands.logic.Island;
 import skylands.logic.Member;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
 import skylands.util.UpdateChecker;
 import skylands.util.Worlds;
+
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public class PlayerConnectEvent {
@@ -49,7 +47,8 @@ public class PlayerConnectEvent {
 			if(!island.isMember(player) && island.isBanned(player)) {
 				player.sendMessage(Texts.prefixed("message.skylands.ban_player.ban", map -> map.put("%owner%", island.owner.name)));
 				player.sendMessage(Texts.prefixed("message.skylands.hub_visit"));
-				FabricDimensions.teleport(player, server.getOverworld(), new TeleportTarget(Skylands.instance.hub.pos, new Vec3d(0, 0, 0), 0, 0));
+				var pos = Skylands.instance.hub.pos;
+				player.teleport(server.getOverworld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
 			}
 		});
 

@@ -1,7 +1,10 @@
 package skylands.logic;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.Set;
 
 public class Hub {
 	public Vec3d pos = Skylands.config.defaultHubPos;
@@ -23,5 +26,9 @@ public class Hub {
 		hubNbt.putDouble("z", this.pos.z);
 		hubNbt.putBoolean("hasProtection", this.hasProtection);
 		nbt.put("hub", hubNbt);
+	}
+
+	public void visit(PlayerEntity player) {
+		player.teleport(Skylands.instance.server.getOverworld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
 	}
 }

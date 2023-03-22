@@ -16,6 +16,7 @@ repositories {
 	maven { url "https://maven.nucleoid.xyz" }
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 	maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
+	maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -29,7 +30,7 @@ dependencies {
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:${project.cca}"
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca}"
 
-	modImplementation(files("libs/fantasy-${project.fantasy}.jar"))
+	modImplementation include("com.github.tyap-lyap:fantasy:${project.fantasy}")
 //	modImplementation include("xyz.nucleoid:fantasy:${project.fantasy}")
 	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api}")
 	modImplementation include("xyz.nucleoid:server-translations-api:${project.server_translations_api}")

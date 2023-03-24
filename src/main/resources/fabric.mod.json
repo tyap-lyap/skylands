@@ -23,7 +23,7 @@
       "skylands.SkylandsMod"
     ],
     "cardinal-components": [
-      "skylands.data.Components"
+      "skylands.data.SkylandsComponents"
     ]
   },
   "accessWidener": "skylands.accesswidener",

@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import skylands.data.Components;
+import skylands.data.SkylandsComponents;
 import skylands.logic.Skylands;
 import skylands.util.Players;
 import skylands.util.Texts;
@@ -38,7 +38,7 @@ public class AcceptCommand {
 					if(!invite.get().accepted) {
 						invite.get().accept(player);
 						player.sendMessage(Texts.prefixed("message.skylands.accept.success", map -> map.put("%owner%", ownerName)));
-						Components.PLAYER_DATA.get(player).addIsland(ownerName);
+						SkylandsComponents.PLAYER_DATA.get(player).addIsland(ownerName);
 					}
 				}
 				else {

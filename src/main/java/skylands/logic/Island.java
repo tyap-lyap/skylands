@@ -20,6 +20,7 @@ import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.gen.chunk.FlatChunkGenerator;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
 import skylands.SkylandsMod;
+import skylands.api.SkylandsAPI;
 import skylands.util.Players;
 import skylands.util.Texts;
 import xyz.nucleoid.fantasy.Fantasy;
@@ -240,34 +241,40 @@ public class Island {
 		return handler.asWorld();
 	}
 
-	public void visitAsMember(PlayerEntity player) {
+	public void visit(PlayerEntity player, Vec3d pos) {
 		ServerWorld world = this.getWorld();
-		player.teleport(world, this.spawnPos.getX(), this.spawnPos.getY(), this.spawnPos.getZ(), Set.of(), 0, 0);
+		player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
+
+		if(!isMember(player)) {
+			Players.get(this.owner.name).ifPresent(owner -> {
+				if(!player.getUuid().equals(owner.getUuid())) {
+					owner.sendMessage(Texts.prefixed("message.skylands.island_visit.visit", map -> map.put("%visitor%", player.getName().getString())));
+				}
+			});
+		}
+
+		SkylandsAPI.ON_ISLAND_VISIT.invoker().invoke(player, world, this);
+
 		if (this.freshCreated) {
-			this.onFirstLoad();
+			this.onFirstLoad(player);
 			this.freshCreated = false;
 		}
+	}
+
+	public void visitAsMember(PlayerEntity player) {
+		this.visit(player, this.spawnPos);
 	}
 
 	public void visitAsVisitor(PlayerEntity player) {
-		ServerWorld world = this.getWorld();
-		player.teleport(world, this.visitsPos.getX(), this.visitsPos.getY(), this.visitsPos.getZ(), Set.of(), 0, 0);
-		if (this.freshCreated) {
-			this.onFirstLoad();
-			this.freshCreated = false;
-		}
-		Players.get(this.owner.name).ifPresent(owner -> {
-			if(!player.getUuid().equals(owner.getUuid())) {
-				owner.sendMessage(Texts.prefixed("message.skylands.island_visit.visit", map -> map.put("%visitor%", player.getName().getString())));
-			}
-		});
+		this.visit(player, this.visitsPos);
 	}
 
-	public void onFirstLoad() {
+	public void onFirstLoad(PlayerEntity player) {
 		ServerWorld world = this.getWorld();
 		StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(SkylandsMod.id("start_island"));
 		StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
 		structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, world.getRandom(), Block.NOTIFY_ALL);
+		SkylandsAPI.ON_ISLAND_FIRST_LOAD.invoker().invoke(player, world, this);
 	}
 
 	void onFirstNetherLoad(ServerWorld world) {
@@ -278,6 +285,7 @@ public class Island {
 		StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(SkylandsMod.id("nether_island"));
 		StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
 		structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, world.getRandom(), Block.NOTIFY_ALL);
+		SkylandsAPI.ON_NETHER_FIRST_LOAD.invoker().onLoad(world, this);
 
 		this.hasNether = true;
 	}

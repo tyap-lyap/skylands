@@ -39,7 +39,7 @@ public class HubCommands {
 		})));
 	}
 
-	static void visit(ServerPlayerEntity player, MinecraftServer server) {
+	public static void visit(ServerPlayerEntity player, MinecraftServer server) {
 		player.sendMessage(Texts.prefixed("message.skylands.hub_visit"));
 		Skylands.instance.hub.visit(player);
 	}

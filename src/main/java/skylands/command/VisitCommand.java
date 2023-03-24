@@ -26,7 +26,7 @@ public class VisitCommand {
 		}))));
 	}
 
-	static void run(ServerPlayerEntity visitor, ServerPlayerEntity owner) {
+	public static void run(ServerPlayerEntity visitor, ServerPlayerEntity owner) {
 		String ownerName = owner.getName().getString();
 
 		Skylands.instance.islands.get(owner).ifPresentOrElse(island -> {

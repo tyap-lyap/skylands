@@ -3,6 +3,7 @@ package skylands.logic;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
+import skylands.api.SkylandsAPI;
 
 import java.util.Set;
 
@@ -29,6 +30,8 @@ public class Hub {
 	}
 
 	public void visit(PlayerEntity player) {
-		player.teleport(Skylands.instance.server.getOverworld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
+		var world = Skylands.getServer().getOverworld();
+		player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
+		SkylandsAPI.ON_HUB_VISIT.invoker().invoke(player, world);
 	}
 }

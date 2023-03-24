@@ -30,7 +30,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 		ServerPlayerEntity player = ServerPlayerEntity.class.cast(this);
 
 		if(!WorldProtection.canModify(world, player)) {
-			if(player.getPos().getY() < -74) {
+			if(player.getPos().getY() < world.getDimension().minY() - 10) {
 				Worlds.getIsland(world).ifPresentOrElse(island -> {
 					var pos = island.spawnPos;
 					player.teleport(island.getWorld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);

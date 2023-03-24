@@ -48,6 +48,10 @@ public class Skylands {
 		nbt.put("skylands", skylandsNbt);
 	}
 
+	public static MinecraftServer getServer() {
+		return getInstance().server;
+	}
+
 	public static Skylands getInstance() {
 		return Skylands.instance;
 	}

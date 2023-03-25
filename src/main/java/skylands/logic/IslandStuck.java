@@ -2,8 +2,12 @@ package skylands.logic;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.WorldSavePath;
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.Nullable;
+import skylands.SkylandsMod;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,7 +22,27 @@ public class IslandStuck {
 		var island = new Island(player);
 		island.freshCreated = true;
 		this.stuck.add(island);
+
+		copyTemplate(player);
 		return island;
+	}
+
+	void copyTemplate(PlayerEntity player) {
+		try {
+			var server = player.getServer();
+			File islandTemplate = server.getFile("island_template");
+			String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "") + "\\dimensions\\skylands\\" + player.getUuid().toString();
+			File lock = new File(path + "\\copied.lock");
+
+			if(islandTemplate.exists() && !lock.exists()) {
+				FileUtils.copyDirectory(islandTemplate, new File(path));
+				lock.createNewFile();
+			}
+		}
+		catch (Exception e) {
+			SkylandsMod.LOGGER.error("Failed to copy island template due to an exception: " + e);
+			e.printStackTrace();
+		}
 	}
 
 	public void delete(PlayerEntity player) {

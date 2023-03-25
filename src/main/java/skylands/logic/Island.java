@@ -11,6 +11,7 @@ import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplate;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.RandomSeed;
@@ -19,6 +20,7 @@ import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.gen.chunk.FlatChunkGenerator;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
+import org.apache.commons.io.FileUtils;
 import skylands.SkylandsMod;
 import skylands.api.SkylandsAPI;
 import skylands.util.Players;
@@ -27,6 +29,7 @@ import xyz.nucleoid.fantasy.Fantasy;
 import xyz.nucleoid.fantasy.RuntimeWorldConfig;
 import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
+import java.io.File;
 import java.time.Instant;
 import java.util.*;
 
@@ -205,7 +208,25 @@ public class Island {
 		if(this.netherConfig == null) {
 			this.netherConfig = createNetherConfig();
 		}
+		copyNetherTemplate();
 		return this.fantasy.getOrOpenPersistentWorld(new Identifier("nether", this.owner.uuid.toString()), this.netherConfig);
+	}
+
+	void copyNetherTemplate() {
+		try {
+			File netherTemplate = server.getFile("nether_template");
+			String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "") + "\\dimensions\\nether\\" + owner.uuid.toString();
+			File lock = new File(path + "\\copied.lock");
+
+			if(netherTemplate.exists() && !lock.exists()) {
+				FileUtils.copyDirectory(netherTemplate, new File(path));
+				lock.createNewFile();
+			}
+		}
+		catch (Exception e) {
+			SkylandsMod.LOGGER.error("Failed to copy nether template due to an exception: " + e);
+			e.printStackTrace();
+		}
 	}
 
 	private RuntimeWorldConfig createNetherConfig() {

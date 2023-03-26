@@ -22,7 +22,7 @@ public abstract class MinecraftServerMixin {
 	@Final
 	private static Logger LOGGER;
 
-	@Redirect(method = "save", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"))
+	@Redirect(method = "save", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", remap = false))
 	void info(Logger logger, String s, Object o, Object o1) {
 		if(o1 instanceof Identifier id) {
 			if(id.getNamespace().equals(SkylandsMod.MOD_ID)) {
@@ -32,7 +32,7 @@ public abstract class MinecraftServerMixin {
 		logger.info(s, o, o1);
 	}
 
-	@Redirect(method = "save", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V"))
+	@Redirect(method = "save", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V", remap = false))
 	void info(Logger logger, String s, Object o) {
 		try {
 			if(o instanceof String) {

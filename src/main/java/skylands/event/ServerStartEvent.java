@@ -17,11 +17,14 @@ public class ServerStartEvent {
 		try {
 			File hubTemplate = server.getFile("hub_template");
 			String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "");
-			File lock = new File(path + "\\copied.lock");
 
-			if(hubTemplate.exists() && !lock.exists()) {
-				FileUtils.copyDirectory(hubTemplate, new File(path));
-				lock.createNewFile();
+			if(!new File(path + "\\region").exists()) {
+				File lock = new File(path + "\\copied.lock");
+
+				if(hubTemplate.exists() && !lock.exists()) {
+					FileUtils.copyDirectory(hubTemplate, new File(path));
+					lock.createNewFile();
+				}
 			}
 		}
 		catch (Exception e) {

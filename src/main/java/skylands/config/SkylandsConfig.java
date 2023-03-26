@@ -2,9 +2,8 @@ package skylands.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.Vec3d;
 import skylands.SkylandsMod;
 import skylands.logic.Skylands;
 
@@ -17,10 +16,9 @@ public class SkylandsConfig {
 	public static final Gson GSON = new GsonBuilder().setLenient().setPrettyPrinting().create();
 	@SuppressWarnings("unused")
 	public String readDocs = "https://github.com/tyap-lyap/skylands/wiki";
-	public String configFormat = "json";
-	public Vec3d defaultSpawnPos = new Vec3d(0.5D, 75.0D, 0.5D);
-	public Vec3d defaultVisitsPos = new Vec3d(0.5D, 75.0D, 0.5D);
-	public Vec3d defaultHubPos = new Vec3d(0.5D, 80.0D, 0.5D);
+	public PlayerPosition defaultSpawnPos = new PlayerPosition(0.5D, 75.0D, 0.5D, 0, 0);
+	public PlayerPosition defaultVisitsPos = new PlayerPosition(0.5D, 75.0D, 0.5D, 0, 0);
+	public PlayerPosition defaultHubPos = new PlayerPosition(0.5D, 80.0D, 0.5D, 0, 0);
 	public boolean hubProtectedByDefault = false;
 	public int islandDeletionCooldown = (24 * 60) * 60;
 
@@ -33,56 +31,47 @@ public class SkylandsConfig {
 		Skylands.config = SkylandsConfig.read();
 	}
 
-	public void readFromNbt(NbtCompound nbt) {
-		NbtCompound configNbt = nbt.getCompound("config");
-		if(configNbt.isEmpty()) return;
-
-		var spawnPosNbt = configNbt.getCompound("defaultSpawnPos");
-		double spawnPosX = spawnPosNbt.getDouble("x");
-		double spawnPosY = spawnPosNbt.getDouble("y");
-		double spawnPosZ = spawnPosNbt.getDouble("z");
-		this.defaultSpawnPos = new Vec3d(spawnPosX, spawnPosY, spawnPosZ);
-
-		var visitsPosNbt = configNbt.getCompound("defaultVisitsPos");
-		double visitsPosX = visitsPosNbt.getDouble("x");
-		double visitsPosY = visitsPosNbt.getDouble("y");
-		double visitsPosZ = visitsPosNbt.getDouble("z");
-		this.defaultVisitsPos = new Vec3d(visitsPosX, visitsPosY, visitsPosZ);
-
-		this.updateCheckerEnabled = configNbt.getBoolean("updateCheckerEnabled");
-		this.teleportAfterIslandCreation = configNbt.getBoolean("teleportAfterIslandCreation");
-		this.createIslandOnPlayerJoin = configNbt.getBoolean("createIslandOnPlayerJoin");
-		this.rightClickHarvestEnabled = configNbt.getBoolean("rightClickHarvestEnabled");
-	}
-
-	public void writeToNbt(NbtCompound nbt) {
-		NbtCompound configNbt = new NbtCompound();
-
-		NbtCompound spawnPosNbt = new NbtCompound();
-		spawnPosNbt.putDouble("x", this.defaultSpawnPos.getX());
-		spawnPosNbt.putDouble("y", this.defaultSpawnPos.getY());
-		spawnPosNbt.putDouble("z", this.defaultSpawnPos.getZ());
-		configNbt.put("defaultSpawnPos", spawnPosNbt);
-
-		NbtCompound visitsPosNbt = new NbtCompound();
-		visitsPosNbt.putDouble("x", this.defaultVisitsPos.getX());
-		visitsPosNbt.putDouble("y", this.defaultVisitsPos.getY());
-		visitsPosNbt.putDouble("z", this.defaultVisitsPos.getZ());
-		configNbt.put("defaultVisitsPos", visitsPosNbt);
-
-		configNbt.putBoolean("updateCheckerEnabled", this.updateCheckerEnabled);
-		configNbt.putBoolean("teleportAfterIslandCreation", this.teleportAfterIslandCreation);
-		configNbt.putBoolean("createIslandOnPlayerJoin", this.createIslandOnPlayerJoin);
-		configNbt.putBoolean("rightClickHarvestEnabled", this.rightClickHarvestEnabled);
-
-		nbt.put("config", configNbt);
-	}
-
 	public static SkylandsConfig read() {
 		String filePath = FabricLoader.getInstance().getConfigDir().resolve("skylands.json").toString();
 		try {
+			BufferedReader fixReader = new BufferedReader(new FileReader(filePath));
+			var json = GSON.fromJson(fixReader, JsonObject.class);
+			boolean fixed = false;
+
+			if(json.getAsJsonObject("defaultSpawnPos").has("field_1352")) {
+				var defaultSpawnPos = json.getAsJsonObject("defaultSpawnPos");
+				defaultSpawnPos.addProperty("x", defaultSpawnPos.getAsJsonPrimitive("field_1352").getAsDouble());
+				defaultSpawnPos.addProperty("y", defaultSpawnPos.getAsJsonPrimitive("field_1351").getAsDouble());
+				defaultSpawnPos.addProperty("z", defaultSpawnPos.getAsJsonPrimitive("field_1350").getAsDouble());
+				fixed = true;
+			}
+
+			if(json.getAsJsonObject("defaultVisitsPos").has("field_1352")) {
+				var defaultVisitsPos = json.getAsJsonObject("defaultVisitsPos");
+				defaultVisitsPos.addProperty("x", defaultVisitsPos.getAsJsonPrimitive("field_1352").getAsDouble());
+				defaultVisitsPos.addProperty("y", defaultVisitsPos.getAsJsonPrimitive("field_1351").getAsDouble());
+				defaultVisitsPos.addProperty("z", defaultVisitsPos.getAsJsonPrimitive("field_1350").getAsDouble());
+				fixed = true;
+			}
+
+			if(json.getAsJsonObject("defaultHubPos").has("field_1352")) {
+				var defaultHubPos = json.getAsJsonObject("defaultHubPos");
+				defaultHubPos.addProperty("x", defaultHubPos.getAsJsonPrimitive("field_1352").getAsDouble());
+				defaultHubPos.addProperty("y", defaultHubPos.getAsJsonPrimitive("field_1351").getAsDouble());
+				defaultHubPos.addProperty("z", defaultHubPos.getAsJsonPrimitive("field_1350").getAsDouble());
+				fixed = true;
+			}
+
+			if (fixed) {
+				var fixedConfig = GSON.fromJson(json, SkylandsConfig.class);
+				fixedConfig.save();
+				return fixedConfig;
+			}
+
 			BufferedReader reader = new BufferedReader(new FileReader(filePath));
-			return GSON.fromJson(reader, SkylandsConfig.class);
+			var config = GSON.fromJson(reader, SkylandsConfig.class);
+			config.save();
+			return config;
 		}
 		catch(FileNotFoundException e) {
 			SkylandsMod.LOGGER.info("File " + filePath + " is not found! Setting to default.");

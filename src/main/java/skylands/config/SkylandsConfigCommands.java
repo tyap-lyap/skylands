@@ -5,9 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
 import skylands.logic.Skylands;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -22,7 +20,7 @@ public class SkylandsConfigCommands {
 	public static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
 		dispatcher.register(literal("force-sl").then(literal("config").requires(Permissions.require("skylands.force.config", 4)).then(literal("default-spawn-pos").then(argument("position", blockPos()).executes(context -> {
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
-			Skylands.config.defaultSpawnPos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			Skylands.config.defaultSpawnPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			Skylands.config.save();
 			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
 			context.getSource().sendFeedback(Text.of("config.defaultSpawnPos has changed to: " + posText), true);
@@ -30,7 +28,7 @@ public class SkylandsConfigCommands {
 
 		}))).then(literal("default-visits-pos").then(argument("position", blockPos()).executes(context -> {
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
-			Skylands.config.defaultVisitsPos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			Skylands.config.defaultVisitsPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			Skylands.config.save();
 			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
 			context.getSource().sendFeedback(Text.of("config.defaultVisitsPos has changed to: " + posText), true);
@@ -38,7 +36,7 @@ public class SkylandsConfigCommands {
 
 		}))).then(literal("default-hub-pos").then(argument("position", blockPos()).executes(context -> {
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
-			Skylands.config.defaultHubPos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			Skylands.config.defaultHubPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			Skylands.config.save();
 			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
 			context.getSource().sendFeedback(Text.of("config.defaultHubPos has changed to: " + posText), true);

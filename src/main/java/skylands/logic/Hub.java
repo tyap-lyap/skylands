@@ -8,7 +8,7 @@ import skylands.api.SkylandsAPI;
 import java.util.Set;
 
 public class Hub {
-	public Vec3d pos = Skylands.config.defaultHubPos;
+	public Vec3d pos = Skylands.config.defaultHubPos.toVec();
 	public boolean hasProtection = Skylands.config.hubProtectedByDefault;
 
 	public Hub() {
@@ -31,7 +31,7 @@ public class Hub {
 
 	public void visit(PlayerEntity player) {
 		var world = Skylands.getServer().getOverworld();
-		player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
+		player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), Set.of(), Skylands.config.defaultHubPos.yaw, Skylands.config.defaultHubPos.pitch);
 		SkylandsAPI.ON_HUB_VISIT.invoker().invoke(player, world);
 	}
 }

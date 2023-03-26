@@ -92,6 +92,10 @@ public class IslandStuck {
 		return false;
 	}
 
+	public boolean isEmpty() {
+		return stuck.isEmpty();
+	}
+
 	public void readFromNbt(NbtCompound nbt) {
 		NbtCompound islandStuckNbt = nbt.getCompound("islandStuck");
 		int size = islandStuckNbt.getInt("size");

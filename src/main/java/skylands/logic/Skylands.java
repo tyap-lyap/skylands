@@ -52,6 +52,14 @@ public class Skylands {
 		return getInstance().server;
 	}
 
+	public static IslandStuck getIslands() {
+		return getInstance().islands;
+	}
+
+	public static Hub getHub() {
+		return getInstance().hub;
+	}
+
 	public static Skylands getInstance() {
 		return Skylands.instance;
 	}

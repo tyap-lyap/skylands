@@ -9,6 +9,7 @@
     "block.entity.EndGatewayBlockEntityMixin",
     "entity.EntityMixin",
     "entity.ServerPlayerEntityMixin",
+    "server.MinecraftServerMixin",
     "server.PlayerManagerMixin",
     "world.ServerWorldMixin",
     "world.protection.ArmorStandMixin",

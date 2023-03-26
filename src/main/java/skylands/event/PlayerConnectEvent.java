@@ -2,6 +2,7 @@ package skylands.event;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.World;
 import skylands.logic.Member;
 import skylands.logic.Skylands;
 import skylands.util.Texts;
@@ -14,6 +15,13 @@ import java.util.Set;
 public class PlayerConnectEvent {
 
 	public static void onJoin(MinecraftServer server, ServerPlayerEntity player) {
+
+		if(server.getFile("hub_template").exists()) {
+			if(player.getWorld().getRegistryKey().equals(World.OVERWORLD)) {
+				Skylands.getInstance().hub.visit(player);
+			}
+		}
+
 		Skylands skylands = Skylands.instance;
 
 		skylands.islands.get(player).ifPresent(island -> {

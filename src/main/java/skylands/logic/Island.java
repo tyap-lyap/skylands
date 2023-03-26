@@ -44,8 +44,8 @@ public class Island {
 	public ArrayList<Member> bans = new ArrayList<>();
 
 	public boolean locked = false;
-	public Vec3d spawnPos = Skylands.config.defaultSpawnPos;
-	public Vec3d visitsPos = Skylands.config.defaultVisitsPos;
+	public Vec3d spawnPos = Skylands.config.defaultSpawnPos.toVec();
+	public Vec3d visitsPos = Skylands.config.defaultVisitsPos.toVec();
 	public boolean hasNether = false;
 	public long seed = 0L;
 	/**
@@ -262,9 +262,9 @@ public class Island {
 		return handler.asWorld();
 	}
 
-	public void visit(PlayerEntity player, Vec3d pos) {
+	public void visit(PlayerEntity player, Vec3d pos, float yaw, float pitch) {
 		ServerWorld world = this.getWorld();
-		player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
+		player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), Set.of(), yaw, pitch);
 
 		if(!isMember(player)) {
 			Players.get(this.owner.name).ifPresent(owner -> {
@@ -283,18 +283,20 @@ public class Island {
 	}
 
 	public void visitAsMember(PlayerEntity player) {
-		this.visit(player, this.spawnPos);
+		this.visit(player, this.spawnPos, Skylands.config.defaultSpawnPos.yaw, Skylands.config.defaultSpawnPos.pitch);
 	}
 
 	public void visitAsVisitor(PlayerEntity player) {
-		this.visit(player, this.visitsPos);
+		this.visit(player, this.visitsPos, Skylands.config.defaultVisitsPos.yaw, Skylands.config.defaultVisitsPos.pitch);
 	}
 
 	public void onFirstLoad(PlayerEntity player) {
 		ServerWorld world = this.getWorld();
-		StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(SkylandsMod.id("start_island"));
-		StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
-		structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, world.getRandom(), Block.NOTIFY_ALL);
+		if(!server.getFile("island_template").exists()) {
+			StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(SkylandsMod.id("start_island"));
+			StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
+			structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, world.getRandom(), Block.NOTIFY_ALL);
+		}
 		SkylandsAPI.ON_ISLAND_FIRST_LOAD.invoker().invoke(player, world, this);
 	}
 

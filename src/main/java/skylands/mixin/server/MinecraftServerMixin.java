@@ -25,7 +25,7 @@ public abstract class MinecraftServerMixin {
 	@Redirect(method = "save", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", remap = false))
 	void info(Logger logger, String s, Object o, Object o1) {
 		if(o1 instanceof Identifier id) {
-			if(id.getNamespace().equals(SkylandsMod.MOD_ID)) {
+			if(id.getNamespace().equals(SkylandsMod.MOD_ID) || id.getNamespace().equals("nether")) {
 				return;
 			}
 		}

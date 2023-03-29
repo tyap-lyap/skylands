@@ -27,10 +27,16 @@ public class UpdateChecker {
 	private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder().build();
 	private static Instant lastCheck = Instant.now().minus(4, ChronoUnit.HOURS);
 	private static String cachedLatest = "0";
+	private static ArrayList<ProjectVersion> cachedModrinth = new ArrayList<>();
 
 	public static void onPlayerJoin(ServerPlayerEntity player) {
 		if(Permissions.check(player, "skylands.update.checker.notify", 4)) {
-			check(player);
+			try {
+				check(player);
+			}
+			catch (Exception e) {
+				SkylandsMod.LOGGER.info("Failed to check for mod updates due to an exception: " + e);
+			}
 		}
 	}
 
@@ -45,9 +51,24 @@ public class UpdateChecker {
 			var text = Texts.prefixed("message.skylands.new_update", map -> {
 				map.put("%local_version%", local);
 				map.put("%remote_version%", remote);
+				map.put("%changes%", getChanges(localNum));
 			});
 			player.sendMessage(text);
 		}
+	}
+
+	static String getChanges(int local) {
+		StringBuilder builder = new StringBuilder();
+
+		for (ProjectVersion projectVersion : cachedModrinth) {
+			var version = Integer.parseInt(projectVersion.versionNumber.split("\\+")[0].replaceAll("\\.", ""));
+			if (version > local) {
+				builder.append(projectVersion.changelog.replaceAll("\\r\\n", "\n")
+						.replaceAll("\\[(.*?)]\\(.*?\\)", "")
+						.replaceAll(" \\(\\)", "")).append("\n");
+			}
+		}
+		return builder.toString().trim();
 	}
 
 	static String getLatestRemote() {
@@ -91,7 +112,7 @@ public class UpdateChecker {
 			Arrays.asList(versions).forEach(version -> {
 				if(version.gameVersions.contains(SharedConstants.getGameVersion().getName())) array.add(version);
 			});
-
+			cachedModrinth = array;
 			return Optional.of(array);
 		}
 		catch(FileNotFoundException e) {

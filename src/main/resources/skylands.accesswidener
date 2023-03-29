@@ -1,1 +1,3 @@
 accessWidener	v1	named
+accessible method net/minecraft/entity/Entity unsetRemoved ()V
+accessible method net/minecraft/server/network/ServerPlayerEntity worldChanged (Lnet/minecraft/server/world/ServerWorld;)V

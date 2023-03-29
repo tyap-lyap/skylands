@@ -29,10 +29,10 @@ dependencies {
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:${project.cca}"
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca}"
 
-	modImplementation include("com.github.tyap-lyap:fantasy:${project.fantasy}")
-//	modImplementation include("xyz.nucleoid:fantasy:${project.fantasy}")
+//	modImplementation include("com.github.tyap-lyap:fantasy:${project.fantasy}")
+	modImplementation include("xyz.nucleoid:fantasy:${project.fantasy}")
 	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api}")
-	modImplementation include("xyz.nucleoid:server-translations-api:${project.server_translations_api}")
+	modImplementation include("fr.catcore:server-translations-api:${project.server_translations_api}")
 	modImplementation include("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
 }
 

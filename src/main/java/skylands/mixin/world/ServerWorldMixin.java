@@ -2,17 +2,16 @@ package skylands.mixin.world;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.server.world.ServerChunkManager;
 import net.minecraft.server.world.ServerEntityManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.profiler.Profiler;
+import net.minecraft.util.registry.BuiltinRegistries;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.ZombieSiegeManager;
 import net.minecraft.world.MutableWorldProperties;
 import net.minecraft.world.StructureWorldAccess;
@@ -29,6 +28,7 @@ import net.minecraft.world.spawner.CatSpawner;
 import net.minecraft.world.spawner.PatrolSpawner;
 import net.minecraft.world.spawner.PhantomSpawner;
 import net.minecraft.world.spawner.Spawner;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -37,6 +37,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import skylands.SkylandsMod;
+import skylands.logic.Island;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,9 +51,14 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
 	@Shadow @Final private ServerEntityManager<Entity> entityManager;
 	@Mutable @Shadow @Final private List<Spawner> spawners;
 
-	protected ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, DynamicRegistryManager registryManager, RegistryEntry<DimensionType> dimensionEntry, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long biomeAccess, int maxChainedNeighborUpdates) {
-		super(properties, registryRef, registryManager, dimensionEntry, profiler, isClient, debugWorld, biomeAccess, maxChainedNeighborUpdates);
+	@Shadow
+	@NotNull
+	public abstract MinecraftServer getServer();
+
+	protected ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, RegistryEntry<DimensionType> dimension, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long seed, int maxChainedNeighborUpdates) {
+		super(properties, registryRef, dimension, profiler, isClient, debugWorld, seed, maxChainedNeighborUpdates);
 	}
+
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	void init(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<Spawner> spawners, boolean shouldTickTime, CallbackInfo ci) {
@@ -62,9 +68,9 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
 		}
 
 		if(worldKey.equals(World.OVERWORLD) && server.getFile("hub_template").exists()) {
-			var biome = server.getRegistryManager().get(RegistryKeys.BIOME).getEntry(server.getRegistryManager().get(RegistryKeys.BIOME).getOrThrow(BiomeKeys.PLAINS));
-			FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.of(RegistryEntryList.of()), biome, List.of());
-			FlatChunkGenerator generator = new FlatChunkGenerator(flat);
+			FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), BuiltinRegistries.BIOME);
+			flat.setBiome(getServer().getRegistryManager().get(Registry.BIOME_KEY).getOrCreateEntry(BiomeKeys.PLAINS));
+			FlatChunkGenerator generator = new FlatChunkGenerator(Island.EMPTY_STRUCTURE_REGISTRY, flat);
 
 			chunkManager = new ServerChunkManager(
 					this.toServerWorld(),

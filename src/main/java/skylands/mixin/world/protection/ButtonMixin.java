@@ -1,7 +1,7 @@
 package skylands.mixin.world.protection;
 
+import net.minecraft.block.AbstractButtonBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ButtonBlock;
 import net.minecraft.block.WallMountedBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import skylands.util.Texts;
 import skylands.util.WorldProtection;
 
-@Mixin(ButtonBlock.class)
+@Mixin(AbstractButtonBlock.class)
 public abstract class ButtonMixin extends WallMountedBlock {
 
 	public ButtonMixin(Settings settings) {

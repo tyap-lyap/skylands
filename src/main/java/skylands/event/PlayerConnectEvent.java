@@ -5,11 +5,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import skylands.logic.Member;
 import skylands.logic.Skylands;
+import skylands.util.TeleportUtil;
 import skylands.util.Texts;
 import skylands.util.UpdateChecker;
 import skylands.util.Worlds;
-
-import java.util.Set;
 
 @SuppressWarnings("unused")
 public class PlayerConnectEvent {
@@ -45,7 +44,7 @@ public class PlayerConnectEvent {
 				player.sendMessage(Texts.prefixed("message.skylands.ban_player.ban", map -> map.put("%owner%", island.owner.name)));
 				player.sendMessage(Texts.prefixed("message.skylands.hub_visit"));
 				var pos = Skylands.instance.hub.pos;
-				player.teleport(server.getOverworld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
+				TeleportUtil.teleport(player, server.getOverworld(), pos.getX(), pos.getY(), pos.getZ(), 0, 0);
 			}
 		});
 

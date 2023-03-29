@@ -1,14 +1,15 @@
 package skylands.logic;
 
+import com.mojang.serialization.Lifecycle;
+import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructurePlacementData;
+import net.minecraft.structure.StructureSet;
 import net.minecraft.structure.StructureTemplate;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.Identifier;
@@ -16,7 +17,11 @@ import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.RandomSeed;
+import net.minecraft.util.registry.BuiltinRegistries;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.gen.chunk.FlatChunkGenerator;
@@ -25,6 +30,7 @@ import org.apache.commons.io.FileUtils;
 import skylands.SkylandsMod;
 import skylands.api.SkylandsAPI;
 import skylands.util.Players;
+import skylands.util.TeleportUtil;
 import skylands.util.Texts;
 import xyz.nucleoid.fantasy.Fantasy;
 import xyz.nucleoid.fantasy.RuntimeWorldConfig;
@@ -35,6 +41,7 @@ import java.time.Instant;
 import java.util.*;
 
 public class Island {
+	public static final Registry<StructureSet> EMPTY_STRUCTURE_REGISTRY = new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), (x) -> null).freeze();
 	MinecraftServer server = Skylands.instance.server;
 	Skylands skylands = Skylands.instance;
 	Fantasy fantasy = Skylands.instance.fantasy;
@@ -209,9 +216,9 @@ public class Island {
 	}
 
 	private RuntimeWorldConfig createIslandConfig() {
-		var biome = this.server.getRegistryManager().get(RegistryKeys.BIOME).getEntry(this.server.getRegistryManager().get(RegistryKeys.BIOME).getOrThrow(BiomeKeys.PLAINS));
-		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.of(RegistryEntryList.of()), biome, List.of());
-		FlatChunkGenerator generator = new FlatChunkGenerator(flat);
+		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), BuiltinRegistries.BIOME);
+		flat.setBiome(this.server.getRegistryManager().get(Registry.BIOME_KEY).getOrCreateEntry(BiomeKeys.PLAINS));
+		FlatChunkGenerator generator = new FlatChunkGenerator(EMPTY_STRUCTURE_REGISTRY, flat);
 
 		return new RuntimeWorldConfig()
 				.setDimensionType(DimensionTypes.OVERWORLD)
@@ -247,9 +254,9 @@ public class Island {
 	}
 
 	private RuntimeWorldConfig createNetherConfig() {
-		var biome = this.server.getRegistryManager().get(RegistryKeys.BIOME).getEntry(this.server.getRegistryManager().get(RegistryKeys.BIOME).getOrThrow(BiomeKeys.NETHER_WASTES));
-		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.of(RegistryEntryList.of()), biome, List.of());
-		FlatChunkGenerator generator = new FlatChunkGenerator(flat);
+		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.empty(), BuiltinRegistries.BIOME);
+		flat.setBiome(this.server.getRegistryManager().get(Registry.BIOME_KEY).getOrCreateEntry(BiomeKeys.NETHER_WASTES));
+		FlatChunkGenerator generator = new FlatChunkGenerator(EMPTY_STRUCTURE_REGISTRY, flat);
 
 		return new RuntimeWorldConfig()
 				.setDimensionType(DimensionTypes.THE_NETHER)
@@ -281,7 +288,7 @@ public class Island {
 
 	public void visit(PlayerEntity player, Vec3d pos, float yaw, float pitch) {
 		ServerWorld world = this.getWorld();
-		player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), Set.of(), yaw, pitch);
+		TeleportUtil.teleport((ServerPlayerEntity)player, world, pos.getX(), pos.getY(), pos.getZ(), yaw, pitch);
 
 		if(!isMember(player)) {
 			Players.get(this.owner.name).ifPresent(owner -> {

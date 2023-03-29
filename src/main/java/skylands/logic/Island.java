@@ -6,6 +6,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplate;
@@ -182,6 +183,22 @@ public class Island {
 	public long getSeed() {
 		if (this.seed == 0) this.seed = RandomSeed.getSeed();
 		return this.seed;
+	}
+
+	/**
+	 * @return list of players currently on this island
+	 */
+	public List<ServerPlayerEntity> getPlayers() {
+		return server.getPlayerManager().getPlayerList().stream().filter(player -> {
+			var island = SkylandsAPI.getIsland(player);
+			return island.isPresent() && island.get().equals(this);
+		}).toList();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Island isl) return isl.owner.uuid.equals(this.owner.uuid);
+		return super.equals(obj);
 	}
 
 	public RuntimeWorldHandle getHandler() {

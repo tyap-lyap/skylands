@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class Texts {
+	public static String prefixTranslationKey = "message.skylands.prefix";
 
 	public static Text prefixed(String key, Consumer<Map<String, String>> builder) {
 		String prefix = getPrefix();
@@ -44,7 +45,11 @@ public class Texts {
 		return of(key, (m) -> {});
 	}
 
+	public static void setPrefix(String key) {
+		prefixTranslationKey = key;
+	}
+
 	public static String getPrefix() {
-		return Language.getInstance().get("message.skylands.prefix");
+		return Language.getInstance().get(prefixTranslationKey);
 	}
 }

@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class SkylandsAPI {
-	static Skylands skylands = Skylands.getInstance();
 
 	public static final Event<HubVisitEvent> ON_HUB_VISIT = EventFactory.createArrayBacked(HubVisitEvent.class, callbacks -> (player, world) -> {
 		for (HubVisitEvent callback : callbacks) {
@@ -43,15 +42,15 @@ public class SkylandsAPI {
 	@FunctionalInterface public interface NetherFirstLoad {void onLoad(World world, Island island);}
 
 	public static Optional<Island> getIsland(PlayerEntity player) {
-		return skylands.islands.get(player);
+		return Skylands.getIslands().get(player);
 	}
 
 	public static Optional<Island> getIsland(String playerName) {
-		return skylands.islands.get(playerName);
+		return Skylands.getIslands().get(playerName);
 	}
 
 	public static Optional<Island> getIsland(UUID playerUuid) {
-		return skylands.islands.get(playerUuid);
+		return Skylands.getIslands().get(playerUuid);
 	}
 
 	public static boolean isIsland(World world) {
@@ -66,7 +65,7 @@ public class SkylandsAPI {
 	public static Optional<Island> getIsland(World world) {
 		if (isIsland(world)) {
 			try {
-				return Skylands.instance.islands.get(UUID.fromString(world.getRegistryKey().getValue().getPath()));
+				return Skylands.getIslands().get(UUID.fromString(world.getRegistryKey().getValue().getPath()));
 			}
 			catch (Exception e) {
 				return Optional.empty();

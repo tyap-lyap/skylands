@@ -33,7 +33,9 @@ jobs:
             fabric
             quilt
           game-versions: |
-            1.19.4
+            1.19
+            1.19.1
+            1.19.2
           dependencies: |
             fabric-api | depends | *
 

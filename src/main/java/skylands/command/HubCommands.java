@@ -3,7 +3,6 @@ package skylands.command;
 import com.mojang.brigadier.CommandDispatcher;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.argument.BlockPosArgumentType;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -21,37 +20,37 @@ public class HubCommands {
 		dispatcher.register(literal("sl").then(literal("hub").requires(Permissions.require("skylands.hub", true)).executes(context -> {
 			var source = context.getSource();
 			var player = source.getPlayer();
-			MinecraftServer server = source.getServer();
+
 			if(player != null) {
-				HubCommands.visit(player, server);
+				HubCommands.visit(player);
 			}
 			return 1;
 		})));
 
-		dispatcher.register(literal("force-sl").then(literal("set-hub-pos").requires(Permissions.require("skylands.force.hub.position", 4)).then(argument("position", blockPos()).executes(context -> {
+		dispatcher.register(literal("force-sl").then(literal("hub").then(literal("set-spawn-pos").requires(Permissions.require("skylands.force.hub.position", 4)).then(argument("position", blockPos()).executes(context -> {
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
 			var source = context.getSource();
 			HubCommands.setPos(pos, source);
 			return 1;
-		}))).then(literal("toggle-hub-protection").requires(Permissions.require("skylands.force.hub.protection", 4)).executes(context -> {
+		}))).then(literal("toggle-protection").requires(Permissions.require("skylands.force.hub.protection", 4)).executes(context -> {
 			HubCommands.toggleProtection(context.getSource());
 			return 1;
-		})));
+		}))));
 	}
 
-	public static void visit(ServerPlayerEntity player, MinecraftServer server) {
+	public static void visit(ServerPlayerEntity player) {
 		player.sendMessage(Texts.prefixed("message.skylands.hub_visit"));
-		Skylands.instance.hub.visit(player);
+		Skylands.getHub().visit(player);
 	}
 
 	static void setPos(BlockPos pos, ServerCommandSource source) {
-		Skylands.instance.hub.pos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+		Skylands.getHub().pos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 		String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
 		source.sendFeedback(Texts.prefixed("message.skylands.hub_pos_change", map -> map.put("%pos%", posText)), true);
 	}
 
 	static void toggleProtection(ServerCommandSource source) {
-		var hub = Skylands.instance.hub;
+		var hub = Skylands.getHub();
 		if(hub.hasProtection) {
 			hub.hasProtection = false;
 			source.sendFeedback(Texts.prefixed("message.skylands.hub_protection.disable"), true);

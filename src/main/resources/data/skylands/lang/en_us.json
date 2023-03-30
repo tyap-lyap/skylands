@@ -12,8 +12,11 @@
   "message.skylands.island_delete.success": "Your Island got successfully deleted!",
   "message.skylands.island_delete.warning": "Are you sure that you want to delete your Island? It can't be rolled back even with all might and determination! Type <color:#3fd9ff>/sl delete CONFIRM <color:#98f9ff>to continue.",
 
-  "message.skylands.force_delete.fail": "<color:#ff816a>%player% does not have an Island yet!",
-  "message.skylands.force_delete.success": "%player%'s Island got successfully deleted!",
+  "message.skylands.force.delete.fail": "<color:#ff816a>%player% does not have an Island yet!",
+  "message.skylands.force.delete.success": "%player%'s Island got successfully deleted!",
+
+  "message.skylands.force.visit.fail": "<color:#ff816a>%player% does not have an Island yet!",
+  "message.skylands.force.visit.success": "Teleporting to the <color:#3fd9ff>%player%<color:#98f9ff>'s Island!",
 
   "message.skylands.hub_visit": "Teleporting to the Hub!",
   "message.skylands.hub_pos_change": "Position of the Hub got changed to <color:#3fd9ff>%pos%",

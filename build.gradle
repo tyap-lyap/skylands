@@ -3,7 +3,6 @@ plugins {
 	id "io.github.juuxel.loom-quiltflower" version "1.8.0"
 }
 
-archivesBaseName = project.archives_base_name
 version = project.mod_version + "+" + project.minecraft_version
 group = project.maven_group
 
@@ -34,10 +33,18 @@ dependencies {
 	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api}")
 	modImplementation include("xyz.nucleoid:server-translations-api:${project.server_translations_api}")
 	modImplementation include("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
+
+	modLocalRuntime "maven.modrinth:dcwa:4.0"
+	modLocalRuntime "maven.modrinth:starlight:1.1.1+1.19"
+	modLocalRuntime "maven.modrinth:lithium:mc1.19.4-0.11.1"
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/" + archivesBaseName + ".accesswidener")
+	accessWidenerPath = file("src/main/resources/" + base.archivesName.get() + ".accesswidener")
+}
+
+base {
+	archivesName = project.archives_base_name
 }
 
 processResources {
@@ -60,6 +67,6 @@ java {
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}" }
+		rename { "${it}_${base.archivesName.get()}"}
 	}
 }

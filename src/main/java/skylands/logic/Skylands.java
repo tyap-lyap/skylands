@@ -32,7 +32,6 @@ public class Skylands {
 		NbtMigrator.update(skylandsNbt);
 
 		this.format = skylandsNbt.getInt("format");
-//		this.config.readFromNbt(skylandsNbt);
 		this.islands.readFromNbt(skylandsNbt);
 		this.hub.readFromNbt(skylandsNbt);
 	}
@@ -41,7 +40,6 @@ public class Skylands {
 		NbtCompound skylandsNbt = new NbtCompound();
 
 		skylandsNbt.putInt("format", this.format);
-//		this.config.writeToNbt(skylandsNbt);
 		this.islands.writeToNbt(skylandsNbt);
 		this.hub.writeToNbt(skylandsNbt);
 

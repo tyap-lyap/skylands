@@ -24,7 +24,6 @@ import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
 import org.apache.commons.io.FileUtils;
 import skylands.SkylandsMod;
 import skylands.api.SkylandsAPI;
-import skylands.util.Players;
 import skylands.util.Texts;
 import xyz.nucleoid.fantasy.Fantasy;
 import xyz.nucleoid.fantasy.RuntimeWorldConfig;
@@ -195,6 +194,10 @@ public class Island {
 		}).toList();
 	}
 
+	public Optional<ServerPlayerEntity> getOwner() {
+		return Optional.ofNullable(server.getPlayerManager().getPlayer(this.owner.uuid));
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Island isl) return isl.owner.uuid.equals(this.owner.uuid);
@@ -279,22 +282,22 @@ public class Island {
 		return handler.asWorld();
 	}
 
-	public void visit(PlayerEntity player, Vec3d pos, float yaw, float pitch) {
+	public void visit(PlayerEntity visitor, Vec3d pos, float yaw, float pitch) {
 		ServerWorld world = this.getWorld();
-		player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), Set.of(), yaw, pitch);
+		visitor.teleport(world, pos.getX(), pos.getY(), pos.getZ(), Set.of(), yaw, pitch);
 
-		if(!isMember(player)) {
-			Players.get(this.owner.name).ifPresent(owner -> {
-				if(!player.getUuid().equals(owner.getUuid())) {
-					owner.sendMessage(Texts.prefixed("message.skylands.island_visit.visit", map -> map.put("%visitor%", player.getName().getString())));
+		if(!isMember(visitor)) {
+			this.getOwner().ifPresent(owner -> {
+				if(!visitor.getUuid().equals(owner.getUuid())) {
+					owner.sendMessage(Texts.prefixed("message.skylands.island_visit.visit", map -> map.put("%visitor%", visitor.getName().getString())));
 				}
 			});
 		}
 
-		SkylandsAPI.ON_ISLAND_VISIT.invoker().invoke(player, world, this);
+		SkylandsAPI.ON_ISLAND_VISIT.invoker().invoke(visitor, world, this);
 
 		if (this.freshCreated) {
-			this.onFirstLoad(player);
+			this.onFirstLoad(visitor);
 			this.freshCreated = false;
 		}
 	}

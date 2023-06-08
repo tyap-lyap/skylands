@@ -13,7 +13,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import skylands.logic.Skylands;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 import skylands.util.WorldProtection;
 
 public class UseBlockEvent {
@@ -45,7 +45,7 @@ public class UseBlockEvent {
 				return ActionResult.SUCCESS;
 			}
 			else {
-				player.sendMessage(Texts.prefixed("message.skylands.world_protection.harvest"), true);
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.world_protection.harvest"), true);
 				return ActionResult.PASS;
 			}
 

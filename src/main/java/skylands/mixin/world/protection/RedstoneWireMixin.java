@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 import skylands.util.WorldProtection;
 
 @Mixin(RedstoneWireBlock.class)
@@ -27,7 +27,7 @@ public abstract class RedstoneWireMixin extends Block {
 	void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
 		if(!world.isClient) {
 			if(!WorldProtection.canModify(world, player)) {
-				player.sendMessage(Texts.prefixed("message.skylands.world_protection.redstone"), true);
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.world_protection.redstone"), true);
 				cir.setReturnValue(ActionResult.FAIL);
 			}
 		}

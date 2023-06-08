@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 import skylands.util.WorldProtection;
 
 @Mixin(ChestBoatEntity.class)
@@ -23,9 +23,9 @@ public abstract class ChestBoatMixin extends BoatEntity {
 
 	@Inject(method = "interact", at = @At("HEAD"), cancellable = true)
 	void interact(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-		if(!player.world.isClient) {
-			if(!WorldProtection.canModify(player.world, player)) {
-				player.sendMessage(Texts.prefixed("message.skylands.world_protection.boat_open"), true);
+		if(!player.getWorld().isClient) {
+			if(!WorldProtection.canModify(player.getWorld(), player)) {
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.world_protection.boat_open"), true);
 				cir.setReturnValue(ActionResult.FAIL);
 			}
 		}

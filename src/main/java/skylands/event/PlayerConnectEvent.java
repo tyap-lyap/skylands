@@ -5,9 +5,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import skylands.logic.Member;
 import skylands.logic.Skylands;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 import skylands.util.UpdateChecker;
-import skylands.util.Worlds;
+import skylands.util.SkylandsWorlds;
 
 import java.util.Set;
 
@@ -40,10 +40,10 @@ public class PlayerConnectEvent {
 			}
 		});
 
-		Worlds.getIsland(player.getWorld()).ifPresent(island -> {
+		SkylandsWorlds.getIsland(player.getWorld()).ifPresent(island -> {
 			if(!island.isMember(player) && island.isBanned(player)) {
-				player.sendMessage(Texts.prefixed("message.skylands.ban_player.ban", map -> map.put("%owner%", island.owner.name)));
-				player.sendMessage(Texts.prefixed("message.skylands.hub_visit"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.ban_player.ban", map -> map.put("%owner%", island.owner.name)));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.hub_visit"));
 				var pos = Skylands.instance.hub.pos;
 				player.teleport(server.getOverworld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
 			}

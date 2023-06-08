@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import skylands.logic.Island;
-import skylands.util.Worlds;
+import skylands.util.SkylandsWorlds;
 
 import java.util.Optional;
 
@@ -18,18 +18,18 @@ import java.util.Optional;
 public abstract class EntityMixin {
 
 	@Shadow
-	public World world;
+	private World world;
 
 	@ModifyVariable(method = "tickPortal", at = @At("STORE"), ordinal = 0)
 	public RegistryKey<World> tickPortal_modifyRegistryKey(RegistryKey<World> instance) {
-		if (Worlds.isIsland(world) && Worlds.isOverworld(world.getRegistryKey())) {
-			Optional<Island> island = Worlds.getIsland(world);
+		if (SkylandsWorlds.isIsland(world) && SkylandsWorlds.isOverworld(world.getRegistryKey())) {
+			Optional<Island> island = SkylandsWorlds.getIsland(world);
 			if (island.isPresent()) {
 				return island.get().getNether().getRegistryKey();
 			}
 		}
-		if (Worlds.isIsland(world) && Worlds.isNether(world.getRegistryKey())) {
-			Optional<Island> island = Worlds.getIsland(world);
+		if (SkylandsWorlds.isIsland(world) && SkylandsWorlds.isNether(world.getRegistryKey())) {
+			Optional<Island> island = SkylandsWorlds.getIsland(world);
 			if (island.isPresent()) {
 				return island.get().getWorld().getRegistryKey();
 			}
@@ -39,18 +39,18 @@ public abstract class EntityMixin {
 
 	@Redirect(method = "getTeleportTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;getRegistryKey()Lnet/minecraft/registry/RegistryKey;"))
 	public RegistryKey<World> getTeleportTarget_redirectRegistryKey0(ServerWorld instance) {
-		return Worlds.redirect(instance.getRegistryKey());
+		return SkylandsWorlds.redirect(instance.getRegistryKey());
 	}
 
 	@Redirect(method = "getTeleportTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getRegistryKey()Lnet/minecraft/registry/RegistryKey;"))
 	public RegistryKey<World> getTeleportTarget_redirectRegistryKey(World instance) {
-		return Worlds.redirect(instance.getRegistryKey());
+		return SkylandsWorlds.redirect(instance.getRegistryKey());
 	}
 
 
 	@Redirect(method = "moveToWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;getRegistryKey()Lnet/minecraft/registry/RegistryKey;", ordinal = 0))
 	public RegistryKey<World> moveToWorld_redirectRegistryKey(ServerWorld instance) {
-		return Worlds.redirect(instance.getRegistryKey());
+		return SkylandsWorlds.redirect(instance.getRegistryKey());
 	}
 
 }

@@ -9,7 +9,7 @@ import skylands.logic.Skylands;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Worlds {
+public class SkylandsWorlds {
 
 	public static boolean isIsland(World world) {
 		return isIsland(world.getRegistryKey());

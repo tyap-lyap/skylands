@@ -8,7 +8,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import skylands.SkylandsMod;
 import skylands.data.SkylandsComponents;
 import skylands.logic.Skylands;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
 import static net.minecraft.server.command.CommandManager.argument;
@@ -53,33 +53,33 @@ public class HomeCommand {
 	public static void run(ServerPlayerEntity player) {
 		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
 			if(player.getWorld().getRegistryKey().getValue().equals(SkylandsMod.id(player.getUuid().toString()))) {
-				player.sendMessage(Texts.prefixed("message.skylands.home.fail"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.home.fail"));
 			}
 			else {
-				player.sendMessage(Texts.prefixed("message.skylands.home.success"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.home.success"));
 				island.visitAsMember(player);
 			}
-		}, () -> player.sendMessage(Texts.prefixed("message.skylands.home.no_island")));
+		}, () -> player.sendMessage(SkylandsTexts.prefixed("message.skylands.home.no_island")));
 	}
 
 	public static void run(ServerPlayerEntity visitor, String islandOwner) {
 		Skylands.instance.islands.get(islandOwner).ifPresentOrElse(island -> {
 			if(visitor.getWorld().getRegistryKey().getValue().equals(SkylandsMod.id(island.owner.uuid.toString()))) {
-				visitor.sendMessage(Texts.prefixed("message.skylands.visit_home.fail", map -> map.put("%owner%", islandOwner)));
+				visitor.sendMessage(SkylandsTexts.prefixed("message.skylands.visit_home.fail", map -> map.put("%owner%", islandOwner)));
 			}
 			else {
 				if(island.isMember(visitor)) {
-					visitor.sendMessage(Texts.prefixed("message.skylands.visit_home.success", map -> map.put("%owner%", islandOwner)));
+					visitor.sendMessage(SkylandsTexts.prefixed("message.skylands.visit_home.success", map -> map.put("%owner%", islandOwner)));
 					island.visitAsMember(visitor);
 					SkylandsComponents.PLAYER_DATA.get(visitor).addIsland(islandOwner);
 				}
 				else {
-					visitor.sendMessage(Texts.prefixed("message.skylands.visit_home.not_member"));
+					visitor.sendMessage(SkylandsTexts.prefixed("message.skylands.visit_home.not_member"));
 					SkylandsComponents.PLAYER_DATA.get(visitor).removeIsland(islandOwner);
 				}
 			}
 		}, () -> {
-			visitor.sendMessage(Texts.prefixed("message.skylands.visit_home.no_island"));
+			visitor.sendMessage(SkylandsTexts.prefixed("message.skylands.visit_home.no_island"));
 			SkylandsComponents.PLAYER_DATA.get(visitor).removeIsland(islandOwner);
 		});
 	}

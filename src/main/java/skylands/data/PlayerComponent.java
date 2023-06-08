@@ -4,7 +4,7 @@ import dev.onyxstudios.cca.api.v3.component.ComponentV3;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import skylands.logic.Skylands;
-import skylands.util.Worlds;
+import skylands.util.SkylandsWorlds;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -64,7 +64,7 @@ public class PlayerComponent implements ComponentV3 {
 		}
 		tag.put("islands", islandsNbt);
 
-		Worlds.getIsland(player.getWorld()).ifPresent(island -> {
+		SkylandsWorlds.getIsland(player.getWorld()).ifPresent(island -> {
 			tag.putString("lastIsland", island.owner.uuid.toString());
 		});
 	}

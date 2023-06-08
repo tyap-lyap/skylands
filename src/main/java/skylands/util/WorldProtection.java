@@ -8,7 +8,7 @@ import skylands.logic.Skylands;
 public class WorldProtection {
 
 	public static boolean canModify(World world, PlayerEntity player) {
-		var island = Worlds.getIsland(world);
+		var island = SkylandsWorlds.getIsland(world);
 
 		if(Permissions.check(player, "skylands.world.protection.bypass", false)) {
 			return true;
@@ -22,5 +22,9 @@ public class WorldProtection {
 			return !Skylands.instance.hub.hasProtection;
 		}
 		return true;
+	}
+
+	public static boolean canModify(PlayerEntity player) {
+		return canModify(player.getWorld(), player);
 	}
 }

@@ -7,7 +7,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import skylands.logic.IslandStuck;
 import skylands.logic.Skylands;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -43,18 +43,18 @@ public class DeleteCommand {
 
 				if(seconds >= Skylands.config.islandDeletionCooldown) {
 					islands.delete(player);
-					player.sendMessage(Texts.prefixed("message.skylands.island_delete.success"));
+					player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.success"));
 				}
 				else {
-					player.sendMessage(Texts.prefixed("message.skylands.island_delete.too_often"));
+					player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.too_often"));
 				}
 
 			}, () -> {
-				player.sendMessage(Texts.prefixed("message.skylands.island_delete.fail"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.fail"));
 			});
 		}
 		else {
-			player.sendMessage(Texts.prefixed("message.skylands.island_delete.warning"));
+			player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.warning"));
 		}
 	}
 
@@ -67,14 +67,14 @@ public class DeleteCommand {
 			var hours = ChronoUnit.HOURS.between(created, now);
 
 			if(hours >= 24) {
-				player.sendMessage(Texts.prefixed("message.skylands.island_delete.warning"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.warning"));
 			}
 			else {
-				player.sendMessage(Texts.prefixed("message.skylands.island_delete.too_often"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.too_often"));
 			}
 
 		}, () -> {
-			player.sendMessage(Texts.prefixed("message.skylands.island_delete.fail"));
+			player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.fail"));
 		});
 	}
 }

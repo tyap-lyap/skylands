@@ -23,7 +23,7 @@ public class SkylandsConfigCommands {
 			Skylands.config.defaultSpawnPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			Skylands.config.save();
 			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
-			context.getSource().sendFeedback(Text.of("config.defaultSpawnPos has changed to: " + posText), true);
+			context.getSource().sendFeedback(() -> Text.of("config.defaultSpawnPos has changed to: " + posText), true);
 			return 1;
 
 		}))).then(literal("default-visits-pos").then(argument("position", blockPos()).executes(context -> {
@@ -31,7 +31,7 @@ public class SkylandsConfigCommands {
 			Skylands.config.defaultVisitsPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			Skylands.config.save();
 			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
-			context.getSource().sendFeedback(Text.of("config.defaultVisitsPos has changed to: " + posText), true);
+			context.getSource().sendFeedback(() -> Text.of("config.defaultVisitsPos has changed to: " + posText), true);
 			return 1;
 
 		}))).then(literal("default-hub-pos").then(argument("position", blockPos()).executes(context -> {
@@ -39,53 +39,53 @@ public class SkylandsConfigCommands {
 			Skylands.config.defaultHubPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			Skylands.config.save();
 			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
-			context.getSource().sendFeedback(Text.of("config.defaultHubPos has changed to: " + posText), true);
+			context.getSource().sendFeedback(() -> Text.of("config.defaultHubPos has changed to: " + posText), true);
 			return 1;
 
 		}))).then(literal("island-deletion-cooldown").then(argument("cooldown", integer()).executes(context -> {
 			var cooldown = IntegerArgumentType.getInteger(context, "cooldown");
 			Skylands.config.islandDeletionCooldown = cooldown;
 			Skylands.config.save();
-			context.getSource().sendFeedback(Text.of("config.islandDeletionCooldown has changed to: " + cooldown), true);
+			context.getSource().sendFeedback(() -> Text.of("config.islandDeletionCooldown has changed to: " + cooldown), true);
 			return 1;
 
 		}))).then(literal("teleport-after-island-creation").executes(context -> {
 			var config = Skylands.config;
 			config.teleportAfterIslandCreation = !config.teleportAfterIslandCreation;
 			config.save();
-			context.getSource().sendFeedback(Text.of("config.teleportAfterIslandCreation has changed to: " + config.teleportAfterIslandCreation), true);
+			context.getSource().sendFeedback(() -> Text.of("config.teleportAfterIslandCreation has changed to: " + config.teleportAfterIslandCreation), true);
 			return 1;
 
 		})).then(literal("hub-protected-by-default").executes(context -> {
 			var config = Skylands.config;
 			config.hubProtectedByDefault = !config.hubProtectedByDefault;
 			config.save();
-			context.getSource().sendFeedback(Text.of("config.hubProtectedByDefault has changed to: " + config.hubProtectedByDefault), true);
+			context.getSource().sendFeedback(() -> Text.of("config.hubProtectedByDefault has changed to: " + config.hubProtectedByDefault), true);
 			return 1;
 
 		})).then(literal("create-island-on-player-join").executes(context -> {
 			var config = Skylands.config;
 			config.createIslandOnPlayerJoin = !config.createIslandOnPlayerJoin;
 			config.save();
-			context.getSource().sendFeedback(Text.of("config.createIslandOnPlayerJoin has changed to: " + config.createIslandOnPlayerJoin), true);
+			context.getSource().sendFeedback(() -> Text.of("config.createIslandOnPlayerJoin has changed to: " + config.createIslandOnPlayerJoin), true);
 			return 1;
 
 		})).then(literal("toggle-update-checker").executes(context -> {
 			var config = Skylands.config;
 			config.updateCheckerEnabled = !config.updateCheckerEnabled;
 			config.save();
-			context.getSource().sendFeedback(Text.of("config.updateCheckerEnabled has changed to: " + config.updateCheckerEnabled), true);
+			context.getSource().sendFeedback(() -> Text.of("config.updateCheckerEnabled has changed to: " + config.updateCheckerEnabled), true);
 			return 1;
 
 		})).then(literal("toggle-right-click-harvest").executes(context -> {
 			var config = Skylands.config;
 			config.rightClickHarvestEnabled = !config.rightClickHarvestEnabled;
 			config.save();
-			context.getSource().sendFeedback(Text.of("config.rightClickHarvestEnabled has changed to: " + config.rightClickHarvestEnabled), true);
+			context.getSource().sendFeedback(() -> Text.of("config.rightClickHarvestEnabled has changed to: " + config.rightClickHarvestEnabled), true);
 			return 1;
 		})).then(literal("reload").executes(context -> {
 			Skylands.config = SkylandsConfig.read();
-			context.getSource().sendFeedback(Text.of("Config successfully reloaded!"), true);
+			context.getSource().sendFeedback(() -> Text.of("Config successfully reloaded!"), true);
 			return 1;
 		}))));
 

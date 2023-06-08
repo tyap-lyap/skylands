@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 import skylands.util.WorldProtection;
 
 @Mixin(DecorationItem.class)
@@ -26,7 +26,7 @@ public abstract class DecorationItemMixin extends Item {
 		PlayerEntity player = context.getPlayer();
 		if(!world.isClient && player != null) {
 			if(!WorldProtection.canModify(world, player)) {
-				player.sendMessage(Texts.prefixed("message.skylands.world_protection.item_place"), true);
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.world_protection.item_place"), true);
 				cir.setReturnValue(ActionResult.FAIL);
 			}
 		}

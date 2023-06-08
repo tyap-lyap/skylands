@@ -7,7 +7,7 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import skylands.logic.Skylands;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
 import static net.minecraft.command.argument.EntityArgumentType.player;
@@ -54,38 +54,38 @@ public class MemberCommands {
 	static void invite(ServerPlayerEntity inviter, ServerPlayerEntity newcomer) {
 		Skylands.instance.islands.get(inviter).ifPresentOrElse(island -> {
 			if(island.isMember(newcomer)) {
-				inviter.sendMessage(Texts.prefixed("message.skylands.invite_member.already_member"));
+				inviter.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.already_member"));
 			}
 			else {
 				if(Skylands.instance.invites.hasInvite(island, newcomer)) {
-					inviter.sendMessage(Texts.prefixed("message.skylands.invite_member.already_invited"));
+					inviter.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.already_invited"));
 				}
 				else {
-					inviter.sendMessage(Texts.prefixed("message.skylands.invite_member.success", (map) -> map.put("%newcomer%", newcomer.getName().getString())));
+					inviter.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.success", (map) -> map.put("%newcomer%", newcomer.getName().getString())));
 
-					newcomer.sendMessage(Texts.prefixed("message.skylands.invite_member.invite.0", (map) -> map.put("%inviter%", inviter.getName().getString())));
-					newcomer.sendMessage(Texts.prefixed("message.skylands.invite_member.invite.1", (map) -> map.put("%inviter%", inviter.getName().getString())));
+					newcomer.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.invite.0", (map) -> map.put("%inviter%", inviter.getName().getString())));
+					newcomer.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.invite.1", (map) -> map.put("%inviter%", inviter.getName().getString())));
 
 					Skylands.instance.invites.create(island, newcomer);
 				}
 			}
-		}, () -> inviter.sendMessage(Texts.prefixed("message.skylands.invite_member.no_island")));
+		}, () -> inviter.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.no_island")));
 	}
 
 	static void remove(ServerPlayerEntity player, String removed) {
 		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
 			if(player.getName().getString().equals(removed)) {
-				player.sendMessage(Texts.prefixed("message.skylands.remove_member.yourself"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.remove_member.yourself"));
 			}
 			else {
 				if(island.isMember(removed)) {
 					island.members.removeIf(member -> member.name.equals(removed));
-					player.sendMessage(Texts.prefixed("message.skylands.remove_member.success", (map) -> map.put("%member%", removed)));
+					player.sendMessage(SkylandsTexts.prefixed("message.skylands.remove_member.success", (map) -> map.put("%member%", removed)));
 				}
 				else {
-					player.sendMessage(Texts.prefixed("message.skylands.remove_member.not_member"));
+					player.sendMessage(SkylandsTexts.prefixed("message.skylands.remove_member.not_member"));
 				}
 			}
-		}, () -> player.sendMessage(Texts.prefixed("message.skylands.remove_member.no_island")));
+		}, () -> player.sendMessage(SkylandsTexts.prefixed("message.skylands.remove_member.no_island")));
 	}
 }

@@ -48,7 +48,7 @@ public class UpdateChecker {
 		var remoteNum = Integer.parseInt(remote.replaceAll("\\.", ""));
 
 		if(remoteNum > localNum) {
-			var text = Texts.prefixed("message.skylands.new_update", map -> {
+			var text = SkylandsTexts.prefixed("message.skylands.new_update", map -> {
 				map.put("%local_version%", local);
 				map.put("%remote_version%", remote);
 				map.put("%changes%", getChanges(localNum));

@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
 import skylands.config.SkylandsConfigCommands;
 import skylands.logic.Skylands;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 
 import static net.minecraft.server.command.CommandManager.literal;
 import static net.minecraft.server.command.CommandManager.argument;
@@ -49,9 +49,9 @@ public class SkylandsCommands {
 
 			Skylands.getIslands().get(playerName).ifPresentOrElse(island -> {
 				Skylands.instance.islands.delete(playerName);
-				Texts.prefixed(context, "message.skylands.force.delete.success", map -> map.put("%player%", playerName));
+				SkylandsTexts.prefixed(context, "message.skylands.force.delete.success", map -> map.put("%player%", playerName));
 			}, () -> {
-				Texts.prefixed(context, "message.skylands.force.delete.fail", map -> map.put("%player%", playerName));
+				SkylandsTexts.prefixed(context, "message.skylands.force.delete.fail", map -> map.put("%player%", playerName));
 			});
 
 			return 1;
@@ -63,9 +63,9 @@ public class SkylandsCommands {
 			if(admin != null) {
 				Skylands.getIslands().get(playerName).ifPresentOrElse(island -> {
 					island.visitAsMember(admin);
-					Texts.prefixed(context, "message.skylands.force.visit.success", map -> map.put("%player%", playerName));
+					SkylandsTexts.prefixed(context, "message.skylands.force.visit.success", map -> map.put("%player%", playerName));
 				}, () -> {
-					Texts.prefixed(context, "message.skylands.force.visit.fail", map -> map.put("%player%", playerName));
+					SkylandsTexts.prefixed(context, "message.skylands.force.visit.fail", map -> map.put("%player%", playerName));
 				});
 			}
 			return 1;

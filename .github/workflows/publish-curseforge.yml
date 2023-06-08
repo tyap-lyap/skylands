@@ -20,25 +20,23 @@ jobs:
       - name: Build artifacts
         run: ./gradlew build
       - name: publish artifacts
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           curseforge-id: 688057
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
-          files-primary: build/libs/!(*-@(dev|sources)).jar
-          files-secondary: build/libs/*-@(dev|sources).jar
+          files: build/libs/*.jar
 
           version-type: beta
           loaders: |
             fabric
             quilt
-          game-versions: |
-            1.19.4
-          dependencies: |
-            fabric-api | depends | *
+
+          game-version-filter: releases
 
           java: |
             17
 
           retry-attempts: 2
           retry-delay: 10000
+          fail-mode: fail

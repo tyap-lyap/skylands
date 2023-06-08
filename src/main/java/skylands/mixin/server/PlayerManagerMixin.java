@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import skylands.logic.Island;
 import skylands.logic.Skylands;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 
 @Mixin(PlayerManager.class)
 public class PlayerManagerMixin {
@@ -23,7 +23,7 @@ public class PlayerManagerMixin {
 				if(Skylands.config.teleportAfterIslandCreation) {
 					island.visitAsMember(player);
 				}
-				player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_create.success"));
 			}
 		}
 	}

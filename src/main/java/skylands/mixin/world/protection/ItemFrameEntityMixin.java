@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 import skylands.util.WorldProtection;
 
 @Mixin(ItemFrameEntity.class)
@@ -24,9 +24,10 @@ public abstract class ItemFrameEntityMixin extends AbstractDecorationEntity {
 
 	@Inject(method = "damage", at = @At("HEAD"), cancellable = true)
 	void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+		World world = getWorld();
 		if(!world.isClient && source.getAttacker() instanceof PlayerEntity attacker) {
 			if(!WorldProtection.canModify(world, attacker)) {
-				attacker.sendMessage(Texts.prefixed("message.skylands.world_protection.entity_hurt"), true);
+				attacker.sendMessage(SkylandsTexts.prefixed("message.skylands.world_protection.entity_hurt"), true);
 				cir.setReturnValue(false);
 			}
 		}
@@ -34,9 +35,9 @@ public abstract class ItemFrameEntityMixin extends AbstractDecorationEntity {
 
 	@Inject(method = "interact", at = @At("HEAD"), cancellable = true)
 	void interact(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-		if(!player.world.isClient) {
-			if(!WorldProtection.canModify(world, player)) {
-				player.sendMessage(Texts.prefixed("message.skylands.world_protection.item_frame_use"), true);
+		if(!player.getWorld().isClient) {
+			if(!WorldProtection.canModify(player)) {
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.world_protection.item_frame_use"), true);
 				cir.setReturnValue(ActionResult.FAIL);
 			}
 		}

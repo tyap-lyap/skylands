@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 import skylands.util.WorldProtection;
 
 @Mixin(AxeItem.class)
@@ -21,7 +21,7 @@ public abstract class AxeItemMixin {
 		PlayerEntity player = context.getPlayer();
 		if(!world.isClient && player != null) {
 			if(!WorldProtection.canModify(world, player)) {
-				player.sendMessage(Texts.prefixed("message.skylands.world_protection.axe_use"), true);
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.world_protection.axe_use"), true);
 				cir.setReturnValue(ActionResult.FAIL);
 			}
 		}

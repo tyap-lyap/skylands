@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 import skylands.util.WorldProtection;
 
 @Mixin(LivingEntity.class)
@@ -23,17 +23,18 @@ public abstract class LivingEntityMixin extends Entity {
 	@Inject(method = "damage", at = @At("HEAD"), cancellable = true)
 	void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
 		LivingEntity self = LivingEntity.class.cast(this);
+		World world = getWorld();
 
 		if(!world.isClient && world.getServer() != null) {
 			if(self instanceof PlayerEntity player) {
 				if(!WorldProtection.canModify(world, player)) {
-					player.sendMessage(Texts.prefixed("message.skylands.world_protection.damage_take"), true);
+					player.sendMessage(SkylandsTexts.prefixed("message.skylands.world_protection.damage_take"), true);
 					cir.setReturnValue(false);
 				}
 			}
 			if(source.getAttacker() instanceof PlayerEntity attacker) {
 				if(!WorldProtection.canModify(world, attacker)) {
-					attacker.sendMessage(Texts.prefixed("message.skylands.world_protection.entity_hurt"), true);
+					attacker.sendMessage(SkylandsTexts.prefixed("message.skylands.world_protection.entity_hurt"), true);
 					cir.setReturnValue(false);
 				}
 			}

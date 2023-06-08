@@ -8,7 +8,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import skylands.logic.Skylands;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 
 import static net.minecraft.command.argument.BlockPosArgumentType.blockPos;
 import static net.minecraft.server.command.CommandManager.argument;
@@ -43,32 +43,32 @@ public class SettingCommands {
 	static void toggleVisits(ServerPlayerEntity player) {
 		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
 			if(island.locked) {
-				player.sendMessage(Texts.prefixed("message.skylands.settings.unlock"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.unlock"));
 				island.locked = false;
 			}
 			else {
-				player.sendMessage(Texts.prefixed("message.skylands.settings.lock"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.lock"));
 				island.locked = true;
 			}
 
-		}, () -> player.sendMessage(Texts.prefixed("message.skylands.settings.no_island")));
+		}, () -> player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.no_island")));
 	}
 
 	static void setSpawnPos(ServerPlayerEntity player, BlockPos pos) {
 		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
 			island.spawnPos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
-			player.sendMessage(Texts.prefixed("message.skylands.settings.spawn_pos_change", map -> map.put("%pos%", posText)));
+			player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.spawn_pos_change", map -> map.put("%pos%", posText)));
 
-		}, () -> player.sendMessage(Texts.prefixed("message.skylands.settings.no_island")));
+		}, () -> player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.no_island")));
 	}
 
 	static void setVisitsPos(ServerPlayerEntity player, BlockPos pos) {
 		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
 			island.visitsPos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
-			player.sendMessage(Texts.prefixed("message.skylands.settings.visits_pos_change", map -> map.put("%pos%", posText)));
+			player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.visits_pos_change", map -> map.put("%pos%", posText)));
 
-		}, () -> player.sendMessage(Texts.prefixed("message.skylands.settings.no_island")));
+		}, () -> player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.no_island")));
 	}
 }

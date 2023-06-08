@@ -11,15 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class Texts {
+public class SkylandsTexts {
 	public static String prefixTranslationKey = "message.skylands.prefix";
 
 	public static void prefixed(CommandContext<ServerCommandSource> context, String key, Consumer<Map<String, String>> builder) {
-		context.getSource().sendFeedback(Texts.prefixed(key, builder), false);
+		context.getSource().sendFeedback(() -> SkylandsTexts.prefixed(key, builder), false);
 	}
 
 	public static void prefixed(PlayerEntity player, String key, Consumer<Map<String, String>> builder) {
-		player.sendMessage(Texts.prefixed(key, builder));
+		player.sendMessage(SkylandsTexts.prefixed(key, builder));
 	}
 
 	public static Text prefixed(String key, Consumer<Map<String, String>> builder) {

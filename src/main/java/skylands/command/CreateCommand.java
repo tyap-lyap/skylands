@@ -7,7 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import skylands.logic.Island;
 import skylands.logic.IslandStuck;
 import skylands.logic.Skylands;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -28,14 +28,14 @@ public class CreateCommand {
 		IslandStuck islands = Skylands.instance.islands;
 
 		if(islands.get(player).isPresent()) {
-			player.sendMessage(Texts.prefixed("message.skylands.island_create.fail"));
+			player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_create.fail"));
 		}
 		else {
 			Island island = islands.create(player);
 			if(Skylands.config.teleportAfterIslandCreation) {
 				island.visitAsMember(player);
 			}
-			player.sendMessage(Texts.prefixed("message.skylands.island_create.success"));
+			player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_create.success"));
 		}
 	}
 }

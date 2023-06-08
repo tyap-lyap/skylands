@@ -24,7 +24,7 @@ import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
 import org.apache.commons.io.FileUtils;
 import skylands.SkylandsMod;
 import skylands.api.SkylandsAPI;
-import skylands.util.Texts;
+import skylands.util.SkylandsTexts;
 import xyz.nucleoid.fantasy.Fantasy;
 import xyz.nucleoid.fantasy.RuntimeWorldConfig;
 import xyz.nucleoid.fantasy.RuntimeWorldHandle;
@@ -232,6 +232,11 @@ public class Island {
 		return this.fantasy.getOrOpenPersistentWorld(new Identifier("nether", this.owner.uuid.toString()), this.netherConfig);
 	}
 
+	public void unload() {
+		getHandler().unload();
+		if(hasNether) getNetherHandler().unload();
+	}
+
 	void copyNetherTemplate() {
 		try {
 			File netherTemplate = server.getFile("nether_template");
@@ -289,7 +294,7 @@ public class Island {
 		if(!isMember(visitor)) {
 			this.getOwner().ifPresent(owner -> {
 				if(!visitor.getUuid().equals(owner.getUuid())) {
-					owner.sendMessage(Texts.prefixed("message.skylands.island_visit.visit", map -> map.put("%visitor%", visitor.getName().getString())));
+					owner.sendMessage(SkylandsTexts.prefixed("message.skylands.island_visit.visit", map -> map.put("%visitor%", visitor.getName().getString())));
 				}
 			});
 		}

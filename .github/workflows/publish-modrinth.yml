@@ -25,7 +25,9 @@ jobs:
           modrinth-id: wbrBu6hJ
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
-          files: build/libs/*.jar
+          files: |
+            build/libs/!(*-@(dev|sources|javadoc)).jar
+            build/libs/*-@(dev|sources|javadoc).jar
 
           version-type: beta
           loaders: |

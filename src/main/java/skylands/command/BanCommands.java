@@ -79,7 +79,7 @@ public class BanCommands {
 						SkylandsWorlds.getIsland(banned.getWorld()).ifPresent(isl -> {
 							if(isl.owner.uuid.equals(island.owner.uuid)) {
 								banned.sendMessage(SkylandsTexts.prefixed("message.skylands.hub_visit"));
-								Skylands.instance.hub.visit(player);
+								Skylands.instance.hub.visit(banned);
 							}
 						});
 					}

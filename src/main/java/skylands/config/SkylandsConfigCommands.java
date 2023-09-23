@@ -77,12 +77,6 @@ public class SkylandsConfigCommands {
 			context.getSource().sendFeedback(() -> Text.of("config.updateCheckerEnabled has changed to: " + config.updateCheckerEnabled), true);
 			return 1;
 
-		})).then(literal("toggle-right-click-harvest").executes(context -> {
-			var config = Skylands.config;
-			config.rightClickHarvestEnabled = !config.rightClickHarvestEnabled;
-			config.save();
-			context.getSource().sendFeedback(() -> Text.of("config.rightClickHarvestEnabled has changed to: " + config.rightClickHarvestEnabled), true);
-			return 1;
 		})).then(literal("reload").executes(context -> {
 			Skylands.config = SkylandsConfig.read();
 			context.getSource().sendFeedback(() -> Text.of("Config successfully reloaded!"), true);

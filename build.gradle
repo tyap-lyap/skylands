@@ -33,6 +33,10 @@ dependencies {
 	modImplementation include("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
 }
 
+vineflower {
+    toolVersion = "1.9.3"
+}
+
 loom {
 	accessWidenerPath = file("src/main/resources/" + base.archivesName.get() + ".accesswidener")
 }

@@ -1,6 +1,9 @@
 package skylands.event;
 
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import skylands.logic.Member;
@@ -12,9 +15,12 @@ import skylands.util.SkylandsWorlds;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-public class PlayerConnectEvent {
+public class PlayerConnectEvent implements ServerPlayConnectionEvents.Join, ServerPlayConnectionEvents.Disconnect {
+	static final PlayerConnectEvent INSTANCE = new PlayerConnectEvent();
 
-	public static void onJoin(MinecraftServer server, ServerPlayerEntity player) {
+	@Override
+	public void onPlayReady(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
+		ServerPlayerEntity player = handler.getPlayer();
 
 		if(server.getFile("hub_template").exists()) {
 			if(player.getWorld().getRegistryKey().equals(World.OVERWORLD)) {
@@ -54,7 +60,8 @@ public class PlayerConnectEvent {
 		}
 	}
 
-	public static void onLeave(MinecraftServer server, ServerPlayerEntity player) {
+	@Override
+	public void onPlayDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {
 
 	}
 }

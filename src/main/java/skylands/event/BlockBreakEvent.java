@@ -1,27 +1,25 @@
 package skylands.event;
 
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.CropBlock;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import skylands.logic.Skylands;
+import org.jetbrains.annotations.Nullable;
 import skylands.util.SkylandsTexts;
 import skylands.util.WorldProtection;
 
 @SuppressWarnings("unused")
-public class BlockBreakEvent {
+public class BlockBreakEvent implements PlayerBlockBreakEvents.Before {
+	static final BlockBreakEvent INSTANCE = new BlockBreakEvent();
 
-	public static boolean onBreak(World world, PlayerEntity player, BlockPos pos, BlockState state) {
-		if(!WorldProtection.canModify(world, player)) {
+	@Override
+	public boolean beforeBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
+		if(!world.isClient() && !WorldProtection.canModify(world, player)) {
 			player.sendMessage(SkylandsTexts.prefixed("message.skylands.world_protection.block_break"), true);
 			return false;
 		}
-
-		if(Skylands.config.rightClickHarvestEnabled && state.getBlock() instanceof CropBlock crop && crop.isMature(state)) {
-			player.sendMessage(SkylandsTexts.prefixed("message.skylands.right_click_harvest.tip"), true);
-		}
-
 		return true;
 	}
 }

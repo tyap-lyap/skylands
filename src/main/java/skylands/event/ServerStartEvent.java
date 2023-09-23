@@ -1,6 +1,7 @@
 package skylands.event;
 
 import com.google.common.collect.Lists;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourcePackManager;
 import net.minecraft.server.MinecraftServer;
@@ -13,9 +14,11 @@ import skylands.logic.Skylands;
 import java.io.File;
 import java.util.Collection;
 
-public class ServerStartEvent {
+public class ServerStartEvent implements ServerLifecycleEvents.ServerStarting {
+	static final ServerStartEvent INSTANCE = new ServerStartEvent();
 
-	public static void onStarting(MinecraftServer server) {
+	@Override
+	public void onServerStarting(MinecraftServer server) {
 		Skylands.instance = new Skylands(server);
 
 		try {

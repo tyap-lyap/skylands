@@ -6,6 +6,7 @@ import net.minecraft.util.WorldSavePath;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.Nullable;
 import skylands.SkylandsMod;
+import skylands.config.IslandTemplate;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,28 +16,41 @@ import java.util.UUID;
 public class IslandStuck {
 	public ArrayList<Island> stuck = new ArrayList<>();
 
-	public Island create(PlayerEntity player) {
+	public Island create(PlayerEntity player, String islandTemplate) {
 		for(var island : this.stuck) {
 			if(island.owner.uuid.equals(player.getUuid())) return island;
 		}
 		var island = new Island(player);
 		island.freshCreated = true;
+		island.islandTemplate = islandTemplate;
+
+		var template = island.getTemplateOrDefault();
+
+		island.spawnPos = template.playerSpawnPosition;
+		island.visitsPos = template.getPlayerVisitsPosition();
+
 		this.stuck.add(island);
 
-		copyTemplate(player);
+		copyWorldFile(player, template);
 		return island;
 	}
 
-	void copyTemplate(PlayerEntity player) {
-		try {
-			var server = player.getServer();
-			File islandTemplate = server.getFile("island_template");
-			String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "") + "\\dimensions\\skylands\\" + player.getUuid().toString();
-			File lock = new File(path + "\\copied.lock");
+	public Island create(PlayerEntity player) {
+		return create(player, "default");
+	}
 
-			if(islandTemplate.exists() && !lock.exists()) {
-				FileUtils.copyDirectory(islandTemplate, new File(path));
-				lock.createNewFile();
+	void copyWorldFile(PlayerEntity player, IslandTemplate template) {
+		try {
+			if(template.type.equals("world") && template.metadata != null) {
+				var server = player.getServer();
+				File worldFile = server.getFile(template.metadata.path);
+				String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "") + "\\dimensions\\skylands\\" + player.getUuid().toString();
+				File lock = new File(path + "\\copied.lock");
+
+				if(worldFile.exists() && !lock.exists()) {
+					FileUtils.copyDirectory(worldFile, new File(path));
+					lock.createNewFile();
+				}
 			}
 		}
 		catch (Exception e) {

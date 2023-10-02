@@ -37,8 +37,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 		if(!WorldProtection.canModify(world, player)) {
 			if(player.getPos().getY() < world.getDimension().minY() - 10) {
 				SkylandsWorlds.getIsland(world).ifPresentOrElse(island -> {
-					var pos = island.spawnPos;
-					player.teleport(island.getWorld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
+					var pos = island.visitsPos;
+					player.teleport(island.getWorld(), pos.x, pos.y, pos.z, Set.of(), pos.yaw, pos.pitch);
 				}, () -> {
 					Skylands.instance.hub.visit(player);
 				});

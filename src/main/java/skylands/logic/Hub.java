@@ -2,13 +2,13 @@ package skylands.logic;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.Vec3d;
 import skylands.api.SkylandsAPI;
+import skylands.config.PlayerPosition;
 
 import java.util.Set;
 
 public class Hub {
-	public Vec3d pos = Skylands.config.defaultHubPos.toVec();
+	public PlayerPosition spawnPos = Skylands.config.defaultHubPos;
 	public boolean hasProtection = Skylands.config.hubProtectedByDefault;
 
 	public Hub() {
@@ -16,22 +16,22 @@ public class Hub {
 
 	public void readFromNbt(NbtCompound nbt) {
 		NbtCompound hubNbt = nbt.getCompound("hub");
-		this.pos = new Vec3d(hubNbt.getDouble("x"), hubNbt.getDouble("y"), hubNbt.getDouble("z"));
+		this.spawnPos = PlayerPosition.fromNbt(nbt.getCompound("spawnPos"), new PlayerPosition(hubNbt.getDouble("x"), hubNbt.getDouble("y"), hubNbt.getDouble("z")));
 		this.hasProtection = hubNbt.getBoolean("hasProtection");
 	}
 
 	public void writeToNbt(NbtCompound nbt) {
 		NbtCompound hubNbt = new NbtCompound();
-		hubNbt.putDouble("x", this.pos.x);
-		hubNbt.putDouble("y", this.pos.y);
-		hubNbt.putDouble("z", this.pos.z);
+
+		hubNbt.put("spawnPos", spawnPos.toNbt());
+
 		hubNbt.putBoolean("hasProtection", this.hasProtection);
 		nbt.put("hub", hubNbt);
 	}
 
 	public void visit(PlayerEntity player) {
 		var world = Skylands.getServer().getOverworld();
-		player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), Set.of(), Skylands.config.defaultHubPos.yaw, Skylands.config.defaultHubPos.pitch);
+		player.teleport(world, spawnPos.x, spawnPos.y, spawnPos.z, Set.of(), spawnPos.yaw, spawnPos.pitch);
 		SkylandsAPI.ON_HUB_VISIT.invoker().invoke(player, world);
 	}
 }

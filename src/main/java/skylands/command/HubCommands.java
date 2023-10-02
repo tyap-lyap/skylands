@@ -1,12 +1,13 @@
 package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import skylands.config.PlayerPosition;
 import skylands.logic.Skylands;
 import skylands.util.SkylandsTexts;
 
@@ -30,9 +31,16 @@ public class HubCommands {
 		dispatcher.register(literal("force-sl").then(literal("hub").then(literal("set-spawn-pos").requires(Permissions.require("skylands.force.hub.position", 4)).then(argument("position", blockPos()).executes(context -> {
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
 			var source = context.getSource();
-			HubCommands.setPos(pos, source);
+			HubCommands.setPos(pos, 0, 0, source);
 			return 1;
-		}))).then(literal("toggle-protection").requires(Permissions.require("skylands.force.hub.protection", 4)).executes(context -> {
+		}).then(argument("yaw", IntegerArgumentType.integer()).then(argument("pitch", IntegerArgumentType.integer()).executes(context -> {
+			var pos = BlockPosArgumentType.getBlockPos(context, "position");
+			int yaw = IntegerArgumentType.getInteger(context, "yaw");
+			int pitch = IntegerArgumentType.getInteger(context, "pitch");
+			var source = context.getSource();
+			HubCommands.setPos(pos, yaw, pitch, source);
+			return 1;
+		}))))).then(literal("toggle-protection").requires(Permissions.require("skylands.force.hub.protection", 4)).executes(context -> {
 			HubCommands.toggleProtection(context.getSource());
 			return 1;
 		}))));
@@ -43,9 +51,9 @@ public class HubCommands {
 		Skylands.getHub().visit(player);
 	}
 
-	static void setPos(BlockPos pos, ServerCommandSource source) {
-		Skylands.getHub().pos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-		String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
+	static void setPos(BlockPos pos, int yaw, int pitch, ServerCommandSource source) {
+		Skylands.getHub().spawnPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, yaw, pitch);
+		String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ() + " " + yaw + " " + pitch;
 		source.sendFeedback(() -> SkylandsTexts.prefixed("message.skylands.hub_pos_change", map -> map.put("%pos%", posText)), true);
 	}
 

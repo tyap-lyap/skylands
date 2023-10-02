@@ -5,6 +5,7 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,6 +27,10 @@ public class PlayerManagerMixin {
 				}
 				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_create.success"));
 			}
+		}
+
+		if(player.getWorld().getRegistryKey().equals(World.OVERWORLD) && Skylands.config.forceHubSpawnPos) {
+			Skylands.instance.hub.visit(player);
 		}
 	}
 }

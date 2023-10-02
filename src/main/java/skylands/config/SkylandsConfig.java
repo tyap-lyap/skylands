@@ -3,6 +3,7 @@ package skylands.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.annotations.JsonAdapter;
 import net.fabricmc.loader.api.FabricLoader;
 import skylands.SkylandsMod;
 import skylands.logic.Skylands;
@@ -11,13 +12,18 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SkylandsConfig {
 	public static final Gson GSON = new GsonBuilder().setLenient().setPrettyPrinting().create();
 	@SuppressWarnings("unused")
 	public String readDocs = "https://github.com/tyap-lyap/skylands/wiki";
+	@JsonAdapter(PlayerPosition.JsonAdapter.class)
 	public PlayerPosition defaultSpawnPos = new PlayerPosition(0.5D, 75.0D, 0.5D, 0, 0);
+	@JsonAdapter(PlayerPosition.JsonAdapter.class)
 	public PlayerPosition defaultVisitsPos = new PlayerPosition(0.5D, 75.0D, 0.5D, 0, 0);
+	@JsonAdapter(PlayerPosition.JsonAdapter.class)
 	public PlayerPosition defaultHubPos = new PlayerPosition(0.5D, 80.0D, 0.5D, 0, 0);
 	public boolean hubProtectedByDefault = false;
 	public int islandDeletionCooldown = (24 * 60) * 60;
@@ -25,6 +31,15 @@ public class SkylandsConfig {
 	public boolean updateCheckerEnabled = true;
 	public boolean teleportAfterIslandCreation = false;
 	public boolean createIslandOnPlayerJoin = false;
+	public boolean forceHubSpawnPos = false;
+	public boolean hubTemplateEnabled = false;
+	public HubTemplate hubTemplate = new HubTemplate("world", new Metadata("hub_template"));
+
+	public ArrayList<IslandTemplate> islandTemplates = new ArrayList<>(List.of(new IslandTemplate("default", "structure",
+		new Metadata("skylands:start_island", new BlockPosition(-7, 65, -7)), defaultSpawnPos, "default")));
+
+	public ArrayList<Template> netherTemplates = new ArrayList<>(List.of(new Template("default", "structure",
+		new Metadata("skylands:nether_island", new BlockPosition(-7, 65, -7)), defaultSpawnPos)));
 
 	public static void init() {
 		Skylands.config = SkylandsConfig.read();

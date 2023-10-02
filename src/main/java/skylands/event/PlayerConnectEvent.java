@@ -50,8 +50,8 @@ public class PlayerConnectEvent implements ServerPlayConnectionEvents.Join, Serv
 			if(!island.isMember(player) && island.isBanned(player)) {
 				player.sendMessage(SkylandsTexts.prefixed("message.skylands.ban_player.ban", map -> map.put("%owner%", island.owner.name)));
 				player.sendMessage(SkylandsTexts.prefixed("message.skylands.hub_visit"));
-				var pos = Skylands.instance.hub.pos;
-				player.teleport(server.getOverworld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0, 0);
+				var pos = Skylands.instance.hub.spawnPos;
+				player.teleport(server.getOverworld(), pos.x, pos.y, pos.z, Set.of(), pos.yaw, pos.pitch);
 			}
 		});
 

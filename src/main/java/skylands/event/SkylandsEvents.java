@@ -21,6 +21,7 @@ public class SkylandsEvents {
 		});
 
 		ServerLifecycleEvents.SERVER_STARTING.register(ServerStartEvent.INSTANCE);
+		ServerLifecycleEvents.SERVER_STARTED.register(ServerStartEvent.INSTANCE);
 		ServerTickEvents.END_SERVER_TICK.register(ServerTickEvent.INSTANCE);
 		ServerPlayConnectionEvents.JOIN.register(PlayerConnectEvent.INSTANCE);
 		ServerPlayConnectionEvents.DISCONNECT.register(PlayerConnectEvent.INSTANCE);

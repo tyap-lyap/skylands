@@ -1,12 +1,13 @@
 package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import skylands.config.PlayerPosition;
 import skylands.logic.Skylands;
 import skylands.util.SkylandsTexts;
 
@@ -27,17 +28,33 @@ public class SettingCommands {
 			var player = context.getSource().getPlayer();
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
 			if(player != null) {
-				SettingCommands.setSpawnPos(player, pos);
+				SettingCommands.setSpawnPos(player, pos, 0, 0);
 			}
 			return 1;
-		}))).then(literal("set-visits-pos").requires(Permissions.require("skylands.settings.visits.position", true)).then(argument("position", blockPos()).executes(context -> {
+		}).then(argument("yaw", IntegerArgumentType.integer()).then(argument("pitch", IntegerArgumentType.integer()).executes(context -> {
+			var player = context.getSource().getPlayer();
+			var pos = BlockPosArgumentType.getBlockPos(context, "position");
+			int yaw = IntegerArgumentType.getInteger(context, "yaw");
+			int pitch = IntegerArgumentType.getInteger(context, "pitch");
+
+			SettingCommands.setSpawnPos(player, pos, yaw, pitch);
+			return 1;
+		}))))).then(literal("set-visits-pos").requires(Permissions.require("skylands.settings.visits.position", true)).then(argument("position", blockPos()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
 			if(player != null) {
-				SettingCommands.setVisitsPos(player, pos);
+				SettingCommands.setVisitsPos(player, pos, 0, 0);
 			}
 			return 1;
-		})))));
+		}).then(argument("yaw", IntegerArgumentType.integer()).then(argument("pitch", IntegerArgumentType.integer()).executes(context -> {
+			var player = context.getSource().getPlayer();
+			var pos = BlockPosArgumentType.getBlockPos(context, "position");
+			int yaw = IntegerArgumentType.getInteger(context, "yaw");
+			int pitch = IntegerArgumentType.getInteger(context, "pitch");
+
+			SettingCommands.setVisitsPos(player, pos, yaw, pitch);
+			return 1;
+		})))))));
 	}
 
 	static void toggleVisits(ServerPlayerEntity player) {
@@ -54,19 +71,19 @@ public class SettingCommands {
 		}, () -> player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.no_island")));
 	}
 
-	static void setSpawnPos(ServerPlayerEntity player, BlockPos pos) {
+	static void setSpawnPos(ServerPlayerEntity player, BlockPos pos, int yaw, int pitch) {
 		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
-			island.spawnPos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
+			island.spawnPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, yaw, pitch);
+			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ() + " " + yaw + " " + pitch;
 			player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.spawn_pos_change", map -> map.put("%pos%", posText)));
 
 		}, () -> player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.no_island")));
 	}
 
-	static void setVisitsPos(ServerPlayerEntity player, BlockPos pos) {
+	static void setVisitsPos(ServerPlayerEntity player, BlockPos pos, int yaw, int pitch) {
 		Skylands.instance.islands.get(player).ifPresentOrElse(island -> {
-			island.visitsPos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
+			island.visitsPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, yaw, pitch);
+			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ() + " " + yaw + " " + pitch;
 			player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.visits_pos_change", map -> map.put("%pos%", posText)));
 
 		}, () -> player.sendMessage(SkylandsTexts.prefixed("message.skylands.settings.no_island")));

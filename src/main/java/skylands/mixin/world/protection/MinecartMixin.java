@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.VehicleEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,10 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import skylands.util.SkylandsTexts;
 import skylands.util.WorldProtection;
 
-@Mixin(AbstractMinecartEntity.class)
-public abstract class MinecartMixin extends Entity {
+@Mixin(VehicleEntity.class)
+abstract class VehicleEntityMixin extends Entity {
 
-	public MinecartMixin(EntityType<?> type, World world) {
+	public VehicleEntityMixin(EntityType<?> type, World world) {
 		super(type, world);
 	}
 

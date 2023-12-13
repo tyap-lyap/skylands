@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class SkylandsConfig {
 	public static SkylandsConfig read() {
 		String filePath = FabricLoader.getInstance().getConfigDir().resolve("skylands.json").toString();
 		try {
-			BufferedReader fixReader = new BufferedReader(new FileReader(filePath));
+			BufferedReader fixReader = new BufferedReader(new FileReader(filePath, StandardCharsets.UTF_8));
 			var json = GSON.fromJson(fixReader, JsonObject.class);
 			boolean fixed = false;
 
@@ -105,7 +106,7 @@ public class SkylandsConfig {
 	public void save() {
 		try {
 			String filePath = FabricLoader.getInstance().getConfigDir().resolve("skylands.json").toString();
-			try(FileWriter writer = new FileWriter(filePath)) {
+			try(FileWriter writer = new FileWriter(filePath, StandardCharsets.UTF_8)) {
 				writer.write(GSON.toJson(this));
 			}
 		}

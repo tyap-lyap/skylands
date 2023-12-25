@@ -1,4 +1,4 @@
-package skylands.config;
+package skylands.config.template;
 
 import com.google.gson.annotations.JsonAdapter;
 import net.minecraft.block.Block;
@@ -8,6 +8,7 @@ import net.minecraft.structure.StructureTemplate;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
+import skylands.config.PlayerPosition;
 
 public class Template {
 	public String name;
@@ -18,6 +19,8 @@ public class Template {
 
 	@JsonAdapter(PlayerPosition.JsonAdapter.class) @Nullable
 	public PlayerPosition playerVisitsPosition;
+
+	public String permission;
 
 	public Template(String name, String type, Metadata metadata, PlayerPosition playerSpawnPosition) {
 		this.name = name;

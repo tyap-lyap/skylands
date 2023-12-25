@@ -31,7 +31,9 @@ public class CreateCommand {
 
 				for(var template : Skylands.config.islandTemplates) {
 					if(template.name.contains(remains)) {
-						builder.suggest(template.name);
+						if(template.permission == null || Permissions.check(player, template.permission)) {
+							builder.suggest(template.name);
+						}
 					}
 				}
 				return builder.buildFuture();
@@ -64,14 +66,23 @@ public class CreateCommand {
 		}
 	}
 
-	static void run(ServerPlayerEntity player, String template) {
+	static void run(ServerPlayerEntity player, String templateName) {
 		IslandStuck islands = Skylands.instance.islands;
 
 		if(islands.get(player).isPresent()) {
 			player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_create.fail"));
 		}
 		else {
-			Island island = islands.create(player, template);
+			var template = Skylands.config.getIslandTemplate(templateName);
+			Island island;
+
+			if(template.isPresent() && (template.get().permission == null || Permissions.check(player, template.get().permission))) {
+				island = islands.create(player, templateName);
+			}
+			else {
+				island = islands.create(player);
+			}
+
 			if(Skylands.config.teleportAfterIslandCreation) {
 				island.visitAsMember(player);
 			}

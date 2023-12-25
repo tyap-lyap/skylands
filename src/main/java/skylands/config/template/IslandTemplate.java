@@ -1,4 +1,6 @@
-package skylands.config;
+package skylands.config.template;
+
+import skylands.config.PlayerPosition;
 
 public class IslandTemplate extends Template {
 	public String netherTemplate;

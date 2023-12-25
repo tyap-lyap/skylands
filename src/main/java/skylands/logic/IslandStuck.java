@@ -6,7 +6,7 @@ import net.minecraft.util.WorldSavePath;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.Nullable;
 import skylands.SkylandsMod;
-import skylands.config.IslandTemplate;
+import skylands.config.template.IslandTemplate;
 
 import java.io.File;
 import java.util.ArrayList;

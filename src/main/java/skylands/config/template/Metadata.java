@@ -1,9 +1,10 @@
-package skylands.config;
+package skylands.config.template;
 
 import com.google.gson.annotations.JsonAdapter;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
+import skylands.config.BlockPosition;
 
 public class Metadata {
 

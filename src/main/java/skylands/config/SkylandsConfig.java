@@ -6,6 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.JsonAdapter;
 import net.fabricmc.loader.api.FabricLoader;
 import skylands.SkylandsMod;
+import skylands.config.template.HubTemplate;
+import skylands.config.template.IslandTemplate;
+import skylands.config.template.Metadata;
+import skylands.config.template.Template;
 import skylands.logic.Skylands;
 
 import java.io.BufferedReader;
@@ -15,6 +19,7 @@ import java.io.FileWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SkylandsConfig {
 	public static final Gson GSON = new GsonBuilder().setLenient().setPrettyPrinting().create();
@@ -44,6 +49,14 @@ public class SkylandsConfig {
 
 	public static void init() {
 		Skylands.config = SkylandsConfig.read();
+	}
+
+	public Optional<IslandTemplate> getIslandTemplate(String name) {
+		for(IslandTemplate template : islandTemplates) {
+			if(template.name.equals(name)) return Optional.of(template);
+		}
+
+		return Optional.empty();
 	}
 
 	public static SkylandsConfig read() {

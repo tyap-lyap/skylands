@@ -1,4 +1,4 @@
-package skylands.config;
+package skylands.config.template;
 
 public class HubTemplate extends Template {
 

@@ -25,34 +25,10 @@ public class SkylandsEvents {
 			}
 		});
 
-		ServerLifecycleEvents.SERVER_STARTING.register(ServerStartEvent::onStarting);
-		ServerTickEvents.END_SERVER_TICK.register(ServerTickEvent::onTick);
-		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> PlayerConnectEvent.onJoin(server, handler.player));
-		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> PlayerConnectEvent.onLeave(server, handler.player));
-		PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
-			if(!world.isClient) {
-				return BlockBreakEvent.onBreak(world, player, pos, state);
-			}
-			return true;
-		});
-		UseItemCallback.EVENT.register((player, world, hand) -> {
-			if(!world.isClient) {
-				return UseItemEvent.onUse(player, world, hand);
-			}
-			return TypedActionResult.pass(player.getStackInHand(hand));
-		});
-		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-			if(!world.isClient) {
-				return UseEntityEvent.onUse(player, world, hand, entity);
-			}
-			return ActionResult.PASS;
-		});
-
-		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-			if(!world.isClient) {
-				return UseBlockEvent.onBlockUse(player, world, hand, hitResult);
-			}
-			return ActionResult.PASS;
-		});
+		ServerLifecycleEvents.SERVER_STARTING.register(ServerStartEvent.INSTANCE);
+		ServerTickEvents.END_SERVER_TICK.register(ServerTickEvent.INSTANCE);
+		ServerPlayConnectionEvents.JOIN.register(PlayerConnectEvent.INSTANCE);
+		ServerPlayConnectionEvents.DISCONNECT.register(PlayerConnectEvent.INSTANCE);
+		PlayerBlockBreakEvents.BEFORE.register(BlockBreakEvent.INSTANCE);
 	}
 }

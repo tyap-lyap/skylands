@@ -33,7 +33,7 @@ dependencies {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/" + base.archivesName.get() + ".accesswidener")
+	accessWidenerPath = file("src/main/resources/skylands.accesswidener")
 }
 
 base {

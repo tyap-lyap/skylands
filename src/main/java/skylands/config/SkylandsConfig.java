@@ -25,7 +25,6 @@ public class SkylandsConfig {
 	public boolean updateCheckerEnabled = true;
 	public boolean teleportAfterIslandCreation = false;
 	public boolean createIslandOnPlayerJoin = false;
-	public boolean rightClickHarvestEnabled = true;
 
 	public static void init() {
 		Skylands.config = SkylandsConfig.read();

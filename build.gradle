@@ -1,5 +1,5 @@
 plugins {
-	id "fabric-loom" version "1.4-SNAPSHOT"
+	id "fabric-loom" version "1.7-SNAPSHOT"
 }
 
 version = project.mod_version
@@ -33,7 +33,7 @@ dependencies {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/" + base.archivesName.get() + ".accesswidener")
+	accessWidenerPath = file("src/main/resources/skylands.accesswidener")
 }
 
 base {

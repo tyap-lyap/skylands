@@ -207,7 +207,8 @@ public class Island {
 				.setGenerator(generator)
 				.setDifficulty(Difficulty.NORMAL)
 				.setShouldTickTime(true)
-				.setSeed(this.getSeed());
+				.setSeed(this.getSeed())
+				.setWorldConstructor((srv, rk, config, style) -> new SkylandsRuntimeWorld(srv, rk, config, style));
 	}
 
 	public RuntimeWorldHandle getNetherHandler() {
@@ -254,7 +255,8 @@ public class Island {
 				.setGenerator(generator)
 				.setDifficulty(Difficulty.NORMAL)
 				.setShouldTickTime(true)
-				.setSeed(this.getSeed());
+				.setSeed(this.getSeed())
+				.setWorldConstructor((srv, rk, config, style) -> new SkylandsRuntimeWorld(srv, rk, config, style));
 	}
 
 	public ServerWorld getEnd() {

@@ -2,7 +2,6 @@ package skylands.mixin.server;
 
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.world.World;
@@ -18,7 +17,7 @@ import skylands.util.SkylandsTexts;
 public class PlayerManagerMixin {
 
 	@Inject(method = "onPlayerConnect", at = @At("TAIL"))
-	void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci) {
+	void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
 		if(player.getStatHandler().getStat(Stats.CUSTOM.getOrCreateStat(Stats.LEAVE_GAME)) == 0) {
 			if(Skylands.config.createIslandOnPlayerJoin) {
 				Island island = Skylands.instance.islands.create(player);

@@ -96,7 +96,7 @@ public class SkylandsConfig {
 				return fixedConfig;
 			}
 
-			BufferedReader reader = new BufferedReader(new FileReader(filePath));
+			BufferedReader reader = new BufferedReader(new FileReader(filePath, StandardCharsets.UTF_8));
 			var config = GSON.fromJson(reader, SkylandsConfig.class);
 			config.save();
 			return config;

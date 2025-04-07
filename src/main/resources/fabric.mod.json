@@ -3,7 +3,7 @@
   "id": "skylands",
   "version": "${version}",
   "name": "Skylands",
-  "description": "Simple Skyblock Islands generator and manager.",
+  "description": "Simple server-side multiplayer skyblock islands generator and manager.",
   "authors": [
     "PinkGoosik"
   ],
@@ -41,7 +41,7 @@
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
-    "minecraft": ">=1.20.3 <1.21",
+    "minecraft": ">=1.20-rc.1 <1.20.2",
     "java": ">=17"
   }
 }

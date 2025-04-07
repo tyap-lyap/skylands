@@ -16,6 +16,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class UpdateChecker {
 	private static final Gson GSON = new GsonBuilder().setLenient().setPrettyPrinting().create();
 	private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder().build();
 	private static Instant lastCheck = Instant.now().minus(4, ChronoUnit.HOURS);
-	private static String cachedLatest = "0";
+	private static String cachedLatest = "0.1.0";
 	private static ArrayList<ProjectVersion> cachedModrinth = new ArrayList<>();
 
 	public static void onPlayerJoin(ServerPlayerEntity player) {
@@ -38,34 +39,32 @@ public class UpdateChecker {
 				SkylandsMod.LOGGER.info("Failed to check for mod updates due to an exception: " + e);
 			}
 		}
+
 	}
 
 	static void check(ServerPlayerEntity player) {
-		var local = getLocalVersion();
-		var remote = getLatestRemote();
+		Version local = new Version(getLocalVersion());
+		Version remote = new Version(getLatestRemote());
 
-		var localNum = Integer.parseInt(local.replaceAll("\\.", ""));
-		var remoteNum = Integer.parseInt(remote.replaceAll("\\.", ""));
-
-		if(remoteNum > localNum) {
+		if(local.compareTo(remote) < 0) {
 			var text = SkylandsTexts.prefixed("message.skylands.new_update", map -> {
-				map.put("%local_version%", local);
-				map.put("%remote_version%", remote);
-				map.put("%changes%", getChanges(localNum));
+				map.put("%local_version%", local.version);
+				map.put("%remote_version%", remote.version);
+				map.put("%changes%", getChanges(local));
 			});
 			player.sendMessage(text);
 		}
 	}
 
-	static String getChanges(int local) {
+	static String getChanges(Version local) {
 		StringBuilder builder = new StringBuilder();
 
 		for (ProjectVersion projectVersion : cachedModrinth) {
-			var version = Integer.parseInt(projectVersion.versionNumber.split("\\+")[0].replaceAll("\\.", ""));
-			if (version > local) {
+			Version version = new Version(projectVersion.versionNumber.split("\\+")[0]);
+			if (version.compareTo(local) > 0) {
 				builder.append(projectVersion.changelog.replaceAll("\\r\\n", "\n")
-						.replaceAll("\\[(.*?)]\\(.*?\\)", "")
-						.replaceAll(" \\(\\)", "")).append("\n");
+					.replaceAll("\\[(.*?)]\\(.*?\\)", "")
+					.replaceAll(" \\(\\)", "")).append("\n");
 			}
 		}
 		return builder.toString().trim();
@@ -85,7 +84,7 @@ public class UpdateChecker {
 	}
 
 	static String getLocalVersion() {
-		String version = "1000";
+		String version = "10.0";
 		var mod = FabricLoader.getInstance().getModContainer("skylands");
 
 		if(mod.isPresent()) {
@@ -98,13 +97,13 @@ public class UpdateChecker {
 	static Optional<ArrayList<ProjectVersion>> getModrinthVersions() {
 		try {
 			HttpRequest request = HttpRequest.newBuilder()
-					.GET()
-					.uri(new URI("https://api.modrinth.com/v2/project/skylands/version"))
-					.headers("User-Agent", "tyap-lyap/skylands/" + getLocalVersion())
-					.build();
+				.GET()
+				.uri(new URI("https://api.modrinth.com/v2/project/skylands/version"))
+				.headers("User-Agent", "tyap-lyap/skylands/" + getLocalVersion())
+				.build();
 
 			HttpResponse<InputStream> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofInputStream());
-			InputStreamReader reader = new InputStreamReader(response.body());
+			InputStreamReader reader = new InputStreamReader(response.body(), StandardCharsets.UTF_8);
 			ProjectVersion[] versions = GSON.fromJson(reader, ProjectVersion[].class);
 
 			var array = new ArrayList<ProjectVersion>();
@@ -146,5 +145,49 @@ public class UpdateChecker {
 		@SerializedName("game_versions")
 		public ArrayList<String> gameVersions = new ArrayList<>();
 		public ArrayList<String> loaders = new ArrayList<>();
+	}
+
+	// Credit https://stackoverflow.com/questions/198431/how-do-you-compare-two-version-strings-in-java
+	public static class Version implements Comparable<Version> {
+
+		final String version;
+
+		public Version(String version) {
+			if(version == null)
+				throw new IllegalArgumentException("Version can not be null");
+			if(!version.matches("[0-9]+(\\.[0-9]+)*"))
+				throw new IllegalArgumentException("Invalid version format");
+			this.version = version;
+		}
+
+		@Override public int compareTo(Version that) {
+			if(that == null)
+				return 1;
+			String[] thisParts = this.version.split("\\.");
+			String[] thatParts = that.version.split("\\.");
+			int length = Math.max(thisParts.length, thatParts.length);
+			for(int i = 0; i < length; i++) {
+				int thisPart = i < thisParts.length ?
+					Integer.parseInt(thisParts[i]) : 0;
+				int thatPart = i < thatParts.length ?
+					Integer.parseInt(thatParts[i]) : 0;
+				if(thisPart < thatPart)
+					return -1;
+				if(thisPart > thatPart)
+					return 1;
+			}
+			return 0;
+		}
+
+		@Override public boolean equals(Object that) {
+			if(this == that)
+				return true;
+			if(that == null)
+				return false;
+			if(this.getClass() != that.getClass())
+				return false;
+			return this.compareTo((Version) that) == 0;
+		}
+
 	}
 }

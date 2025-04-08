@@ -16,7 +16,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class AcceptCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("accept").requires(Permissions.require("skylands.accept", true)).then(argument("player", word()).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("accept").requires(Permissions.require("skylands.accept", true)).then(argument("player", word()).executes(context -> {
 			String inviter = StringArgumentType.getString(context, "player");
 			var player = context.getSource().getPlayer();
 

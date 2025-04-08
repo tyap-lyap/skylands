@@ -44,7 +44,7 @@ public class SkylandsCommands {
 		DeleteCommand.init(dispatcher);
 		SettingCommands.init(dispatcher);
 
-		dispatcher.register(literal("force-sl").then(literal("delete").requires(Permissions.require("skylands.force.delete", 4)).then(argument("player", word()).suggests(SUGGEST_ISLANDS).executes(context -> {
+		dispatcher.register(literal("skylandsadmin").then(literal("delete").requires(Permissions.require("skylands.force.delete", 4)).then(argument("player", word()).suggests(SUGGEST_ISLANDS).executes(context -> {
 			var playerName = StringArgumentType.getString(context, "player");
 
 			Skylands.getIslands().get(playerName).ifPresentOrElse(island -> {
@@ -57,7 +57,7 @@ public class SkylandsCommands {
 			return 1;
 		}))));
 
-		dispatcher.register(literal("force-sl").then(literal("visit").requires(Permissions.require("skylands.force.visit", 4)).then(argument("player", word()).suggests(SUGGEST_ISLANDS).executes(context -> {
+		dispatcher.register(literal("skylandsadmin").then(literal("visit").requires(Permissions.require("skylands.force.visit", 4)).then(argument("player", word()).suggests(SUGGEST_ISLANDS).executes(context -> {
 			var playerName = StringArgumentType.getString(context, "player");
 			var admin = context.getSource().getPlayer();
 			if(admin != null) {

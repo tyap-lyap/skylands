@@ -16,7 +16,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class VisitCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("visit").requires(Permissions.require("skylands.visit", true)).then(argument("player", player()).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("visit").requires(Permissions.require("skylands.visit", true)).then(argument("player", player()).executes(context -> {
 			var visitor = context.getSource().getPlayer();
 			var owner = EntityArgumentType.getPlayer(context, "player");
 			if(visitor != null && owner != null) {

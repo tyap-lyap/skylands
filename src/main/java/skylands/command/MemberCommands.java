@@ -17,7 +17,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class MemberCommands {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("members").then(literal("invite").requires(Permissions.require("skylands.members.invite", true)).then(argument("player", player()).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("members").then(literal("invite").requires(Permissions.require("skylands.members.invite", true)).then(argument("player", player()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var newcomer = EntityArgumentType.getPlayer(context, "player");
 			if(player != null && newcomer != null) {
@@ -25,7 +25,7 @@ public class MemberCommands {
 			}
 			return 1;
 		})))));
-		dispatcher.register(literal("sl").then(literal("members").then(literal("remove").requires(Permissions.require("skylands.members.remove", true)).then(argument("player", word()).suggests((context, builder) -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("members").then(literal("remove").requires(Permissions.require("skylands.members.remove", true)).then(argument("player", word()).suggests((context, builder) -> {
 			var player = context.getSource().getPlayer();
 			var island = Skylands.instance.islands.get(player);
 

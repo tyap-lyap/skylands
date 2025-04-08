@@ -18,7 +18,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class HubCommands {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("hub").requires(Permissions.require("skylands.hub", true)).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("hub").requires(Permissions.require("skylands.hub", true)).executes(context -> {
 			var source = context.getSource();
 			var player = source.getPlayer();
 
@@ -28,7 +28,7 @@ public class HubCommands {
 			return 1;
 		})));
 
-		dispatcher.register(literal("force-sl").then(literal("hub").then(literal("set-spawn-pos").requires(Permissions.require("skylands.force.hub.position", 4)).then(argument("position", blockPos()).executes(context -> {
+		dispatcher.register(literal("skylandsadmin").then(literal("hub").then(literal("set-spawn-pos").requires(Permissions.require("skylands.force.hub.position", 4)).then(argument("position", blockPos()).executes(context -> {
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
 			var source = context.getSource();
 			HubCommands.setPos(pos, 0, 0, source);

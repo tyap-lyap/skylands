@@ -18,7 +18,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class SettingCommands {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("settings").then(literal("toggle-visits").requires(Permissions.require("skylands.settings.lock", true)).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("settings").then(literal("toggle-visits").requires(Permissions.require("skylands.settings.lock", true)).executes(context -> {
 			var player = context.getSource().getPlayer();
 			if(player != null) {
 				SettingCommands.toggleVisits(player);

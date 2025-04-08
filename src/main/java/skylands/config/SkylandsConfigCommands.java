@@ -2,6 +2,7 @@ package skylands.config;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
@@ -18,7 +19,7 @@ import static net.minecraft.command.argument.BlockPosArgumentType.blockPos;
 public class SkylandsConfigCommands {
 
 	public static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("force-sl").then(literal("config").requires(Permissions.require("skylands.force.config", 4)).then(literal("default-spawn-pos").then(argument("position", blockPos()).executes(context -> {
+		dispatcher.register(literal("skylandsadmin").then(literal("config").requires(Permissions.require("skylands.force.config", 4)).then(literal("default-spawn-pos").then(argument("position", blockPos()).executes(context -> {
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
 			Skylands.config.defaultSpawnPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			Skylands.config.save();
@@ -81,7 +82,13 @@ public class SkylandsConfigCommands {
 			Skylands.config = SkylandsConfig.read();
 			context.getSource().sendFeedback(() -> Text.of("Config successfully reloaded!"), true);
 			return 1;
-		}))));
+		})).then(literal("root-command").then(argument("root-command", StringArgumentType.word()).executes(context -> {
+			var config = Skylands.config;
+			config.rootCommand = StringArgumentType.getString(context, "root-command");
+			config.save();
+			context.getSource().sendFeedback(() -> Text.of("Root command was changed to: " + config.rootCommand + ", server restart is required!"), true);
+			return 1;
+		})))));
 
 	}
 }

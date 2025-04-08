@@ -25,6 +25,8 @@ public class SkylandsConfig {
 	public static final Gson GSON = new GsonBuilder().setLenient().setPrettyPrinting().create();
 	@SuppressWarnings("unused")
 	public String readDocs = "https://github.com/tyap-lyap/skylands/wiki";
+
+	public String rootCommand = "sl";
 	@JsonAdapter(PlayerPosition.JsonAdapter.class)
 	public PlayerPosition defaultSpawnPos = new PlayerPosition(0.5D, 75.0D, 0.5D, 0, 0);
 	@JsonAdapter(PlayerPosition.JsonAdapter.class)

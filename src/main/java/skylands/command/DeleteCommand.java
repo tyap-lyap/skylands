@@ -19,7 +19,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class DeleteCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("delete").requires(Permissions.require("skylands.delete", true)).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("delete").requires(Permissions.require("skylands.delete", true)).executes(context -> {
 			var player = context.getSource().getPlayer();
 			if(player != null) DeleteCommand.warn(player);
 			return 1;

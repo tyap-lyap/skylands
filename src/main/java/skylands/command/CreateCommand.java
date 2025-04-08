@@ -16,7 +16,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class CreateCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("create").requires(Permissions.require("skylands.create", true)).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("create").requires(Permissions.require("skylands.create", true)).executes(context -> {
 			var source = context.getSource();
 			var player = source.getPlayer();
 			if(player != null) {

@@ -1,12 +1,12 @@
 package skylands.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import eu.pb4.placeholders.api.TextParserUtils;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Language;
 import skylands.logic.Skylands;
+import skylands.util.SkylandsTexts;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -38,6 +38,6 @@ public class HelpCommand {
 				break;
 			}
 		}
-		player.sendMessage(TextParserUtils.formatText(text));
+		player.sendMessage(SkylandsTexts.format(text, map -> map.put("%root_command%", Skylands.config.rootCommand)));
 	}
 }

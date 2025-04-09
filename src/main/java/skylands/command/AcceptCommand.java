@@ -36,7 +36,7 @@ public class AcceptCommand {
 				if(invite.isPresent()) {
 					if(!invite.get().accepted) {
 						invite.get().accept(player);
-						player.sendMessage(SkylandsTexts.prefixed("message.skylands.accept.success", map -> map.put("%owner%", ownerName)));
+						player.sendMessage(SkylandsTexts.prefixed("message.skylands.accept.success", map -> {map.put("%owner%", ownerName); map.put("%root_command%", Skylands.config.rootCommand);}));
 						SkylandsComponents.PLAYER_DATA.get(player).addIsland(ownerName);
 					}
 				}

@@ -62,6 +62,7 @@ public class IslandStuck {
 	public void delete(PlayerEntity player) {
 		this.get(player).ifPresent(island -> {
 			island.getNetherHandler().delete();
+			island.getEndHandler().delete();
 			island.getHandler().delete();
 		});
 		stuck.removeIf(island -> island.owner.uuid.equals(player.getUuid()));
@@ -70,6 +71,7 @@ public class IslandStuck {
 	public void delete(String playerName) {
 		this.get(playerName).ifPresent(island -> {
 			island.getNetherHandler().delete();
+			island.getEndHandler().delete();
 			island.getHandler().delete();
 		});
 		stuck.removeIf(island -> island.owner.name.equals(playerName));

@@ -63,8 +63,8 @@ public class MemberCommands {
 				else {
 					inviter.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.success", (map) -> map.put("%newcomer%", newcomer.getName().getString())));
 
-					newcomer.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.invite.0", (map) -> map.put("%inviter%", inviter.getName().getString())));
-					newcomer.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.invite.1", (map) -> map.put("%inviter%", inviter.getName().getString())));
+					newcomer.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.invite.0", (map) -> {map.put("%inviter%", inviter.getName().getString()); map.put("%root_command%", Skylands.config.rootCommand);}));
+					newcomer.sendMessage(SkylandsTexts.prefixed("message.skylands.invite_member.invite.1", (map) -> {map.put("%inviter%", inviter.getName().getString()); map.put("%root_command%", Skylands.config.rootCommand);}));
 
 					Skylands.instance.invites.create(island, newcomer);
 				}

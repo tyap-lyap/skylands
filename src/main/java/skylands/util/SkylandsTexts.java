@@ -52,6 +52,17 @@ public class SkylandsTexts {
 		return TextParserUtils.formatText(text);
 	}
 
+	public static Text format(String text, Consumer<Map<String, String>> builder) {
+		Map<String, String> placeholders = new HashMap<>();
+		builder.accept(placeholders);
+
+		for(String k : placeholders.keySet()) {
+			String v = placeholders.get(k);
+			text = text.replaceAll(k, v);
+		}
+		return TextParserUtils.formatText(text);
+	}
+
 	public static Text of(String key) {
 		return of(key, (m) -> {});
 	}

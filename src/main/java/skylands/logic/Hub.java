@@ -16,7 +16,7 @@ public class Hub {
 
 	public void readFromNbt(NbtCompound nbt) {
 		NbtCompound hubNbt = nbt.getCompound("hub");
-		this.spawnPos = PlayerPosition.fromNbt(nbt.getCompound("spawnPos"), new PlayerPosition(hubNbt.getDouble("x"), hubNbt.getDouble("y"), hubNbt.getDouble("z")));
+		this.spawnPos = PlayerPosition.fromNbt(hubNbt.getCompound("spawnPos"), new PlayerPosition(hubNbt.getDouble("x"), hubNbt.getDouble("y"), hubNbt.getDouble("z")));
 		this.hasProtection = hubNbt.getBoolean("hasProtection");
 	}
 

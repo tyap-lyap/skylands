@@ -24,7 +24,7 @@ public class PlayerManagerMixin {
 				if(Skylands.config.teleportAfterIslandCreation) {
 					island.visitAsMember(player);
 				}
-				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_create.success"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_create.success", map -> map.put("%root_command%", Skylands.config.rootCommand)));
 			}
 		}
 

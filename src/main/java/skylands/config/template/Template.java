@@ -1,7 +1,11 @@
 package skylands.config.template;
 
 import com.google.gson.annotations.JsonAdapter;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.StructureBlockBlockEntity;
+import net.minecraft.block.enums.StructureBlockMode;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplate;
@@ -34,6 +38,15 @@ public class Template {
 			StructureTemplate structure = world.getServer().getStructureTemplateManager().getTemplateOrBlank(new Identifier(metadata.structure));
 			StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setRotation(metadata.getRotation()).setIgnoreEntities(true);
 			structure.place(world, metadata.position.toBlockPos(), metadata.getPivot(), data, world.getRandom(), Block.NOTIFY_ALL);
+
+			if(FabricLoader.getInstance().isDevelopmentEnvironment()) {
+				world.setBlockState(metadata.position.toBlockPos().down(), Blocks.STRUCTURE_BLOCK.getDefaultState());
+
+				var structureBlock = (StructureBlockBlockEntity)world.getBlockEntity(metadata.position.toBlockPos().down());
+				structureBlock.setTemplateName(new Identifier(metadata.structure));
+				structureBlock.setMode(StructureBlockMode.LOAD);
+				structureBlock.loadStructure(world);
+			}
 		}
 	}
 

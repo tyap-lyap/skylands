@@ -66,3 +66,10 @@ jobs:
         with:
           files: "build/libs/*"
           repo-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Hit mod update webhook
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: ${{ secrets.MOD_UPDATE_WEBHOOK }}
+          method: 'GET'
+          preventFailureOnNoResponse: 'true'

@@ -78,11 +78,22 @@ public class SkylandsConfigCommands {
 			context.getSource().sendFeedback(() -> Text.of("config.updateCheckerEnabled has changed to: " + config.updateCheckerEnabled), true);
 			return 1;
 
+		})).then(literal("toggle-end-dimension-islands").executes(context -> {
+			var config = Skylands.config;
+			config.endDimensionIslandsEnabled = !config.endDimensionIslandsEnabled;
+			config.save();
+			context.getSource().sendFeedback(() -> Text.of("config.endDimensionIslandsEnabled has changed to: " + config.endDimensionIslandsEnabled), true);
+			return 1;
 		})).then(literal("reload").executes(context -> {
 			Skylands.config = SkylandsConfig.read();
 			context.getSource().sendFeedback(() -> Text.of("Config successfully reloaded!"), true);
 			return 1;
-		})).then(literal("root-command").then(argument("root-command", StringArgumentType.word()).executes(context -> {
+		})).then(literal("reset").executes(context -> {
+			Skylands.config = new SkylandsConfig();
+			Skylands.config.save();
+			context.getSource().sendFeedback(() -> Text.of("Config was successfully reset to default!"), true);
+			return 1;
+		})).then(literal("root-command").then(argument("root-command", word()).executes(context -> {
 			var config = Skylands.config;
 			config.rootCommand = StringArgumentType.getString(context, "root-command");
 			config.save();

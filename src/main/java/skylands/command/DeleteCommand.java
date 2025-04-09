@@ -54,7 +54,7 @@ public class DeleteCommand {
 			});
 		}
 		else {
-			player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.warning"));
+			player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.warning", map -> map.put("%root_command%", Skylands.config.rootCommand)));
 		}
 	}
 
@@ -67,7 +67,7 @@ public class DeleteCommand {
 			var hours = ChronoUnit.HOURS.between(created, now);
 
 			if(hours >= 24) {
-				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.warning"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.warning", map -> map.put("%root_command%", Skylands.config.rootCommand)));
 			}
 			else {
 				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.too_often"));

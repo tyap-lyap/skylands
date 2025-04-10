@@ -16,7 +16,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class KickCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("kick").requires(Permissions.require("skylands.kick", true)).then(argument("player", player()).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("kick").requires(Permissions.require("skylands.kick", true)).then(argument("player", player()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var kickedPlayer = EntityArgumentType.getPlayer(context, "player");
 			if(player != null && kickedPlayer != null) {

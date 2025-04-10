@@ -50,6 +50,7 @@ public class PlayerComponent implements ComponentV3 {
 			Skylands.instance.islands.get(UUID.fromString(tag.getString("lastIsland"))).ifPresent(island -> {
 				island.getWorld();
 				if(island.hasNether) island.getNether();
+				if(island.hasEnd) island.getEnd();
 			});
 		}
 	}

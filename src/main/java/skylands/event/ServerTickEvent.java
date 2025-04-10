@@ -5,7 +5,6 @@ import net.minecraft.server.MinecraftServer;
 import skylands.logic.Skylands;
 
 public class ServerTickEvent implements ServerTickEvents.EndTick {
-
 	static final ServerTickEvent INSTANCE = new ServerTickEvent();
 
 	@Override

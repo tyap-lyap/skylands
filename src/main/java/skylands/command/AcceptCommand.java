@@ -16,7 +16,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class AcceptCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("accept").requires(Permissions.require("skylands.accept", true)).then(argument("player", word()).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("accept").requires(Permissions.require("skylands.accept", true)).then(argument("player", word()).executes(context -> {
 			String inviter = StringArgumentType.getString(context, "player");
 			var player = context.getSource().getPlayer();
 
@@ -36,7 +36,7 @@ public class AcceptCommand {
 				if(invite.isPresent()) {
 					if(!invite.get().accepted) {
 						invite.get().accept(player);
-						player.sendMessage(SkylandsTexts.prefixed("message.skylands.accept.success", map -> map.put("%owner%", ownerName)));
+						player.sendMessage(SkylandsTexts.prefixed("message.skylands.accept.success", map -> {map.put("%owner%", ownerName); map.put("%root_command%", Skylands.config.rootCommand);}));
 						SkylandsComponents.PLAYER_DATA.get(player).addIsland(ownerName);
 					}
 				}

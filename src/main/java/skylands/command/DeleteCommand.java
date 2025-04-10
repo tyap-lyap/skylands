@@ -19,7 +19,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class DeleteCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("delete").requires(Permissions.require("skylands.delete", true)).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("delete").requires(Permissions.require("skylands.delete", true)).executes(context -> {
 			var player = context.getSource().getPlayer();
 			if(player != null) DeleteCommand.warn(player);
 			return 1;
@@ -54,7 +54,7 @@ public class DeleteCommand {
 			});
 		}
 		else {
-			player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.warning"));
+			player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.warning", map -> map.put("%root_command%", Skylands.config.rootCommand)));
 		}
 	}
 
@@ -67,7 +67,7 @@ public class DeleteCommand {
 			var hours = ChronoUnit.HOURS.between(created, now);
 
 			if(hours >= 24) {
-				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.warning"));
+				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.warning", map -> map.put("%root_command%", Skylands.config.rootCommand)));
 			}
 			else {
 				player.sendMessage(SkylandsTexts.prefixed("message.skylands.island_delete.too_often"));

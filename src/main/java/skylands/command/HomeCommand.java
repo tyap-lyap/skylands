@@ -17,14 +17,14 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class HomeCommand {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("home").requires(Permissions.require("skylands.home", true)).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("home").requires(Permissions.require("skylands.home", true)).executes(context -> {
 			var player = context.getSource().getPlayer();
 			if(player != null) {
 				HomeCommand.run(player);
 			}
 			return 1;
 		})));
-		dispatcher.register(literal("sl").then(literal("home").requires(Permissions.require("skylands.home", true)).then(argument("player", word()).suggests((context, builder) -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("home").requires(Permissions.require("skylands.home", true)).then(argument("player", word()).suggests((context, builder) -> {
 			var player = context.getSource().getPlayer();
 
 			if(player != null) {

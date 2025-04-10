@@ -41,6 +41,13 @@ public class SkylandsAPI {
 	});
 	@FunctionalInterface public interface NetherFirstLoad {void onLoad(World world, Island island);}
 
+	public static final Event<EndFirstLoad> ON_END_FIRST_LOAD = EventFactory.createArrayBacked(EndFirstLoad.class, callbacks -> (world, island) -> {
+		for (EndFirstLoad callback : callbacks) {
+			callback.onLoad(world, island);
+		}
+	});
+	@FunctionalInterface public interface EndFirstLoad {void onLoad(World world, Island island);}
+
 	public static Optional<Island> getIsland(PlayerEntity player) {
 		return Skylands.getIslands().get(player);
 	}

@@ -14,9 +14,9 @@ import skylands.util.SkylandsTexts;
 import skylands.util.WorldProtection;
 
 @Mixin(AbstractMinecartEntity.class)
-public abstract class MinecartMixin extends Entity {
+abstract class VehicleEntityMixin extends Entity {
 
-	public MinecartMixin(EntityType<?> type, World world) {
+	public VehicleEntityMixin(EntityType<?> type, World world) {
 		super(type, world);
 	}
 

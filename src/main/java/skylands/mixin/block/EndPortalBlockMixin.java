@@ -15,12 +15,13 @@ import skylands.logic.Island;
 import skylands.util.SkylandsWorlds;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Mixin(EndPortalBlock.class)
 public class EndPortalBlockMixin {
 
 	@Inject(method = "onEntityCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;"),
-			locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+		cancellable = true)
 	public void resourceKey(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci) {
 		if (SkylandsWorlds.isIsland(world)) {
 			Optional<Island> island = SkylandsWorlds.getIsland(world);
@@ -32,7 +33,8 @@ public class EndPortalBlockMixin {
 					targetWorld = island.get().getEnd();
 				}
 				if (targetWorld != null) {
-					entity.moveToWorld(targetWorld);
+					entity.teleport(targetWorld, island.get().spawnPos.x, island.get().spawnPos.y, island.get().spawnPos.z, Set.of(), island.get().spawnPos.yaw, island.get().spawnPos.pitch);
+//					entity.moveToWorld(targetWorld);
 				}
 				ci.cancel();
 			}

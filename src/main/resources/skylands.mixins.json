@@ -16,7 +16,6 @@
     "world.protection.AxeItemMixin",
     "world.protection.BarrelBlockMixin",
     "world.protection.BlockItemMixin",
-    "world.protection.BoatMixin",
     "world.protection.BoneMealItemMixin",
     "world.protection.BucketItemMixin",
     "world.protection.ButtonMixin",
@@ -36,12 +35,12 @@
     "world.protection.ItemFrameEntityMixin",
     "world.protection.LeverMixin",
     "world.protection.LivingEntityMixin",
-    "world.protection.MinecartMixin",
     "world.protection.RedstoneWireMixin",
     "world.protection.RepeaterMixin",
     "world.protection.ShovelItemMixin",
     "world.protection.ShulkerBoxBlockMixin",
     "world.protection.StorageMinecartMixin",
+    "world.protection.VehicleEntityMixin",
     "world.protection.VillagerEntityMixin"
   ],
   "injectors": {

@@ -19,7 +19,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class BanCommands {
 
 	static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("sl").then(literal("ban").requires(Permissions.require("skylands.ban", true)).then(argument("player", player()).executes(context -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("ban").requires(Permissions.require("skylands.ban", true)).then(argument("player", player()).executes(context -> {
 			var player = context.getSource().getPlayer();
 			var bannedPlayer = EntityArgumentType.getPlayer(context, "player");
 			if(player != null && bannedPlayer != null) {
@@ -28,7 +28,7 @@ public class BanCommands {
 			return 1;
 		}))));
 
-		dispatcher.register(literal("sl").then(literal("unban").then(argument("player", word()).suggests((context, builder) -> {
+		dispatcher.register(literal(Skylands.config.rootCommand).then(literal("unban").then(argument("player", word()).suggests((context, builder) -> {
 			var player = context.getSource().getPlayer();
 
 			if(player != null) {

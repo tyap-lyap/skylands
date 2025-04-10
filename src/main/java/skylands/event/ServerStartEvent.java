@@ -14,27 +14,36 @@ import skylands.logic.Skylands;
 import java.io.File;
 import java.util.Collection;
 
-public class ServerStartEvent implements ServerLifecycleEvents.ServerStarting {
+public class ServerStartEvent implements ServerLifecycleEvents.ServerStarting, ServerLifecycleEvents.ServerStarted {
 	static final ServerStartEvent INSTANCE = new ServerStartEvent();
+	boolean generateStructure = false;
 
 	@Override
 	public void onServerStarting(MinecraftServer server) {
 		Skylands.instance = new Skylands(server);
 
 		try {
-			File hubTemplate = server.getFile("hub_template");
-			String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "");
+			if(Skylands.config.hubTemplateEnabled) {
+				var template = Skylands.config.hubTemplate;
+				String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "");
 
-			if(!new File(path + "\\region").exists()) {
-				File lock = new File(path + "\\copied.lock");
+				generateStructure = !new File(path + "\\region").exists();
+				if(template.type.equals("world")) {
+					File hubTemplate = server.getFile(template.metadata.path);
 
-				if(hubTemplate.exists() && !lock.exists()) {
-					FileUtils.copyDirectory(hubTemplate, new File(path));
-					lock.createNewFile();
-					SkylandsMod.LOGGER.info("Reloading datapacks from hub template...");
-					reloadDatapacks(server);
+					if(!new File(path + "\\region").exists()) {
+						File lock = new File(path + "\\copied.lock");
+
+						if(hubTemplate.exists() && !lock.exists()) {
+							FileUtils.copyDirectory(hubTemplate, new File(path));
+							lock.createNewFile();
+							SkylandsMod.LOGGER.info("Reloading datapacks from hub template...");
+							reloadDatapacks(server);
+						}
+					}
 				}
 			}
+
 		}
 		catch (Exception e) {
 			SkylandsMod.LOGGER.error("Failed to copy hub template due to an exception: " + e);
@@ -49,6 +58,29 @@ public class ServerStartEvent implements ServerLifecycleEvents.ServerStarting {
 				server.setMotd("Skylands Beta v" + modMeta.getVersion().getFriendlyString());
 			});
 		}
+	}
+
+	@Override
+	public void onServerStarted(MinecraftServer server) {
+		try {
+			if(Skylands.config.hubTemplateEnabled && Skylands.config.hubTemplate.type.equals("structure")) {
+				var template = Skylands.config.hubTemplate;
+				String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "");
+				File lock = new File(path + "\\copied.lock");
+
+				if(!lock.exists() && generateStructure) {
+					template.generateStructure(server.getOverworld());
+					lock.createNewFile();
+					generateStructure = false;
+				}
+
+			}
+		}
+		catch (Exception e) {
+			SkylandsMod.LOGGER.error("Failed to generate hub template due to an exception: " + e);
+			e.printStackTrace();
+		}
+
 	}
 
 	private static void reloadDatapacks(MinecraftServer server) {

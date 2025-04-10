@@ -1,6 +1,5 @@
 package skylands.logic;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKeys;
@@ -8,15 +7,10 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructurePlacementData;
-import net.minecraft.structure.StructureTemplate;
-import net.minecraft.util.BlockMirror;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.RandomSeed;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.gen.chunk.FlatChunkGenerator;
@@ -24,7 +18,11 @@ import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
 import org.apache.commons.io.FileUtils;
 import skylands.SkylandsMod;
 import skylands.api.SkylandsAPI;
+import skylands.config.template.MainIslandTemplate;
+import skylands.config.PlayerPosition;
+import skylands.config.template.Template;
 import skylands.util.SkylandsTexts;
+import skylands.world.SkylandsRuntimeWorld;
 import xyz.nucleoid.fantasy.Fantasy;
 import xyz.nucleoid.fantasy.RuntimeWorldConfig;
 import xyz.nucleoid.fantasy.RuntimeWorldHandle;
@@ -39,20 +37,23 @@ public class Island {
 	Fantasy fantasy = Skylands.instance.fantasy;
 	RuntimeWorldConfig islandConfig = null;
 	RuntimeWorldConfig netherConfig = null;
+	RuntimeWorldConfig endConfig = null;
 	public Member owner;
 	public ArrayList<Member> members = new ArrayList<>();
 	public ArrayList<Member> bans = new ArrayList<>();
 
 	public boolean locked = false;
-	public Vec3d spawnPos = Skylands.config.defaultSpawnPos.toVec();
-	public Vec3d visitsPos = Skylands.config.defaultVisitsPos.toVec();
+	public PlayerPosition spawnPos;
+	public PlayerPosition visitsPos;
 	public boolean hasNether = false;
+	public boolean hasEnd = false;
 	public long seed = 0L;
 	/**
 	 * Mark indicates that this island was just created and wasn't visited yet
 	 */
 	boolean freshCreated = false;
 	public Instant created = Instant.now();
+	public String islandTemplate = "default";
 
 	public Island(UUID uuid, String name) {
 		this.owner = new Member(uuid, name);
@@ -69,22 +70,14 @@ public class Island {
 	public static Island fromNbt(NbtCompound nbt) {
 		Island island = new Island(Member.fromNbt(nbt.getCompound("owner")));
 		island.hasNether = nbt.getBoolean("hasNether");
+		island.hasEnd = nbt.getBoolean("hasEnd");
 		island.created = Instant.parse(nbt.getString("created"));
 		island.locked = nbt.getBoolean("locked");
 		island.seed = nbt.getLong("seed");
 		island.freshCreated = nbt.getBoolean("freshCreated");
 
-		var spawnPosNbt = nbt.getCompound("spawnPos");
-		double spawnPosX = spawnPosNbt.getDouble("x");
-		double spawnPosY = spawnPosNbt.getDouble("y");
-		double spawnPosZ = spawnPosNbt.getDouble("z");
-		island.spawnPos = new Vec3d(spawnPosX, spawnPosY, spawnPosZ);
-
-		var visitsPosNbt = nbt.getCompound("visitsPos");
-		double visitsPosX = visitsPosNbt.getDouble("x");
-		double visitsPosY = visitsPosNbt.getDouble("y");
-		double visitsPosZ = visitsPosNbt.getDouble("z");
-		island.visitsPos = new Vec3d(visitsPosX, visitsPosY, visitsPosZ);
+		island.spawnPos = PlayerPosition.fromNbt(nbt.getCompound("spawnPos"));
+		island.visitsPos = PlayerPosition.fromNbt(nbt.getCompound("visitsPos"));
 
 		NbtCompound membersNbt = nbt.getCompound("members");
 		int membersSize = membersNbt.getInt("size");
@@ -107,22 +100,14 @@ public class Island {
 		NbtCompound nbt = new NbtCompound();
 		nbt.put("owner", this.owner.toNbt());
 		nbt.putBoolean("hasNether", this.hasNether);
+		nbt.putBoolean("hasEnd", this.hasEnd);
 		nbt.putString("created", this.created.toString());
 		nbt.putBoolean("locked", this.locked);
 		nbt.putLong("seed", this.seed);
 		nbt.putBoolean("freshCreated", this.freshCreated);
 
-		NbtCompound spawnPosNbt = new NbtCompound();
-		spawnPosNbt.putDouble("x", this.spawnPos.getX());
-		spawnPosNbt.putDouble("y", this.spawnPos.getY());
-		spawnPosNbt.putDouble("z", this.spawnPos.getZ());
-		nbt.put("spawnPos", spawnPosNbt);
-
-		NbtCompound visitsPosNbt = new NbtCompound();
-		visitsPosNbt.putDouble("x", this.visitsPos.getX());
-		visitsPosNbt.putDouble("y", this.visitsPos.getY());
-		visitsPosNbt.putDouble("z", this.visitsPos.getZ());
-		nbt.put("visitsPos", visitsPosNbt);
+		nbt.put("spawnPos", this.spawnPos.toNbt());
+		nbt.put("visitsPos", this.visitsPos.toNbt());
 
 		NbtCompound membersNbt = new NbtCompound();
 		membersNbt.putInt("size", this.members.size());
@@ -219,10 +204,10 @@ public class Island {
 		return new RuntimeWorldConfig()
 				.setDimensionType(DimensionTypes.OVERWORLD)
 				.setGenerator(generator)
-				.setDifficulty(Difficulty.NORMAL)
+				.setDifficulty(server.getOverworld().getDifficulty())
 				.setShouldTickTime(true)
 				.setSeed(this.getSeed())
-				.setWorldConstructor((srv, rk, config, style) -> new SkylandsRuntimeWorld(srv, rk, config, style));
+				.setWorldConstructor((srv, rk, config, style) -> new SkylandsRuntimeWorld(this, srv, rk, config, style));
 	}
 
 	public RuntimeWorldHandle getNetherHandler() {
@@ -233,24 +218,58 @@ public class Island {
 		return this.fantasy.getOrOpenPersistentWorld(new Identifier("nether", this.owner.uuid.toString()), this.netherConfig);
 	}
 
+	public RuntimeWorldHandle getEndHandler() {
+		if(this.endConfig == null) {
+			this.endConfig = createEndConfig();
+		}
+		copyEndTemplate();
+		return this.fantasy.getOrOpenPersistentWorld(new Identifier("end", this.owner.uuid.toString()), this.endConfig);
+	}
+
 	public void unload() {
 		getHandler().unload();
 		if(hasNether) getNetherHandler().unload();
+		if(hasEnd) getEndHandler().unload();
 	}
 
 	void copyNetherTemplate() {
 		try {
-			File netherTemplate = server.getFile("nether_template");
-			String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "") + "\\dimensions\\nether\\" + owner.uuid.toString();
-			File lock = new File(path + "\\copied.lock");
+			Template template = getNetherTemplateOrDefault();
 
-			if(netherTemplate.exists() && !lock.exists()) {
-				FileUtils.copyDirectory(netherTemplate, new File(path));
-				lock.createNewFile();
+			if(template.type.equals("world") && template.metadata != null) {
+				File worldFile = server.getFile(template.metadata.path);
+				String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "") + "\\dimensions\\nether\\" + owner.uuid.toString();
+				File lock = new File(path + "\\copied.lock");
+
+				if(worldFile.exists() && !lock.exists()) {
+					FileUtils.copyDirectory(worldFile, new File(path));
+					lock.createNewFile();
+				}
 			}
 		}
 		catch (Exception e) {
 			SkylandsMod.LOGGER.error("Failed to copy nether template due to an exception: " + e);
+			e.printStackTrace();
+		}
+	}
+
+	void copyEndTemplate() {
+		try {
+			Template template = getEndTemplateOrDefault();
+
+			if(template.type.equals("world") && template.metadata != null) {
+				File worldFile = server.getFile(template.metadata.path);
+				String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "") + "\\dimensions\\end\\" + owner.uuid.toString();
+				File lock = new File(path + "\\copied.lock");
+
+				if(worldFile.exists() && !lock.exists()) {
+					FileUtils.copyDirectory(worldFile, new File(path));
+					lock.createNewFile();
+				}
+			}
+		}
+		catch (Exception e) {
+			SkylandsMod.LOGGER.error("Failed to copy end template due to an exception: " + e);
 			e.printStackTrace();
 		}
 	}
@@ -263,16 +282,33 @@ public class Island {
 		return new RuntimeWorldConfig()
 				.setDimensionType(DimensionTypes.THE_NETHER)
 				.setGenerator(generator)
-				.setDifficulty(Difficulty.NORMAL)
+				.setDifficulty(server.getOverworld().getDifficulty())
 				.setShouldTickTime(true)
 				.setSeed(this.getSeed())
-				.setWorldConstructor((srv, rk, config, style) -> new SkylandsRuntimeWorld(srv, rk, config, style));
+				.setWorldConstructor((srv, rk, config, style) -> new SkylandsRuntimeWorld(this, srv, rk, config, style));
+	}
+
+	private RuntimeWorldConfig createEndConfig() {
+		var biome = this.server.getRegistryManager().get(RegistryKeys.BIOME).getEntry(this.server.getRegistryManager().get(RegistryKeys.BIOME).getOrThrow(BiomeKeys.THE_END));
+		FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.of(RegistryEntryList.of()), biome, List.of());
+		FlatChunkGenerator generator = new FlatChunkGenerator(flat);
+
+		return new RuntimeWorldConfig()
+			.setDimensionType(DimensionTypes.THE_END)
+			.setGenerator(generator)
+			.setDifficulty(server.getOverworld().getDifficulty())
+			.setShouldTickTime(true)
+			.setSeed(this.getSeed())
+			.setWorldConstructor((srv, rk, config, style) -> new SkylandsRuntimeWorld(this, srv, rk, config, style));
 	}
 
 	public ServerWorld getEnd() {
-		// todo
-		// may coming soon?
-		return null;
+		if(!Skylands.config.endDimensionIslandsEnabled) return null;
+		RuntimeWorldHandle handler = this.getEndHandler();
+		handler.setTickWhenEmpty(false);
+		ServerWorld world = handler.asWorld();
+		if(!this.hasEnd) this.onFirstEndLoad(world);
+		return world;
 	}
 
 	public ServerWorld getNether() {
@@ -309,20 +345,23 @@ public class Island {
 		}
 	}
 
+	public void visit(PlayerEntity visitor, PlayerPosition pos) {
+		this.visit(visitor, pos.toVec(), pos.yaw, pos.pitch);
+	}
+
 	public void visitAsMember(PlayerEntity player) {
-		this.visit(player, this.spawnPos, Skylands.config.defaultSpawnPos.yaw, Skylands.config.defaultSpawnPos.pitch);
+		this.visit(player, this.spawnPos);
 	}
 
 	public void visitAsVisitor(PlayerEntity player) {
-		this.visit(player, this.visitsPos, Skylands.config.defaultVisitsPos.yaw, Skylands.config.defaultVisitsPos.pitch);
+		this.visit(player, this.visitsPos);
 	}
 
 	public void onFirstLoad(PlayerEntity player) {
 		ServerWorld world = this.getWorld();
-		if(!server.getFile("island_template").exists()) {
-			StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(SkylandsMod.id("start_island"));
-			StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
-			structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, world.getRandom(), Block.NOTIFY_ALL);
+		var template = this.getTemplateOrDefault();
+		if(template != null && template.type.equals("structure")) {
+			template.generateStructure(world);
 		}
 		SkylandsAPI.ON_ISLAND_FIRST_LOAD.invoker().invoke(player, world, this);
 	}
@@ -330,13 +369,63 @@ public class Island {
 	void onFirstNetherLoad(ServerWorld world) {
 		if(this.hasNether) return;
 
-		MinecraftServer server = world.getServer();
-
-		StructureTemplate structure = server.getStructureTemplateManager().getTemplateOrBlank(SkylandsMod.id("nether_island"));
-		StructurePlacementData data = new StructurePlacementData().setMirror(BlockMirror.NONE).setIgnoreEntities(true);
-		structure.place(world, new BlockPos(-7, 65, -7), new BlockPos(0, 0, 0), data, world.getRandom(), Block.NOTIFY_ALL);
+		var template = this.getNetherTemplateOrDefault();
+		if(template != null && template.type.equals("structure")) {
+			template.generateStructure(world);
+		}
 		SkylandsAPI.ON_NETHER_FIRST_LOAD.invoker().onLoad(world, this);
 
 		this.hasNether = true;
+	}
+
+	void onFirstEndLoad(ServerWorld world) {
+		if(this.hasEnd) return;
+
+		var template = this.getEndTemplateOrDefault();
+		if(template != null && template.type.equals("structure")) {
+			template.generateStructure(world);
+		}
+		SkylandsAPI.ON_END_FIRST_LOAD.invoker().onLoad(world, this);
+
+		this.hasEnd = true;
+	}
+
+	public MainIslandTemplate getTemplateOrDefault() {
+		MainIslandTemplate def = null;
+
+		for(MainIslandTemplate temp : Skylands.config.islandTemplates) {
+			if(temp.name.equals("default")) {
+				def = temp;
+			}
+			else if(temp.name.equals(this.islandTemplate)) return temp;
+		}
+
+		return def;
+	}
+
+	public Template getNetherTemplateOrDefault() {
+		Template defaultTemplate = null;
+		MainIslandTemplate islTemplate = getTemplateOrDefault();
+
+		for(Template temp : Skylands.config.netherTemplates) {
+			if(temp.name.equals("default")) {
+				defaultTemplate = temp;
+			}
+			else if(temp.name.equals(islTemplate.netherTemplate)) return temp;
+		}
+		return defaultTemplate;
+	}
+
+	public Template getEndTemplateOrDefault() {
+		Template defaultTemplate = null;
+		MainIslandTemplate islTemplate = getTemplateOrDefault();
+
+		for(Template temp : Skylands.config.endTemplates) {
+			if(temp.name.equals("default")) {
+				defaultTemplate = temp;
+			}
+			else if(temp.name.equals(islTemplate.endTemplate)) return temp;
+		}
+		return defaultTemplate;
 	}
 }

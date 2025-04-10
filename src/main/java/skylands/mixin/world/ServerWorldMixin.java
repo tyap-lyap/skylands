@@ -12,6 +12,7 @@ import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.server.world.ServerChunkManager;
 import net.minecraft.server.world.ServerEntityManager;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.random.RandomSequencesState;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.village.ZombieSiegeManager;
@@ -38,7 +39,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import skylands.SkylandsMod;
+import skylands.logic.Skylands;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executor;
@@ -56,31 +59,35 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
 	}
 
 	@Inject(method = "<init>", at = @At("TAIL"))
-	void init(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
+	void init(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<Spawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
 
 		if(worldKey.getValue().getNamespace().equals(SkylandsMod.MOD_ID)) {
 			this.spawners = ImmutableList.of(new PhantomSpawner(), new PatrolSpawner(), new CatSpawner(), new ZombieSiegeManager(), new WanderingTraderManager(properties));
 		}
 
-		if(worldKey.equals(World.OVERWORLD) && server.getFile("hub_template").exists()) {
+		String path = server.getSavePath(WorldSavePath.DATAPACKS).toFile().toString().replace("\\datapacks", "");
+
+		if(worldKey.equals(World.OVERWORLD) && Skylands.config.hubTemplateEnabled && (!new File(path + "\\region").exists() || new File(path + "\\copied.lock").exists())) {
 			var biome = server.getRegistryManager().get(RegistryKeys.BIOME).getEntry(server.getRegistryManager().get(RegistryKeys.BIOME).getOrThrow(BiomeKeys.PLAINS));
 			FlatChunkGeneratorConfig flat = new FlatChunkGeneratorConfig(Optional.of(RegistryEntryList.of()), biome, List.of());
 			FlatChunkGenerator generator = new FlatChunkGenerator(flat);
 
 			chunkManager = new ServerChunkManager(
-					this.toServerWorld(),
-					session,
-					server.getDataFixer(),
-					server.getStructureTemplateManager(),
-					workerExecutor,
-					generator,
-					server.getPlayerManager().getViewDistance(),
-					server.getPlayerManager().getSimulationDistance(),
-					server.syncChunkWrites(),
-					worldGenerationProgressListener,
-					entityManager::updateTrackingStatus,
-					() -> server.getOverworld().getPersistentStateManager()
+				this.toServerWorld(),
+				session,
+				server.getDataFixer(),
+				server.getStructureTemplateManager(),
+				workerExecutor,
+				generator,
+				server.getPlayerManager().getViewDistance(),
+				server.getPlayerManager().getSimulationDistance(),
+				server.syncChunkWrites(),
+				worldGenerationProgressListener,
+				entityManager::updateTrackingStatus,
+				() -> server.getOverworld().getPersistentStateManager()
 			);
+
+			SkylandsMod.LOGGER.info("Overworld generator got overwritten with empty world");
 		}
 
 	}

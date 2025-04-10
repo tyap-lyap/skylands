@@ -28,7 +28,7 @@ public class HubCommands {
 			return 1;
 		})));
 
-		dispatcher.register(literal("skylandsadmin").then(literal("hub").then(literal("set-spawn-pos").requires(Permissions.require("skylands.force.hub.position", 4)).then(argument("position", blockPos()).executes(context -> {
+		dispatcher.register(literal("skylands-admin").then(literal("hub").then(literal("set-spawn-pos").requires(Permissions.require("skylands.admin.hub.position", 4)).then(argument("position", blockPos()).executes(context -> {
 			var pos = BlockPosArgumentType.getBlockPos(context, "position");
 			var source = context.getSource();
 			HubCommands.setPos(pos, 0, 0, source);
@@ -40,7 +40,7 @@ public class HubCommands {
 			var source = context.getSource();
 			HubCommands.setPos(pos, yaw, pitch, source);
 			return 1;
-		}))))).then(literal("toggle-protection").requires(Permissions.require("skylands.force.hub.protection", 4)).executes(context -> {
+		}))))).then(literal("toggle-protection").requires(Permissions.require("skylands.admin.hub.protection", 4)).executes(context -> {
 			HubCommands.toggleProtection(context.getSource());
 			return 1;
 		}))));

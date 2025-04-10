@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import me.lucko.fabric.api.permissions.v0.Permissions;
-import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import skylands.logic.Skylands;
@@ -19,31 +18,7 @@ import static net.minecraft.command.argument.BlockPosArgumentType.blockPos;
 public class SkylandsConfigCommands {
 
 	public static void init(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("skylandsadmin").then(literal("config").requires(Permissions.require("skylands.force.config", 4)).then(literal("default-spawn-pos").then(argument("position", blockPos()).executes(context -> {
-			var pos = BlockPosArgumentType.getBlockPos(context, "position");
-			Skylands.config.defaultSpawnPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			Skylands.config.save();
-			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
-			context.getSource().sendFeedback(() -> Text.of("config.defaultSpawnPos has changed to: " + posText), true);
-			return 1;
-
-		}))).then(literal("default-visits-pos").then(argument("position", blockPos()).executes(context -> {
-			var pos = BlockPosArgumentType.getBlockPos(context, "position");
-			Skylands.config.defaultVisitsPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			Skylands.config.save();
-			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
-			context.getSource().sendFeedback(() -> Text.of("config.defaultVisitsPos has changed to: " + posText), true);
-			return 1;
-
-		}))).then(literal("default-hub-pos").then(argument("position", blockPos()).executes(context -> {
-			var pos = BlockPosArgumentType.getBlockPos(context, "position");
-			Skylands.config.defaultHubPos = new PlayerPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			Skylands.config.save();
-			String posText = pos.getX() + " " + pos.getY() + " " + pos.getZ();
-			context.getSource().sendFeedback(() -> Text.of("config.defaultHubPos has changed to: " + posText), true);
-			return 1;
-
-		}))).then(literal("island-deletion-cooldown").then(argument("cooldown", integer()).executes(context -> {
+		dispatcher.register(literal("skylands-admin").then(literal("config").requires(Permissions.require("skylands.admin.config", 4)).then(literal("island-deletion-cooldown").then(argument("cooldown", integer()).executes(context -> {
 			var cooldown = IntegerArgumentType.getInteger(context, "cooldown");
 			Skylands.config.islandDeletionCooldown = cooldown;
 			Skylands.config.save();

@@ -6,7 +6,7 @@ import net.minecraft.util.WorldSavePath;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.Nullable;
 import skylands.SkylandsMod;
-import skylands.config.template.IslandTemplate;
+import skylands.config.template.MainIslandTemplate;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,8 +26,8 @@ public class IslandStuck {
 
 		var template = island.getTemplateOrDefault();
 
-		island.spawnPos = template.playerSpawnPosition;
-		island.visitsPos = template.getPlayerVisitsPosition();
+		island.spawnPos = template.spawnPosition;
+		island.visitsPos = template.visitsPosition;
 
 		this.stuck.add(island);
 
@@ -39,7 +39,7 @@ public class IslandStuck {
 		return create(player, "default");
 	}
 
-	void copyWorldFile(PlayerEntity player, IslandTemplate template) {
+	void copyWorldFile(PlayerEntity player, MainIslandTemplate template) {
 		try {
 			if(template.type.equals("world") && template.metadata != null) {
 				var server = player.getServer();

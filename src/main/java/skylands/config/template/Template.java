@@ -18,19 +18,29 @@ public class Template {
 	public String name;
 	public String type;
 	public Metadata metadata;
-	@JsonAdapter(PlayerPosition.JsonAdapter.class)
-	public PlayerPosition playerSpawnPosition;
-
-	@JsonAdapter(PlayerPosition.JsonAdapter.class) @Nullable
-	public PlayerPosition playerVisitsPosition;
+	@Nullable public PlayerPosition spawnPosition;
+	@Nullable public PlayerPosition visitsPosition;
 
 	public String permission;
 
-	public Template(String name, String type, Metadata metadata, PlayerPosition playerSpawnPosition) {
+	public Template(String name, String type, Metadata metadata) {
 		this.name = name;
 		this.type = type;
 		this.metadata = metadata;
-		this.playerSpawnPosition = playerSpawnPosition;
+	}
+
+	public Template(String name, String type, Metadata metadata, PlayerPosition spawnPosition) {
+		this.name = name;
+		this.type = type;
+		this.metadata = metadata;
+		this.spawnPosition = spawnPosition;
+	}
+	public Template(String name, String type, Metadata metadata, PlayerPosition spawnPosition, PlayerPosition visitsPosition) {
+		this.name = name;
+		this.type = type;
+		this.metadata = metadata;
+		this.spawnPosition = spawnPosition;
+		this.visitsPosition = visitsPosition;
 	}
 
 	public void generateStructure(ServerWorld world) {
@@ -48,13 +58,5 @@ public class Template {
 				structureBlock.loadStructure(world);
 			}
 		}
-	}
-
-	public PlayerPosition getPlayerVisitsPosition() {
-		if(playerVisitsPosition != null) {
-			return playerVisitsPosition;
-		}
-
-		return playerSpawnPosition;
 	}
 }

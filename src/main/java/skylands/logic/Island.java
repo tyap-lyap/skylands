@@ -18,7 +18,7 @@ import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
 import org.apache.commons.io.FileUtils;
 import skylands.SkylandsMod;
 import skylands.api.SkylandsAPI;
-import skylands.config.template.IslandTemplate;
+import skylands.config.template.MainIslandTemplate;
 import skylands.config.PlayerPosition;
 import skylands.config.template.Template;
 import skylands.util.SkylandsTexts;
@@ -43,8 +43,8 @@ public class Island {
 	public ArrayList<Member> bans = new ArrayList<>();
 
 	public boolean locked = false;
-	public PlayerPosition spawnPos = Skylands.config.defaultSpawnPos;
-	public PlayerPosition visitsPos = Skylands.config.defaultVisitsPos;
+	public PlayerPosition spawnPos;
+	public PlayerPosition visitsPos;
 	public boolean hasNether = false;
 	public boolean hasEnd = false;
 	public long seed = 0L;
@@ -390,10 +390,10 @@ public class Island {
 		this.hasEnd = true;
 	}
 
-	public IslandTemplate getTemplateOrDefault() {
-		IslandTemplate def = null;
+	public MainIslandTemplate getTemplateOrDefault() {
+		MainIslandTemplate def = null;
 
-		for(IslandTemplate temp : Skylands.config.islandTemplates) {
+		for(MainIslandTemplate temp : Skylands.config.islandTemplates) {
 			if(temp.name.equals("default")) {
 				def = temp;
 			}
@@ -405,7 +405,7 @@ public class Island {
 
 	public Template getNetherTemplateOrDefault() {
 		Template defaultTemplate = null;
-		IslandTemplate islTemplate = getTemplateOrDefault();
+		MainIslandTemplate islTemplate = getTemplateOrDefault();
 
 		for(Template temp : Skylands.config.netherTemplates) {
 			if(temp.name.equals("default")) {
@@ -418,7 +418,7 @@ public class Island {
 
 	public Template getEndTemplateOrDefault() {
 		Template defaultTemplate = null;
-		IslandTemplate islTemplate = getTemplateOrDefault();
+		MainIslandTemplate islTemplate = getTemplateOrDefault();
 
 		for(Template temp : Skylands.config.endTemplates) {
 			if(temp.name.equals("default")) {

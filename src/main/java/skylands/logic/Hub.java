@@ -8,7 +8,7 @@ import skylands.config.PlayerPosition;
 import java.util.Set;
 
 public class Hub {
-	public PlayerPosition spawnPos = Skylands.config.defaultHubPos;
+	public PlayerPosition spawnPos = Skylands.config.defaultHubSpawnPos;
 	public boolean hasProtection = Skylands.config.hubProtectedByDefault;
 
 	public Hub() {

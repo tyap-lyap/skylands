@@ -44,28 +44,28 @@ public class SkylandsCommands {
 		DeleteCommand.init(dispatcher);
 		SettingCommands.init(dispatcher);
 
-		dispatcher.register(literal("skylandsadmin").then(literal("delete").requires(Permissions.require("skylands.force.delete", 4)).then(argument("player", word()).suggests(SUGGEST_ISLANDS).executes(context -> {
+		dispatcher.register(literal("skylands-admin").then(literal("delete").requires(Permissions.require("skylands.admin.delete", 4)).then(argument("player", word()).suggests(SUGGEST_ISLANDS).executes(context -> {
 			var playerName = StringArgumentType.getString(context, "player");
 
 			Skylands.getIslands().get(playerName).ifPresentOrElse(island -> {
 				Skylands.instance.islands.delete(playerName);
-				SkylandsTexts.prefixed(context, "message.skylands.force.delete.success", map -> map.put("%player%", playerName));
+				SkylandsTexts.prefixed(context, "message.skylands.admin.delete.success", map -> map.put("%player%", playerName));
 			}, () -> {
-				SkylandsTexts.prefixed(context, "message.skylands.force.delete.fail", map -> map.put("%player%", playerName));
+				SkylandsTexts.prefixed(context, "message.skylands.admin.delete.fail", map -> map.put("%player%", playerName));
 			});
 
 			return 1;
 		}))));
 
-		dispatcher.register(literal("skylandsadmin").then(literal("visit").requires(Permissions.require("skylands.force.visit", 4)).then(argument("player", word()).suggests(SUGGEST_ISLANDS).executes(context -> {
+		dispatcher.register(literal("skylands-admin").then(literal("visit").requires(Permissions.require("skylands.admin.visit", 4)).then(argument("player", word()).suggests(SUGGEST_ISLANDS).executes(context -> {
 			var playerName = StringArgumentType.getString(context, "player");
 			var admin = context.getSource().getPlayer();
 			if(admin != null) {
 				Skylands.getIslands().get(playerName).ifPresentOrElse(island -> {
 					island.visitAsMember(admin);
-					SkylandsTexts.prefixed(context, "message.skylands.force.visit.success", map -> map.put("%player%", playerName));
+					SkylandsTexts.prefixed(context, "message.skylands.admin.visit.success", map -> map.put("%player%", playerName));
 				}, () -> {
-					SkylandsTexts.prefixed(context, "message.skylands.force.visit.fail", map -> map.put("%player%", playerName));
+					SkylandsTexts.prefixed(context, "message.skylands.admin.visit.fail", map -> map.put("%player%", playerName));
 				});
 			}
 			return 1;

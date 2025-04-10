@@ -9,12 +9,9 @@ import skylands.config.BlockPosition;
 public class Metadata {
 
 	public String structure;
-	@JsonAdapter(BlockPosition.JsonAdapter.class)
 	public BlockPosition position;
-	@Nullable
-	public BlockPosition pivot;
-	@Nullable
-	public String rotation;
+	@Nullable public BlockPosition pivot;
+	@Nullable public String rotation;
 
 	public String path;
 
